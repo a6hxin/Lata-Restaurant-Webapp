@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="Lata Family Restaurant Gallery – Our food, ambience and moments"/>
+<title>Gallery – Lata Family Restaurant</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+:root{
+  --saffron:#E8821A;--saffron-lt:#F5A84E;--gold:#C8860A;--spice:#7B2D00;
+  --cream:#FDF6EE;--cream-dk:#F5EAD8;--dark:#1A0A00;--muted:#7A5C44;
+  --border:#E2C9A8;--shadow-sm:0 2px 12px rgba(123,45,0,0.10);
+  --shadow-md:0 8px 32px rgba(123,45,0,0.14);--shadow-lg:0 20px 60px rgba(123,45,0,0.22);
+  --ff-display:'Cormorant Garamond',Georgia,serif;--ff-body:'DM Sans',sans-serif;
+  --nav-h:72px;
+}
+body{font-family:var(--ff-body);background:var(--cream);color:var(--dark);overflow-x:hidden;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--cream-dk);}
+::-webkit-scrollbar-thumb{background:var(--saffron);border-radius:4px;}
+
+/* ══ NAVBAR ══ */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 5%;background:rgba(253,246,238,0.95);backdrop-filter:blur(12px);box-shadow:var(--shadow-sm);}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--saffron),var(--gold));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.nav-logo-text span:first-child{font-family:var(--ff-display);font-size:1.3rem;font-weight:700;color:var(--spice);display:block;line-height:1.1;}
+.nav-logo-text span:last-child{font-size:0.62rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
+.nav-links{display:flex;align-items:center;gap:2rem;}
+.nav-links a{font-size:0.88rem;font-weight:500;color:var(--dark);text-decoration:none;position:relative;transition:color 0.2s;}
+.nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1.5px;background:var(--saffron);transition:width 0.3s;}
+.nav-links a:hover,.nav-links a.active{color:var(--saffron);}
+.nav-links a.active::after,.nav-links a:hover::after{width:100%;}
+.nav-cta{display:flex;align-items:center;gap:10px;}
+.btn-outline{padding:8px 18px;border:1.5px solid var(--saffron);border-radius:8px;font-family:var(--ff-body);font-size:0.85rem;font-weight:500;color:var(--saffron-dk);background:transparent;cursor:pointer;text-decoration:none;transition:all 0.2s;}
+.btn-outline:hover{background:var(--saffron);color:#fff;}
+.btn-solid{padding:9px 20px;border:none;border-radius:8px;font-family:var(--ff-body);font-size:0.85rem;font-weight:500;color:#fff;background:linear-gradient(135deg,var(--saffron),var(--gold));cursor:pointer;text-decoration:none;transition:transform 0.15s,box-shadow 0.2s;}
+.btn-solid:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(200,134,10,0.4);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;}
+.hamburger span{display:block;width:24px;height:2px;background:var(--dark);border-radius:2px;transition:all 0.3s;}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px);}
+.mobile-menu{display:none;position:fixed;inset:0;top:var(--nav-h);z-index:999;background:rgba(253,246,238,0.97);backdrop-filter:blur(16px);flex-direction:column;align-items:center;justify-content:center;gap:2rem;padding:2rem;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{font-family:var(--ff-display);font-size:2rem;font-weight:600;color:var(--spice);text-decoration:none;}
+.mobile-menu a:hover{color:var(--saffron);}
+
+/* ══ PAGE HERO ══ */
+.page-hero{
+  padding-top:calc(var(--nav-h) + 3rem);padding-bottom:3rem;
+  padding-left:5%;padding-right:5%;
+  background:linear-gradient(160deg,var(--cream) 0%,#F7E8C8 60%,var(--cream) 100%);
+  text-align:center;position:relative;overflow:hidden;
+}
+.page-hero::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,var(--spice) 0,var(--spice) 1px,transparent 0,transparent 50%),repeating-linear-gradient(-45deg,var(--spice) 0,var(--spice) 1px,transparent 0,transparent 50%);background-size:30px 30px;opacity:0.03;}
+.page-hero-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(232,130,26,0.1);border:1px solid rgba(232,130,26,0.3);border-radius:20px;padding:5px 14px;font-size:0.78rem;font-weight:500;color:var(--saffron-dk);margin-bottom:1rem;}
+.page-hero h1{font-family:var(--ff-display);font-size:clamp(2.2rem,5vw,3.5rem);font-weight:700;color:var(--spice);margin-bottom:0.75rem;line-height:1.1;}
+.page-hero h1 em{font-style:italic;background:linear-gradient(135deg,var(--saffron),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.page-hero p{font-size:0.95rem;color:var(--muted);max-width:500px;margin:0 auto;font-weight:300;line-height:1.7;}
+
+/* ══ FILTER BAR ══ */
+.filter-bar{
+  background:#fff;border-bottom:1px solid var(--border);
+  padding:1rem 5%;display:flex;align-items:center;
+  gap:10px;flex-wrap:wrap;position:sticky;top:var(--nav-h);z-index:100;
+}
+.fchip{padding:7px 18px;border-radius:20px;border:1.5px solid var(--border);font-family:var(--ff-body);font-size:0.82rem;font-weight:500;color:var(--muted);background:#fff;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.fchip:hover{border-color:var(--saffron);color:var(--saffron-dk);}
+.fchip.active{background:linear-gradient(135deg,var(--saffron),var(--gold));border-color:transparent;color:#fff;}
+.filter-count{margin-left:auto;font-size:0.8rem;color:var(--muted);}
+
+/* ══ MASONRY GALLERY ══ */
+.gallery-wrap{padding:2.5rem 5%;max-width:1300px;margin:0 auto;}
+
+.masonry{
+  columns:4;column-gap:14px;
+}
+.masonry-item{
+  break-inside:avoid;margin-bottom:14px;
+  position:relative;border-radius:16px;overflow:hidden;
+  cursor:pointer;
+  animation:fadeUp 0.5s ease both;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+
+/* each card is a coloured emoji tile */
+.g-tile{
+  width:100%;display:block;
+  border-radius:16px;overflow:hidden;
+  position:relative;
+  border:1px solid var(--border);
+}
+.g-tile-inner{
+  width:100%;display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+  transition:transform 0.4s cubic-bezier(0.22,1,0.36,1);
+}
+.masonry-item:hover .g-tile-inner{transform:scale(1.04);}
+.g-emoji{font-size:clamp(3rem,8vw,6rem);line-height:1;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.15));z-index:1;position:relative;}
+
+/* overlay on hover */
+.g-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top, rgba(26,10,0,0.75) 0%, rgba(26,10,0,0) 50%);
+  opacity:0;transition:opacity 0.35s;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:1.1rem;z-index:2;
+}
+.masonry-item:hover .g-overlay{opacity:1;}
+.g-overlay-title{font-family:var(--ff-display);font-size:1.1rem;font-weight:600;color:#fff;line-height:1.2;margin-bottom:3px;}
+.g-overlay-cat{font-size:0.72rem;color:rgba(255,255,255,0.65);letter-spacing:1px;text-transform:uppercase;}
+.g-overlay-icon{
+  position:absolute;top:12px;right:12px;
+  width:32px;height:32px;border-radius:50%;
+  background:rgba(255,255,255,0.2);backdrop-filter:blur(4px);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:14px;
+  transform:translateY(-8px);opacity:0;transition:all 0.3s 0.05s;
+}
+.masonry-item:hover .g-overlay-icon{transform:translateY(0);opacity:1;}
+
+/* featured badge */
+.g-featured{
+  position:absolute;top:10px;left:10px;z-index:3;
+  background:linear-gradient(135deg,var(--saffron),var(--gold));
+  color:#fff;font-size:0.62rem;font-weight:500;
+  padding:3px 9px;border-radius:20px;letter-spacing:0.5px;
+}
+
+/* like button */
+.g-like{
+  position:absolute;top:10px;right:10px;z-index:3;
+  width:30px;height:30px;border-radius:50%;
+  background:rgba(255,255,255,0.85);backdrop-filter:blur(4px);
+  border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:14px;transition:transform 0.2s,background 0.2s;
+  box-shadow:0 2px 8px rgba(0,0,0,0.12);
+}
+.g-like:hover{transform:scale(1.15);}
+.g-like.liked{background:var(--saffron);animation:likeAnim 0.3s cubic-bezier(0.22,1,0.36,1);}
+@keyframes likeAnim{0%{transform:scale(1);}50%{transform:scale(1.3);}100%{transform:scale(1);}}
+
+/* ══ LIGHTBOX ══ */
+.lightbox{
+  position:fixed;inset:0;z-index:2000;
+  background:rgba(26,10,0,0.94);
+  display:none;align-items:center;justify-content:center;
+  padding:1.5rem;
+  animation:lbIn 0.2s ease;
+}
+@keyframes lbIn{from{opacity:0;}to{opacity:1;}}
+.lightbox.open{display:flex;}
+.lb-inner{
+  position:relative;max-width:680px;width:100%;
+  background:#fff;border-radius:20px;overflow:hidden;
+  box-shadow:var(--shadow-lg);
+  animation:lbSlide 0.3s cubic-bezier(0.22,1,0.36,1);
+}
+@keyframes lbSlide{from{transform:scale(0.9);opacity:0;}to{transform:scale(1);opacity:1;}}
+.lb-img{
+  width:100%;min-height:300px;max-height:420px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:8rem;
+  position:relative;
+}
+.lb-body{padding:1.5rem 1.75rem;}
+.lb-cat{font-size:0.7rem;color:var(--saffron-dk);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+.lb-title{font-family:var(--ff-display);font-size:1.6rem;font-weight:700;color:var(--spice);margin-bottom:8px;}
+.lb-desc{font-size:0.88rem;color:var(--muted);line-height:1.7;margin-bottom:1rem;}
+.lb-footer{display:flex;align-items:center;justify-content:space-between;}
+.lb-like-row{display:flex;align-items:center;gap:8px;font-size:0.82rem;color:var(--muted);}
+.lb-close{
+  position:absolute;top:14px;right:14px;z-index:10;
+  width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.9);
+  border:none;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;
+  box-shadow:var(--shadow-sm);transition:background 0.2s;
+}
+.lb-close:hover{background:#fff;}
+.lb-nav{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.9);
+  border:none;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;
+  box-shadow:var(--shadow-sm);transition:background 0.2s,transform 0.2s;z-index:10;
+}
+.lb-nav:hover{background:#fff;transform:translateY(-50%) scale(1.08);}
+.lb-prev{left:14px;}
+.lb-next{right:14px;}
+
+/* ══ STATS STRIP ══ */
+.stats-strip{
+  background:linear-gradient(135deg,var(--spice),#4A1800);
+  padding:2rem 5%;display:flex;align-items:center;justify-content:center;
+  gap:4rem;flex-wrap:wrap;
+}
+.stat-item{text-align:center;}
+.stat-num{font-family:var(--ff-display);font-size:2rem;font-weight:700;color:var(--saffron-lt);}
+.stat-lbl{font-size:0.75rem;color:rgba(255,255,255,0.55);letter-spacing:1px;text-transform:uppercase;margin-top:2px;}
+
+/* ══ UPLOAD CTA ══ */
+.upload-cta{
+  background:var(--cream-dk);padding:3rem 5%;text-align:center;
+}
+.upload-inner{
+  max-width:580px;margin:0 auto;
+  background:#fff;border-radius:20px;border:1px solid var(--border);
+  padding:2.5rem;box-shadow:var(--shadow-sm);
+}
+.upload-icon{font-size:3rem;margin-bottom:1rem;}
+.upload-inner h2{font-family:var(--ff-display);font-size:1.8rem;font-weight:700;color:var(--spice);margin-bottom:0.6rem;}
+.upload-inner p{font-size:0.88rem;color:var(--muted);line-height:1.7;margin-bottom:1.5rem;}
+.upload-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:10px;background:linear-gradient(135deg,var(--saffron),var(--gold));color:#fff;font-family:var(--ff-body);font-size:0.92rem;font-weight:500;cursor:pointer;border:none;transition:transform 0.15s,box-shadow 0.2s;}
+.upload-btn:hover{transform:translateY(-1px);box-shadow:0 5px 16px rgba(200,134,10,0.4);}
+
+/* ══ FOOTER ══ */
+footer{background:linear-gradient(160deg,var(--spice) 0%,#2A0E00 100%);color:rgba(255,255,255,0.75);padding:3rem 5% 1.5rem;}
+.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:3rem;margin-bottom:2rem;max-width:1200px;margin-left:auto;margin-right:auto;}
+.footer-brand{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.footer-brand-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--saffron),var(--gold));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.footer-brand-name{font-family:var(--ff-display);font-size:1.2rem;font-weight:700;color:#fff;}
+.footer-desc{font-size:0.82rem;line-height:1.7;color:rgba(255,255,255,0.5);margin-bottom:1.2rem;}
+.footer-social{display:flex;gap:10px;}
+.soc-btn{width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 0.2s;font-size:15px;color:#fff;text-decoration:none;}
+.soc-btn:hover{background:var(--saffron);}
+.footer-col h4{font-size:0.72rem;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:1rem;}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.footer-col ul li a{font-size:0.82rem;color:rgba(255,255,255,0.55);text-decoration:none;transition:color 0.2s;}
+.footer-col ul li a:hover{color:var(--saffron-lt);}
+.footer-bottom{max-width:1200px;margin:0 auto;border-top:1px solid rgba(255,255,255,0.08);padding-top:1.2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+.footer-bottom p{font-size:0.78rem;color:rgba(255,255,255,0.3);}
+.footer-bottom-links{display:flex;gap:1.2rem;}
+.footer-bottom-links a{font-size:0.78rem;color:rgba(255,255,255,0.3);text-decoration:none;}
+.footer-bottom-links a:hover{color:rgba(255,255,255,0.65);}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:1024px){
+  .masonry{columns:3;}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:2rem;}
+}
+@media(max-width:768px){
+  :root{--nav-h:64px;}
+  .nav-links,.nav-cta{display:none;}
+  .hamburger{display:flex;}
+  .masonry{columns:2;}
+  .stats-strip{gap:2rem;}
+  .footer-grid{grid-template-columns:1fr;}
+  .footer-bottom{flex-direction:column;text-align:center;}
+  .lb-inner{max-height:90vh;overflow-y:auto;}
+  .lb-img{min-height:220px;font-size:6rem;}
+}
+@media(max-width:480px){
+  .masonry{columns:1;}
+  .filter-bar{padding:0.75rem 4%;}
+  .gallery-wrap{padding:1.5rem 4%;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">🪔</div>
+    <div class="nav-logo-text"><span>Lata Family</span><span>Restaurant</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#about">About</a>
+    <a href="menu.html">Menu</a>
+    <a href="gallery.html" class="active">Gallery</a>
+    <a href="index.html#reservation">Reserve</a>
+  </div>
+  <div class="nav-cta">
+    <a href="login.html" class="btn-outline">Sign In</a>
+    <a href="signup.html" class="btn-solid">Sign Up</a>
+  </div>
+  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="closeMobile()">Home</a>
+  <a href="menu.html" onclick="closeMobile()">Menu</a>
+  <a href="gallery.html" onclick="closeMobile()">Gallery</a>
+  <a href="index.html#reservation" onclick="closeMobile()">Reserve</a>
+  <a href="signup.html" class="btn-solid">Sign Up Free</a>
+</div>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-tag">📸 40+ Photos</div>
+  <h1>Our <em>Gallery</em></h1>
+  <p>A glimpse into our kitchen, our dishes, and the beautiful moments shared at Lata Family Restaurant.</p>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <button class="fchip active" data-cat="all" onclick="filterGallery(this)">✨ All</button>
+  <button class="fchip" data-cat="food" onclick="filterGallery(this)">🍛 Food</button>
+  <button class="fchip" data-cat="ambience" onclick="filterGallery(this)">🏮 Ambience</button>
+  <button class="fchip" data-cat="kitchen" onclick="filterGallery(this)">👨‍🍳 Kitchen</button>
+  <button class="fchip" data-cat="moments" onclick="filterGallery(this)">❤️ Moments</button>
+  <button class="fchip" data-cat="events" onclick="filterGallery(this)">🎉 Events</button>
+  <span class="filter-count" id="filterCount">Showing 30 photos</span>
+</div>
+
+<!-- GALLERY -->
+<div class="gallery-wrap">
+  <div class="masonry" id="masonryGrid"></div>
+</div>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stat-item"><div class="stat-num">500+</div><div class="stat-lbl">Happy Guests Daily</div></div>
+  <div class="stat-item"><div class="stat-num">25+</div><div class="stat-lbl">Years of Memories</div></div>
+  <div class="stat-item"><div class="stat-num">4.9★</div><div class="stat-lbl">Average Rating</div></div>
+  <div class="stat-item"><div class="stat-num">2000+</div><div class="stat-lbl">Photos Shared</div></div>
+</div>
+
+<!-- UPLOAD CTA -->
+<div class="upload-cta">
+  <div class="upload-inner">
+    <div class="upload-icon">📸</div>
+    <h2>Share Your <em style="font-style:italic;color:var(--saffron);">Moment</em></h2>
+    <p>Visited us recently? Tag us on Instagram <strong>@LataFamilyRestaurant</strong> or share your photo — we'd love to feature it here!</p>
+    <button class="upload-btn" onclick="alert('Connect Instagram API or upload feature in production!')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Share Your Photo
+    </button>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+  <div class="lb-inner" id="lbInner">
+    <button class="lb-close" onclick="closeLightboxBtn()">✕</button>
+    <button class="lb-nav lb-prev" onclick="lbNav(-1)">‹</button>
+    <button class="lb-nav lb-next" onclick="lbNav(1)">›</button>
+    <div class="lb-img" id="lbImg"></div>
+    <div class="lb-body">
+      <div class="lb-cat" id="lbCat"></div>
+      <div class="lb-title" id="lbTitle"></div>
+      <div class="lb-desc" id="lbDesc"></div>
+      <div class="lb-footer">
+        <div class="lb-like-row">
+          <button class="g-like" id="lbLikeBtn" onclick="lbLike()">🤍</button>
+          <span id="lbLikeCount"></span> likes
+        </div>
+        <a href="menu.html" class="btn-solid" style="font-size:0.82rem;padding:8px 16px;">View Menu →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">
+        <div class="footer-brand-icon">🪔</div>
+        <div class="footer-brand-name">Lata Family Restaurant</div>
+      </div>
+      <p class="footer-desc">Three generations of authentic Indian flavours, served with love from the heart of Nagpur.</p>
+      <div class="footer-social">
+        <a class="soc-btn" href="#">📸</a>
+        <a class="soc-btn" href="#">👥</a>
+        <a class="soc-btn" href="#">💬</a>
+        <a class="soc-btn" href="#">▶️</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="menu.html">Menu</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="index.html#reservation">Reservations</a></li>
+        <li><a href="login.html">My Account</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Opening Hours</h4>
+      <ul>
+        <li><a href="#">Mon – Fri: 11am – 11pm</a></li>
+        <li><a href="#">Saturday: 10am – 11:30pm</a></li>
+        <li><a href="#">Sunday: 10am – 10:30pm</a></li>
+        <li><a href="#" style="color:var(--saffron-lt);">Open on all holidays ✓</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="#">📍 Civil Lines, Nagpur – 440001</a></li>
+        <li><a href="#">📞 +91 98765 43210</a></li>
+        <li><a href="#">✉️ hello@latafamilyrestaurant.in</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Lata Family Restaurant. All rights reserved.</p>
+    <div class="footer-bottom-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+'use strict';
+
+/* ══ GALLERY DATA ══ */
+const PHOTOS = [
+  // FOOD
+  {id:1,cat:'food',emoji:'🍛',bg:'linear-gradient(135deg,#FDE8C8,#F5C97A)',h:260,title:'Dal Makhani',desc:'Our signature overnight-cooked dal. Rich, creamy and absolutely unforgettable.',likes:142,featured:true},
+  {id:2,cat:'food',emoji:'🥘',bg:'linear-gradient(135deg,#FFE4CC,#FFBC80)',h:200,title:'Paneer Tikka Masala',desc:'Golden chargrilled paneer in a velvety tomato gravy.',likes:98},
+  {id:3,cat:'food',emoji:'🍚',bg:'linear-gradient(135deg,#E8F5E9,#A5D6A7)',h:280,title:'Dum Biryani',desc:'Fragrant basmati rice slow-cooked in a sealed handi with whole spices.',likes:210,featured:true},
+  {id:4,cat:'food',emoji:'🍢',bg:'linear-gradient(135deg,#FFF3E0,#FFCC80)',h:220,title:'Seekh Kebab',desc:'Minced lamb skewers grilled to smoky perfection in our tandoor.',likes:76},
+  {id:5,cat:'food',emoji:'🍮',bg:'linear-gradient(135deg,#FCE4EC,#F48FB1)',h:200,title:'Gulab Jamun',desc:'Soft milk dumplings in warm rose-saffron syrup. Pure happiness.',likes:189},
+  {id:6,cat:'food',emoji:'🧀',bg:'linear-gradient(135deg,#FFF8E1,#FFE082)',h:240,title:'Paneer Tikka',desc:'Marinated cottage cheese, chargrilled with peppers and onions.',likes:114},
+  {id:7,cat:'food',emoji:'🥛',bg:'linear-gradient(135deg,#E3F2FD,#90CAF9)',h:180,title:'Mango Lassi',desc:'Thick Alphonso mango lassi — the perfect summer drink.',likes:87},
+  {id:8,cat:'food',emoji:'🫓',bg:'linear-gradient(135deg,#FFFDE7,#FFF176)',h:200,title:'Butter Naan',desc:'Pillowy soft naan brushed with generous butter, hot from the tandoor.',likes:133},
+  {id:9,cat:'food',emoji:'🐟',bg:'linear-gradient(135deg,#E1F5FE,#81D4FA)',h:220,title:'Fish Amritsari',desc:'Crispy batter-fried fish with carom seeds — a Punjabi favourite.',likes:62},
+  {id:10,cat:'food',emoji:'☕',bg:'linear-gradient(135deg,#FFF3E0,#FFCC80)',h:180,title:'Masala Chai',desc:'Freshly brewed spiced tea — the perfect way to end your meal.',likes:95},
+
+  // AMBIENCE
+  {id:11,cat:'ambience',emoji:'🏮',bg:'linear-gradient(135deg,#4A1800,#7B2D00)',h:280,title:'Evening Ambience',desc:'Warm lanterns, rich wooden interiors — the perfect dining atmosphere.',likes:201,featured:true},
+  {id:12,cat:'ambience',emoji:'🪔',bg:'linear-gradient(135deg,#E8821A,#C8860A)',h:220,title:'Table Settings',desc:'Every table set with care — fresh flowers and traditional diyas.',likes:154},
+  {id:13,cat:'ambience',emoji:'🌿',bg:'linear-gradient(135deg,#E8F5E9,#C8E6C9)',h:200,title:'Garden Seating',desc:'Our beautiful outdoor garden section for fresh-air dining.',likes:88},
+  {id:14,cat:'ambience',emoji:'🎨',bg:'linear-gradient(135deg,#F3E5F5,#CE93D8)',h:260,title:'Wall Art',desc:'Hand-painted murals by local Nagpur artists adorn our walls.',likes:73},
+  {id:15,cat:'ambience',emoji:'🕯️',bg:'linear-gradient(135deg,#FFF8E1,#FFE082)',h:200,title:'Candlelit Dinner',desc:'Romantic candlelit setup for special occasions and anniversaries.',likes:165},
+  {id:16,cat:'ambience',emoji:'🌙',bg:'linear-gradient(135deg,#1A237E,#283593)',h:240,title:'Night View',desc:'Our restaurant beautifully lit up after sundown in Civil Lines.',likes:119},
+
+  // KITCHEN
+  {id:17,cat:'kitchen',emoji:'👨‍🍳',bg:'linear-gradient(135deg,#FFCCBC,#FF8A65)',h:260,title:'Chef at Work',desc:'Head Chef Ramesh ji preparing our famous Dal Makhani from scratch.',likes:234,featured:true},
+  {id:18,cat:'kitchen',emoji:'🔥',bg:'linear-gradient(135deg,#FF6F00,#E65100)',h:220,title:'Tandoor in Action',desc:'Our clay tandoor running at full heat — the heart of our kitchen.',likes:178},
+  {id:19,cat:'kitchen',emoji:'🌿',bg:'linear-gradient(135deg,#E8F5E9,#A5D6A7)',h:200,title:'Fresh Herbs Daily',desc:'Coriander, mint and curry leaves sourced fresh every morning.',likes:66},
+  {id:20,cat:'kitchen',emoji:'🫙',bg:'linear-gradient(135deg,#FFF3E0,#FFCC80)',h:240,title:'Spice Selection',desc:'Our collection of 30+ handpicked whole spices from across India.',likes:92},
+  {id:21,cat:'kitchen',emoji:'🥣',bg:'linear-gradient(135deg,#E3F2FD,#90CAF9)',h:200,title:'Dough Preparation',desc:'Fresh dough kneaded by hand every morning for our breads.',likes:55},
+
+  // MOMENTS
+  {id:22,cat:'moments',emoji:'👨‍👩‍👧‍👦',bg:'linear-gradient(135deg,#FCE4EC,#F48FB1)',h:260,title:'Family Celebration',desc:'A beautiful family gathering celebrating their 25th anniversary with us.',likes:287,featured:true},
+  {id:23,cat:'moments',emoji:'💍',bg:'linear-gradient(135deg,#E8EAF6,#9FA8DA)',h:220,title:'Engagement Dinner',desc:'Congratulations to Rahul & Sneha on their engagement at Lata!',likes:312},
+  {id:24,cat:'moments',emoji:'🎂',bg:'linear-gradient(135deg,#FFF9C4,#FFF176)',h:200,title:'Birthday Party',desc:'Little Arjun celebrating his 7th birthday with our special dessert platter.',likes:198},
+  {id:25,cat:'moments',emoji:'🤝',bg:'linear-gradient(135deg,#E8F5E9,#C8E6C9)',h:240,title:'Business Lunch',desc:'Corporate teams choose Lata for their important business meetings.',likes:44},
+  {id:26,cat:'moments',emoji:'👴',bg:'linear-gradient(135deg,#FDE8C8,#F5C97A)',h:200,title:'Founder\'s Story',desc:'Lata Devi ji, our founder, still visits the kitchen every morning.',likes:445,featured:true},
+
+  // EVENTS
+  {id:27,cat:'events',emoji:'🎊',bg:'linear-gradient(135deg,#FF6F00,#E65100)',h:260,title:'Diwali Night 2024',desc:'Our annual Diwali celebration with live music, fireworks and special menu.',likes:356,featured:true},
+  {id:28,cat:'events',emoji:'🎵',bg:'linear-gradient(135deg,#4A148C,#6A1B9A)',h:220,title:'Live Ghazal Evening',desc:'Monthly live ghazal nights every last Friday of the month.',likes:189},
+  {id:29,cat:'events',emoji:'🏆',bg:'linear-gradient(135deg,#E65100,#BF360C)',h:200,title:'Times Food Award',desc:'Proudly receiving the Times Food Award 2023 – Best Indian Restaurant.',likes:421},
+  {id:30,cat:'events',emoji:'🌹',bg:'linear-gradient(135deg,#FCE4EC,#F48FB1)',h:240,title:'Valentine\'s Special',desc:'Our Valentine\'s Day special dining experience — roses and romance.',likes:267},
+];
+
+let currentCat = 'all';
+let lbIndex = 0;
+let likes = {};
+PHOTOS.forEach(p=>likes[p.id]=p.likes);
+
+/* ══ RENDER ══ */
+function getFiltered(){
+  return currentCat==='all' ? PHOTOS : PHOTOS.filter(p=>p.cat===currentCat);
+}
+
+function render(){
+  const filtered = getFiltered();
+  document.getElementById('filterCount').textContent = `Showing ${filtered.length} photo${filtered.length!==1?'s':''}`;
+  const grid = document.getElementById('masonryGrid');
+  grid.innerHTML = filtered.map((p,i) => `
+    <div class="masonry-item" style="animation-delay:${(i%8)*0.06}s" onclick="openLightbox(${p.id})">
+      <div class="g-tile">
+        ${p.featured ? '<div class="g-featured">⭐ Featured</div>' : ''}
+        <button class="g-like ${likes[p.id]>p.likes?'liked':''}" id="like-${p.id}"
+          onclick="event.stopPropagation();toggleLike(${p.id})">${likes[p.id]>p.likes?'🧡':'🤍'}</button>
+        <div class="g-tile-inner" style="background:${p.bg};height:${p.h}px;">
+          <span class="g-emoji">${p.emoji}</span>
+          <div class="g-overlay">
+            <div class="g-overlay-icon">🔍</div>
+            <div class="g-overlay-title">${p.title}</div>
+            <div class="g-overlay-cat">${p.cat} · ${likes[p.id]} likes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ══ FILTER ══ */
+window.filterGallery = function(el){
+  currentCat = el.dataset.cat;
+  document.querySelectorAll('.fchip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  render();
+};
+
+/* ══ LIKE ══ */
+window.toggleLike = function(id){
+  const btn = document.getElementById('like-'+id);
+  if(!btn) return;
+  const isLiked = btn.classList.contains('liked');
+  likes[id] = isLiked ? likes[id]-1 : likes[id]+1;
+  btn.classList.toggle('liked', !isLiked);
+  btn.textContent = !isLiked ? '🧡' : '🤍';
+};
+
+/* ══ LIGHTBOX ══ */
+function openLightbox(id){
+  const filtered = getFiltered();
+  lbIndex = filtered.findIndex(p=>p.id===id);
+  showLb(filtered[lbIndex]);
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+window.openLightbox = openLightbox;
+
+function showLb(p){
+  document.getElementById('lbImg').style.background = p.bg;
+  document.getElementById('lbImg').innerHTML = `<span style="font-size:8rem;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.15))">${p.emoji}</span>`;
+  document.getElementById('lbCat').textContent = p.cat.toUpperCase();
+  document.getElementById('lbTitle').textContent = p.title;
+  document.getElementById('lbDesc').textContent = p.desc;
+  document.getElementById('lbLikeCount').textContent = likes[p.id];
+  const lbBtn = document.getElementById('lbLikeBtn');
+  lbBtn.textContent = likes[p.id]>p.likes ? '🧡' : '🤍';
+  lbBtn.classList.toggle('liked', likes[p.id]>p.likes);
+  lbBtn.dataset.id = p.id;
+}
+
+window.closeLightbox = function(e){
+  if(e.target===document.getElementById('lightbox')) closeLightboxBtn();
+};
+window.closeLightboxBtn = function(){
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow='';
+};
+window.lbNav = function(dir){
+  const filtered = getFiltered();
+  lbIndex = (lbIndex+dir+filtered.length)%filtered.length;
+  showLb(filtered[lbIndex]);
+};
+window.lbLike = function(){
+  const id = +document.getElementById('lbLikeBtn').dataset.id;
+  toggleLike(id);
+  const filtered = getFiltered();
+  const p = filtered[lbIndex];
+  document.getElementById('lbLikeCount').textContent = likes[p.id];
+  document.getElementById('lbLikeBtn').textContent = likes[p.id]>p.likes ? '🧡' : '🤍';
+};
+
+/* keyboard navigation */
+document.addEventListener('keydown',e=>{
+  const lb=document.getElementById('lightbox');
+  if(!lb.classList.contains('open')) return;
+  if(e.key==='ArrowRight') lbNav(1);
+  if(e.key==='ArrowLeft')  lbNav(-1);
+  if(e.key==='Escape')     closeLightboxBtn();
+});
+
+/* ══ HAMBURGER ══ */
+document.getElementById('hamburger').addEventListener('click',()=>{
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobileMenu').classList.toggle('open');
+});
+window.closeMobile=function(){
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('mobileMenu').classList.remove('open');
+};
+
+/* ══ INIT ══ */
+render();
+
+})();
+</script>
+<script>
+  (function(){
+    const token = localStorage.getItem('lata_token');
+    const name  = localStorage.getItem('lata_name');
+  
+    if (token && name) {
+      // ✅ Logged in — Sign In/Up hata ke user name + dashboard button dikhao
+      document.querySelector('.nav-cta').innerHTML = `
+        <span style="font-size:0.85rem;font-weight:500;color:var(--muted);">
+          👋 ${name.split(' ')[0]}
+        </span>
+        <a href="dashboard.html" class="btn-solid">My Account</a>
+        <button onclick="logout()" class="btn-outline" style="cursor:pointer;">
+          Sign Out
+        </button>
+      `;
+    }
+  
+    // Logout function
+    window.logout = function(){
+      localStorage.removeItem('lata_token');
+      localStorage.removeItem('lata_name');
+      localStorage.removeItem('lata_email');
+      window.location.href = 'index.html';
+    };
+  })();
+  </script>
+</body>
+</html>

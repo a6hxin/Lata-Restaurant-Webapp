@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Track Order – Lata Family Restaurant</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+:root{
+  --saffron:#E8821A;--saffron-lt:#F5A84E;--gold:#C8860A;--spice:#7B2D00;
+  --cream:#FDF6EE;--cream-dk:#F5EAD8;--dark:#1A0A00;--muted:#7A5C44;
+  --border:#E2C9A8;--success:#2E7D32;--error:#D0342C;
+  --shadow-sm:0 2px 12px rgba(123,45,0,0.08);
+  --shadow-md:0 8px 32px rgba(123,45,0,0.13);
+  --shadow-lg:0 24px 64px rgba(123,45,0,0.18);
+  --ff-display:'Cormorant Garamond',Georgia,serif;
+  --ff-body:'DM Sans',sans-serif;
+  --nav-h:68px;
+}
+body{font-family:var(--ff-body);background:var(--cream);color:var(--dark);min-height:100vh;overflow-x:hidden;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+
+/* ══ NAVBAR ══ */
+.nav{position:fixed;top:0;left:0;right:0;z-index:200;height:var(--nav-h);background:rgba(253,246,238,0.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 5%;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--saffron),var(--gold));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;}
+.nav-logo-text span:first-child{font-family:var(--ff-display);font-size:1.2rem;font-weight:700;color:var(--spice);display:block;line-height:1.1;}
+.nav-logo-text span:last-child{font-size:0.58rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
+.nav-right{display:flex;align-items:center;gap:12px;}
+.nav-back{display:flex;align-items:center;gap:6px;font-size:0.85rem;color:var(--muted);text-decoration:none;font-weight:500;transition:color 0.2s;}
+.nav-back:hover{color:var(--saffron);}
+.nav-help{display:flex;align-items:center;gap:6px;font-size:0.82rem;color:var(--saffron-dk);font-weight:500;cursor:pointer;border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;text-decoration:none;transition:all 0.2s;}
+.nav-help:hover{border-color:var(--saffron);background:rgba(232,130,26,0.05);}
+
+/* ══ HERO BANNER ══ */
+.hero-banner{
+  margin-top:var(--nav-h);
+  background:linear-gradient(135deg,var(--spice) 0%,#4A1800 100%);
+  padding:2.5rem 5% 3.5rem;
+  position:relative;overflow:hidden;
+}
+.hero-banner::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,0.03) 0,rgba(255,255,255,0.03) 1px,transparent 0,transparent 50%);background-size:20px 20px;}
+.hb-deco{position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,0.08);}
+.hb-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:4px 14px;font-size:0.75rem;color:rgba(255,255,255,0.75);margin-bottom:0.75rem;letter-spacing:0.5px;}
+.hb-live-dot{width:6px;height:6px;border-radius:50%;background:#4CAF50;animation:livepulse 1.5s ease-in-out infinite;}
+@keyframes livepulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(1.5);}}
+.hero-banner h1{font-family:var(--ff-display);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;color:#fff;margin-bottom:0.4rem;line-height:1.15;}
+.hero-banner h1 em{font-style:italic;color:var(--saffron-lt);}
+.hero-banner p{font-size:0.88rem;color:rgba(255,255,255,0.6);max-width:400px;}
+
+/* order id bar */
+.order-id-bar{
+  max-width:900px;margin:0 auto;
+  background:#fff;border-radius:14px;border:1px solid var(--border);
+  padding:1rem 1.25rem;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1rem;flex-wrap:wrap;
+  position:relative;z-index:1;
+  margin-top:-1.5rem;
+  box-shadow:var(--shadow-md);
+}
+.oid-left{display:flex;align-items:center;gap:12px;}
+.oid-chip{background:linear-gradient(135deg,var(--saffron),var(--gold));color:#fff;border-radius:10px;padding:6px 14px;font-family:var(--ff-display);font-size:1rem;font-weight:700;letter-spacing:0.5px;}
+.oid-info{}
+.oid-label{font-size:0.7rem;color:var(--muted);font-weight:500;letter-spacing:1px;text-transform:uppercase;}
+.oid-detail{font-size:0.85rem;font-weight:500;color:var(--dark);}
+.oid-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.status-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-size:0.8rem;font-weight:500;}
+.status-pill.preparing{background:rgba(232,130,26,0.12);color:var(--saffron-dk);border:1px solid rgba(232,130,26,0.25);}
+.status-pill.picked{background:rgba(21,101,192,0.1);color:#1565C0;border:1px solid rgba(21,101,192,0.2);}
+.status-pill.delivered{background:rgba(46,125,50,0.1);color:var(--success);border:1px solid rgba(46,125,50,0.2);}
+.status-pill.cancelled{background:rgba(208,52,44,0.1);color:var(--error);border:1px solid rgba(208,52,44,0.2);}
+.sp-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.status-pill.preparing .sp-dot{background:var(--saffron);animation:livepulse 1.2s infinite;}
+.status-pill.picked .sp-dot{background:#1565C0;animation:livepulse 1.2s infinite;}
+.status-pill.delivered .sp-dot{background:var(--success);}
+
+/* ══ MAIN LAYOUT ══ */
+.track-wrap{max-width:900px;margin:2rem auto;padding:0 5% 4rem;display:grid;grid-template-columns:1fr 320px;gap:1.5rem;align-items:start;}
+
+/* ══ PROGRESS TRACKER ══ */
+.tracker-card{background:#fff;border-radius:18px;border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.5rem;animation:fadeUp 0.4s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+
+.tracker-title{font-family:var(--ff-display);font-size:1.2rem;font-weight:600;color:var(--spice);margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;}
+.eta-badge{font-family:var(--ff-body);font-size:0.78rem;background:rgba(232,130,26,0.1);color:var(--saffron-dk);border:1px solid rgba(232,130,26,0.2);border-radius:20px;padding:4px 12px;font-weight:500;}
+
+/* step track */
+.steps-track{display:flex;flex-direction:column;gap:0;position:relative;}
+
+.track-step{display:flex;gap:16px;position:relative;}
+.track-step:not(:last-child)::after{
+  content:'';
+  position:absolute;
+  left:19px;top:40px;
+  width:2px;height:calc(100% - 10px);
+  background:var(--border);
+  z-index:0;
+  transition:background 0.6s ease;
+}
+.track-step.done:not(:last-child)::after{background:var(--success);}
+.track-step.active:not(:last-child)::after{background:linear-gradient(to bottom,var(--saffron),var(--border));}
+
+/* step icon */
+.ts-icon-wrap{flex-shrink:0;display:flex;flex-direction:column;align-items:center;z-index:1;}
+.ts-icon{
+  width:40px;height:40px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;border:2px solid var(--border);
+  background:#fff;transition:all 0.4s cubic-bezier(0.22,1,0.36,1);
+  position:relative;
+}
+.track-step.done   .ts-icon{background:var(--success);border-color:var(--success);}
+.track-step.active .ts-icon{background:var(--saffron);border-color:var(--saffron);box-shadow:0 0 0 6px rgba(232,130,26,0.15);animation:iconPulse 2s ease-in-out infinite;}
+@keyframes iconPulse{0%,100%{box-shadow:0 0 0 6px rgba(232,130,26,0.15);}50%{box-shadow:0 0 0 10px rgba(232,130,26,0.06);}}
+
+/* step body */
+.ts-body{flex:1;padding:0 0 2rem;}
+.track-step:last-child .ts-body{padding-bottom:0;}
+.ts-name{font-size:0.95rem;font-weight:500;color:var(--muted);margin-bottom:3px;transition:color 0.3s;}
+.track-step.done   .ts-name{color:var(--success);}
+.track-step.active .ts-name{color:var(--saffron-dk);font-weight:600;}
+.ts-desc{font-size:0.78rem;color:var(--muted);line-height:1.6;}
+.ts-time{font-size:0.72rem;color:var(--muted);margin-top:4px;opacity:0.7;}
+.track-step.done   .ts-time{color:var(--success);opacity:1;}
+.track-step.active .ts-time{color:var(--saffron-dk);opacity:1;font-weight:500;}
+
+/* active step detail card */
+.active-detail{background:rgba(232,130,26,0.05);border:1px solid rgba(232,130,26,0.2);border-radius:10px;padding:10px 14px;margin-top:8px;font-size:0.8rem;color:var(--dark);display:none;animation:slideDown 0.3s ease both;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+.active-detail.show{display:block;}
+.ad-row{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.ad-row:last-child{margin-bottom:0;}
+.ad-row svg{flex-shrink:0;opacity:0.6;}
+
+/* ══ DEMO CONTROLS ══ */
+.demo-bar{
+  background:rgba(232,130,26,0.06);border:1px solid rgba(232,130,26,0.2);
+  border-radius:12px;padding:0.9rem 1.1rem;margin-bottom:1.25rem;
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+}
+.demo-label{font-size:0.75rem;color:var(--muted);font-weight:500;}
+.demo-btns{display:flex;gap:6px;flex-wrap:wrap;}
+.demo-btn{padding:5px 13px;border-radius:20px;border:1.5px solid var(--border);font-family:var(--ff-body);font-size:0.75rem;font-weight:500;color:var(--muted);background:#fff;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.demo-btn:hover{border-color:var(--saffron);color:var(--saffron-dk);}
+.demo-btn.active{background:linear-gradient(135deg,var(--saffron),var(--gold));border-color:transparent;color:#fff;}
+.demo-btn.auto{background:linear-gradient(135deg,var(--spice),#4A1800);border-color:transparent;color:#fff;}
+
+/* ══ RIGHT PANEL ══ */
+.right-panel{display:flex;flex-direction:column;gap:1.25rem;}
+
+/* order items card */
+.info-card{background:#fff;border-radius:16px;border:1px solid var(--border);box-shadow:var(--shadow-sm);overflow:hidden;animation:fadeUp 0.4s ease 0.1s both;}
+.ic-header{padding:0.9rem 1.2rem;border-bottom:1px solid var(--border);font-family:var(--ff-display);font-size:1rem;font-weight:600;color:var(--spice);display:flex;align-items:center;gap:8px;}
+.ic-body{padding:1rem 1.2rem;}
+
+.order-item-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);}
+.order-item-row:last-child{border-bottom:none;}
+.oir-emoji{font-size:1.3rem;width:30px;text-align:center;flex-shrink:0;}
+.oir-name{flex:1;font-size:0.83rem;font-weight:500;color:var(--dark);}
+.oir-qty{font-size:0.72rem;color:var(--muted);background:var(--cream-dk);border-radius:6px;padding:1px 7px;}
+.oir-price{font-size:0.85rem;font-weight:500;color:var(--saffron-dk);}
+
+/* amount card */
+.amount-rows{display:flex;flex-direction:column;gap:6px;}
+.ar{display:flex;justify-content:space-between;font-size:0.83rem;color:var(--muted);}
+.ar.total{font-weight:600;color:var(--dark);font-size:0.92rem;border-top:1px solid var(--border);padding-top:8px;margin-top:2px;}
+
+/* delivery info */
+.dinfo-row{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);}
+.dinfo-row:last-child{border-bottom:none;}
+.dinfo-icon{width:32px;height:32px;border-radius:8px;background:rgba(232,130,26,0.1);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.dinfo-text .dt-label{font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;font-weight:500;}
+.dinfo-text .dt-val{font-size:0.83rem;font-weight:500;color:var(--dark);margin-top:1px;}
+
+/* contact/cancel */
+.action-btns{display:flex;gap:8px;}
+.ab-btn{flex:1;height:38px;border-radius:10px;font-family:var(--ff-body);font-size:0.82rem;font-weight:500;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:6px;}
+.ab-call{border:1.5px solid var(--saffron);background:rgba(232,130,26,0.05);color:var(--saffron-dk);}
+.ab-call:hover{background:var(--saffron);color:#fff;}
+.ab-cancel{border:1.5px solid var(--border);background:#fff;color:var(--muted);}
+.ab-cancel:hover{border-color:var(--error);color:var(--error);}
+
+/* ══ TOAST ══ */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--spice);color:#fff;padding:10px 20px;border-radius:10px;font-size:0.85rem;font-weight:500;z-index:1000;transition:transform 0.3s cubic-bezier(0.22,1,0.36,1);pointer-events:none;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.toast.green{background:var(--success);}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:800px){
+  .track-wrap{grid-template-columns:1fr;gap:1.25rem;}
+  .right-panel{order:2;}
+  .order-id-bar{flex-direction:column;align-items:flex-start;gap:0.75rem;}
+}
+@media(max-width:500px){
+  .hero-banner{padding:2rem 4% 3rem;}
+  .track-wrap{padding:0 4% 3rem;}
+  .demo-btns{gap:5px;}
+  .demo-btn{font-size:0.7rem;padding:4px 10px;}
+  .nav-help{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">🪔</div>
+    <div class="nav-logo-text"><span>Lata Family</span><span>Restaurant</span></div>
+  </a>
+  <div class="nav-right">
+    <a href="my-orders.html" class="nav-back">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      My Orders
+    </a>
+    <a href="tel:+919876543210" class="nav-help">
+      📞 Help
+    </a>
+  </div>
+</nav>
+
+<!-- HERO BANNER -->
+<div class="hero-banner">
+  <div class="hb-deco" style="width:280px;height:280px;top:-100px;right:-60px;"></div>
+  <div class="hb-deco" style="width:180px;height:180px;top:-50px;right:-20px;border-color:rgba(255,255,255,0.05);"></div>
+  <div class="hb-tag"><span class="hb-live-dot"></span> Live Tracking</div>
+  <h>Track Your <em>Order</em></h>
+  <p>Real-time updates on your food from kitchen to your table.</p>
+</div>
+
+<!-- ORDER ID BAR -->
+<div style="padding:0 5%;">
+  <div class="order-id-bar">
+    <div class="oid-left">
+      <div class="oid-chip" id="orderIdChip">#LFR-1029</div>
+      <div class="oid-info">
+        <div class="oid-label">Placed on</div>
+        <div class="oid-detail" id="orderDateDetail">Today · 1:42 PM · Dine In</div>
+      </div>
+    </div>
+    <div class="oid-right">
+      <div class="status-pill preparing" id="statusPill">
+        <div class="sp-dot"></div>
+        <span id="statusText">Preparing</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN TRACK LAYOUT -->
+<div class="track-wrap">
+
+  <!-- LEFT – TRACKER -->
+  <div>
+    <!-- DEMO CONTROLS (for prototype/presentation) -->
+    <div class="demo-bar">
+      <span class="demo-label">🎮 Demo — Click to simulate:</span>
+      <div class="demo-btns">
+        <button class="demo-btn active" onclick="setStatus(0)">Order Placed</button>
+        <button class="demo-btn" onclick="setStatus(1)">Confirmed</button>
+        <button class="demo-btn" onclick="setStatus(2)">Preparing</button>
+        <button class="demo-btn" onclick="setStatus(3)">Ready</button>
+        <button class="demo-btn" onclick="setStatus(4)">Out for Delivery</button>
+        <button class="demo-btn" onclick="setStatus(5)">Delivered ✅</button>
+        <button class="demo-btn auto" onclick="startAutoDemo()">▶ Auto Play</button>
+      </div>
+    </div>
+
+    <!-- TRACKER CARD -->
+    <div class="tracker-card">
+      <div class="tracker-title">
+        Order Progress
+        <div class="eta-badge" id="etaBadge">⏱ ETA: 30–35 mins</div>
+      </div>
+
+      <div class="steps-track" id="stepsTrack">
+
+        <!-- Step 0: Placed -->
+        <div class="track-step" id="step-0">
+          <div class="ts-icon-wrap">
+            <div class="ts-icon" id="icon-0">🧾</div>
+          </div>
+          <div class="ts-body">
+            <div class="ts-name">Order Placed</div>
+            <div class="ts-desc">Your order has been received by Lata Family Restaurant.</div>
+            <div class="ts-time" id="time-0">—</div>
+            <div class="active-detail" id="detail-0">
+              <div class="ad-row">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Waiting for restaurant to confirm your order…
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 1: Confirmed -->
+        <div class="track-step" id="step-1">
+          <div class="ts-icon-wrap">
+            <div class="ts-icon" id="icon-1">✅</div>
+          </div>
+          <div class="ts-body">
+            <div class="ts-name">Order Confirmed</div>
+            <div class="ts-desc">Restaurant has accepted your order and it's in the queue.</div>
+            <div class="ts-time" id="time-1">—</div>
+            <div class="active-detail" id="detail-1">
+              <div class="ad-row">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Order confirmed by Lata Family Restaurant!
+              </div>
+              <div class="ad-row">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Your food will start being prepared shortly.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Preparing -->
+        <div class="track-step" id="step-2">
+          <div class="ts-icon-wrap">
+            <div class="ts-icon" id="icon-2">👨‍🍳</div>
+          </div>
+          <div class="ts-body">
+            <div class="ts-name">Preparing Your Order</div>
+            <div class="ts-desc">Our chefs are crafting your meal with fresh ingredients and love.</div>
+            <div class="ts-time" id="time-2">—</div>
+            <div class="active-detail" id="detail-2">
+              <div class="ad-row">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
+                Head Chef Ramesh is preparing your Dal Makhani right now!
+              </div>
+              <div class="ad-row">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Estimated kitchen time: 20–25 minutes
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Ready -->
+        <div class="track-step" id="step-3">
+          <div class="ts-icon-wrap">
+            <div class="ts-icon" id="icon-3">🍽️</div>
+          </div>
+          <div class="ts-body">
+            <div class="ts-name">Order Ready</div>
+            <div class="ts-desc">Your food is freshly prepared and packed, ready to go!</div>
+            <div class="ts-time" id="time-3">—</div>
+            <div class="active-detail" id="detail-3">
+              <div class="ad-row">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Your order is packed and ready!
+              </div>
+              <div class="ad-row">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Assigning a delivery partner…
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4: Out for Delivery -->
+        <div class="track-step" id="step-4">
+          <div class="ts-icon-wrap">
+            <div class="ts-icon" id="icon-4">🛵</div>
+          </div>
+          <div class="ts-body">
+            <div class="ts-name">Out for Delivery</div>
+            <div class="ts-desc">Ravi is on the way with your order. Almost there!</div>
+            <div class="ts-time" id="time-4">—</div>
+            <div class="active-detail" id="detail-4">
+              <div class="ad-row">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 0-8 8c0 5.4 7.1 11.5 7.4 11.8.2.1.4.2.6.2s.4-.1.6-.2C13 21.5 20 15.4 20 10a8 8 0 0 0-8-8z"/></svg>
+                Delivery partner: <strong>Ravi Kumar</strong> · ⭐ 4.8
+              </div>
+              <div class="ad-row">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 11.69 19a19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-2.1-8.33A2 2 0 0 1 5.08 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L9.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                <span id="riderPhone">+91 99001 23456</span>
+              </div>
+              <div class="ad-row">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                ETA: <strong id="riderEta">8–12 mins</strong> away
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 5: Delivered -->
+        <div class="track-step" id="step-5">
+          <div class="ts-icon-wrap">
+            <div class="ts-icon" id="icon-5">🎉</div>
+          </div>
+          <div class="ts-body">
+            <div class="ts-name">Delivered!</div>
+            <div class="ts-desc">Order delivered successfully. Enjoy your meal! 🙏</div>
+            <div class="ts-time" id="time-5">—</div>
+            <div class="active-detail" id="detail-5">
+              <div class="ad-row">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Delivered to your address. Enjoy your food!
+              </div>
+              <div class="ad-row">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                Rate your experience below!
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- steps-track -->
+
+      <!-- Rating (shown after delivery) -->
+      <div id="ratingSection" style="display:none;margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--border);">
+        <div style="font-size:0.82rem;font-weight:500;color:var(--muted);margin-bottom:0.6rem;">How was your experience?</div>
+        <div style="display:flex;gap:8px;margin-bottom:0.75rem;" id="ratingStars">
+          <button class="star-rate-btn" data-r="1" onclick="rateOrder(1)" style="font-size:1.8rem;background:none;border:none;cursor:pointer;opacity:0.3;transition:all 0.2s;">★</button>
+          <button class="star-rate-btn" data-r="2" onclick="rateOrder(2)" style="font-size:1.8rem;background:none;border:none;cursor:pointer;opacity:0.3;transition:all 0.2s;">★</button>
+          <button class="star-rate-btn" data-r="3" onclick="rateOrder(3)" style="font-size:1.8rem;background:none;border:none;cursor:pointer;opacity:0.3;transition:all 0.2s;">★</button>
+          <button class="star-rate-btn" data-r="4" onclick="rateOrder(4)" style="font-size:1.8rem;background:none;border:none;cursor:pointer;opacity:0.3;transition:all 0.2s;">★</button>
+          <button class="star-rate-btn" data-r="5" onclick="rateOrder(5)" style="font-size:1.8rem;background:none;border:none;cursor:pointer;opacity:0.3;transition:all 0.2s;">★</button>
+        </div>
+        <textarea id="reviewText" placeholder="Tell us about your experience…" style="width:100%;height:70px;border:1.5px solid var(--border);border-radius:10px;padding:10px 12px;font-family:var(--ff-body);font-size:0.83rem;color:var(--dark);background:var(--cream);resize:none;outline:none;"></textarea>
+        <button onclick="submitReview()" style="margin-top:8px;height:38px;padding:0 20px;border-radius:10px;background:linear-gradient(135deg,var(--saffron),var(--gold));color:#fff;border:none;font-family:var(--ff-body);font-size:0.85rem;font-weight:500;cursor:pointer;transition:opacity 0.2s;">Submit Review</button>
+      </div>
+
+    </div><!-- tracker-card -->
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
+
+    <!-- Order Items -->
+    <div class="info-card">
+      <div class="ic-header">🍛 Your Items</div>
+      <div class="ic-body">
+        <div id="orderItemsList"></div>
+      </div>
+    </div>
+
+    <!-- Bill Summary -->
+    <div class="info-card">
+      <div class="ic-header">🧾 Bill Summary</div>
+      <div class="ic-body">
+        <div class="amount-rows" id="billRows"></div>
+      </div>
+    </div>
+
+    <!-- Delivery / Order Info -->
+    <div class="info-card">
+      <div class="ic-header">📋 Order Info</div>
+      <div class="ic-body">
+        <div class="dinfo-row">
+          <div class="dinfo-icon">🏠</div>
+          <div class="dinfo-text">
+            <div class="dt-label">Delivery Address</div>
+            <div class="dt-val" id="deliveryAddr">42, Civil Lines, Nagpur – 440001</div>
+          </div>
+        </div>
+        <div class="dinfo-row">
+          <div class="dinfo-icon">💳</div>
+          <div class="dinfo-text">
+            <div class="dt-label">Payment Method</div>
+            <div class="dt-val" id="paymentMethod">UPI · Google Pay</div>
+          </div>
+        </div>
+        <div class="dinfo-row">
+          <div class="dinfo-icon">🕐</div>
+          <div class="dinfo-text">
+            <div class="dt-label">Order Time</div>
+            <div class="dt-val" id="orderTime">Today, 1:42 PM</div>
+          </div>
+        </div>
+        <div class="dinfo-row">
+          <div class="dinfo-icon">🍽️</div>
+          <div class="dinfo-text">
+            <div class="dt-label">Order Type</div>
+            <div class="dt-val">Delivery</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="info-card">
+      <div class="ic-body">
+        <div class="action-btns">
+          <button class="ab-btn ab-call" onclick="callRestaurant()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 11.69 19a19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 3.1 4.18 2 2 0 0 1 5.08 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L9.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            Call Restaurant
+          </button>
+          <button class="ab-btn ab-cancel" id="cancelBtn" onclick="cancelOrder()">
+            ✕ Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- right-panel -->
+</div><!-- track-wrap -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* ══ ORDER DATA (demo) ══ */
+const ORDER = {
+  id:    '#LFR-1029',
+  date:  'Today · 1:42 PM · Delivery',
+  items: [
+    {name:'Dal Makhani',     emoji:'🍲', qty:1, price:220},
+    {name:'Butter Naan',     emoji:'🫓', qty:2, price:50},
+    {name:'Chicken Biryani', emoji:'🍗', qty:1, price:350},
+    {name:'Gulab Jamun',     emoji:'🍮', qty:1, price:120},
+    {name:'Mango Lassi',     emoji:'🥭', qty:2, price:90},
+  ],
+  subtotal:   880,
+  tax:        44,
+  delivery:   40,
+  discount:   88,
+  total:      876,
+  address:    '42, Sadar Bazaar, Civil Lines, Nagpur – 440001',
+  payment:    'UPI · Google Pay',
+  time:       'Today, 1:42 PM',
+};
+
+/* ══ STEP CONFIG ══ */
+const STEPS = [
+  { label:'Order Placed',       eta:'ETA: 30–35 mins', statusClass:'preparing', statusText:'Order Placed' },
+  { label:'Order Confirmed',    eta:'ETA: 25–30 mins', statusClass:'preparing', statusText:'Confirmed' },
+  { label:'Preparing',          eta:'ETA: 20–25 mins', statusClass:'preparing', statusText:'Preparing' },
+  { label:'Order Ready',        eta:'ETA: 10–15 mins', statusClass:'picked',    statusText:'Ready' },
+  { label:'Out for Delivery',   eta:'ETA: 8–12 mins',  statusClass:'picked',    statusText:'On the Way 🛵' },
+  { label:'Delivered',          eta:'Delivered! 🎉',   statusClass:'delivered', statusText:'Delivered ✅' },
+];
+
+let currentStep = 0;
+let autoTimer   = null;
+let rated       = false;
+
+/* ══ TOAST ══ */
+function showToast(msg, green=false){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast'+(green?' green':'');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+/* ══ TIME STRING ══ */
+function nowTime(){
+  return new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});
+}
+
+/* ══ RENDER STATIC DATA ══ */
+function renderOrderInfo(){
+  document.getElementById('orderIdChip').textContent   = ORDER.id;
+  document.getElementById('orderDateDetail').textContent= ORDER.date;
+  document.getElementById('deliveryAddr').textContent   = ORDER.address;
+  document.getElementById('paymentMethod').textContent  = ORDER.payment;
+  document.getElementById('orderTime').textContent      = ORDER.time;
+
+  // Items
+  document.getElementById('orderItemsList').innerHTML = ORDER.items.map(i=>`
+    <div class="order-item-row">
+      <span class="oir-emoji">${i.emoji}</span>
+      <span class="oir-name">${i.name}</span>
+      <span class="oir-qty">×${i.qty}</span>
+      <span class="oir-price">₹${i.price*i.qty}</span>
+    </div>
+  `).join('');
+
+  // Bill
+  document.getElementById('billRows').innerHTML=`
+    <div class="ar"><span>Subtotal</span><span>₹${ORDER.subtotal}</span></div>
+    <div class="ar"><span>GST & taxes (5%)</span><span>₹${ORDER.tax}</span></div>
+    <div class="ar"><span>Delivery charge</span><span>₹${ORDER.delivery}</span></div>
+    <div class="ar" style="color:var(--success);"><span>Coupon discount (LATA10)</span><span>-₹${ORDER.discount}</span></div>
+    <div class="ar total"><span>Total Paid</span><span>₹${ORDER.total}</span></div>
+  `;
+}
+
+/* ══ SET STATUS ══ */
+window.setStatus = function(step){
+  currentStep = step;
+
+  // Update demo buttons
+  document.querySelectorAll('.demo-btn:not(.auto)').forEach((b,i)=>{
+    b.classList.toggle('active', i===step);
+  });
+
+  // Update each track step
+  for(let i=0;i<6;i++){
+    const el   = document.getElementById('step-'+i);
+    const icon = document.getElementById('icon-'+i);
+    const detail=document.getElementById('detail-'+i);
+    const timeEl=document.getElementById('time-'+i);
+
+    el.classList.remove('done','active');
+    if(detail) detail.classList.remove('show');
+
+    if(i < step){
+      el.classList.add('done');
+      icon.innerHTML = '✓';
+      icon.style.fontSize='16px';
+      icon.style.color='#fff';
+      if(timeEl && timeEl.textContent==='—') timeEl.textContent='';
+    } else if(i === step){
+      el.classList.add('active');
+      icon.style.fontSize='18px';
+      icon.style.color='#fff';
+      if(timeEl) timeEl.textContent = nowTime();
+      if(detail) detail.classList.add('show');
+    } else {
+      // future steps - restore emoji
+      const emojis=['🧾','✅','👨‍🍳','🍽️','🛵','🎉'];
+      icon.innerHTML = emojis[i];
+      icon.style.fontSize='18px';
+      icon.style.color='';
+      if(timeEl) timeEl.textContent='—';
+    }
+  }
+
+  // Update status pill
+  const cfg = STEPS[step];
+  const pill = document.getElementById('statusPill');
+  pill.className = `status-pill ${cfg.statusClass}`;
+  pill.innerHTML = `<div class="sp-dot"></div><span>${cfg.statusText}</span>`;
+
+  // Update ETA badge
+  document.getElementById('etaBadge').textContent = cfg.eta;
+
+  // Show/hide cancel btn
+  document.getElementById('cancelBtn').style.display = step >= 3 ? 'none':'';
+
+  // Show rating after delivery
+  document.getElementById('ratingSection').style.display = step===5 ? 'block':'none';
+
+  // Confetti on delivery
+  if(step===5) launchConfetti();
+};
+
+/* ══ AUTO DEMO ══ */
+window.startAutoDemo = function(){
+  if(autoTimer){ clearInterval(autoTimer); autoTimer=null; document.querySelector('.demo-btn.auto').textContent='▶ Auto Play'; return; }
+  document.querySelector('.demo-btn.auto').textContent='⏸ Pause';
+  let s = currentStep;
+  setStatus(s);
+  autoTimer = setInterval(()=>{
+    s++;
+    if(s>5){ clearInterval(autoTimer); autoTimer=null; document.querySelector('.demo-btn.auto').textContent='▶ Auto Play'; return; }
+    setStatus(s);
+  },2200);
+};
+
+/* ══ RATING ══ */
+window.rateOrder = function(r){
+  if(rated) return;
+  document.querySelectorAll('.star-rate-btn').forEach(b=>{
+    const v=+b.dataset.r;
+    b.style.opacity = v<=r?'1':'0.3';
+    b.style.color   = v<=r?'var(--gold)':'';
+    b.style.transform = v<=r?'scale(1.1)':'scale(1)';
+  });
+};
+window.submitReview=function(){
+  if(rated){ showToast('Already submitted!'); return; }
+  const stars = document.querySelectorAll('.star-rate-btn');
+  let r=0; stars.forEach(b=>{ if(b.style.opacity==='1') r=+b.dataset.r; });
+  if(!r){ showToast('⚠️ Please select a rating first'); return; }
+  rated=true;
+  document.getElementById('ratingSection').innerHTML=`
+    <div style="text-align:center;padding:1rem 0;">
+      <div style="font-size:2rem;margin-bottom:0.5rem;">🙏</div>
+      <div style="font-family:var(--ff-display);font-size:1.1rem;font-weight:600;color:var(--spice);">Thank you for your review!</div>
+      <div style="font-size:0.82rem;color:var(--muted);margin-top:4px;">Your feedback helps us serve you better.</div>
+    </div>
+  `;
+  showToast('✅ Review submitted! Thank you.', true);
+};
+
+/* ══ ACTIONS ══ */
+window.callRestaurant=function(){ showToast('📞 Calling Lata Family Restaurant…'); };
+window.cancelOrder=function(){
+  if(currentStep>=3){ showToast('⚠️ Order cannot be cancelled at this stage.'); return; }
+  if(confirm('Are you sure you want to cancel this order?')){
+    showToast('Order cancellation requested.');
+    document.getElementById('cancelBtn').style.display='none';
+  }
+};
+
+/* ══ CONFETTI ══ */
+function launchConfetti(){
+  const colors=['#E8821A','#C8860A','#2E7D32','#F5A84E','#7B2D00'];
+  for(let i=0;i<60;i++){
+    const el=document.createElement('div');
+    el.style.cssText=`position:fixed;width:8px;height:8px;border-radius:50%;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      left:${Math.random()*100}vw;top:-10px;z-index:9999;pointer-events:none;
+      animation:fall ${1.5+Math.random()*2}s ease-in ${Math.random()*1}s forwards;`;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(), 3500);
+  }
+  if(!document.getElementById('fallCSS')){
+    const s=document.createElement('style');
+    s.id='fallCSS';
+    s.textContent=`@keyframes fall{to{transform:translateY(105vh) rotate(${Math.random()*360}deg);opacity:0;}}`;
+    document.head.appendChild(s);
+  }
+}
+
+/* ══ INIT ══ */
+renderOrderInfo();
+setStatus(0);
+
+})();
+</script>
+</body>
+</html>

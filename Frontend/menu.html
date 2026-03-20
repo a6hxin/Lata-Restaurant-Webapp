@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Menu – Lata Family Restaurant</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+:root{
+  --saffron:#E8821A;--saffron-lt:#F5A84E;--gold:#C8860A;--spice:#7B2D00;
+  --cream:#FDF6EE;--cream-dk:#F5EAD8;--dark:#1A0A00;--muted:#7A5C44;
+  --border:#E2C9A8;--white:#fff;--success:#2E7D32;
+  --shadow-sm:0 2px 12px rgba(123,45,0,0.10);
+  --shadow-md:0 8px 32px rgba(123,45,0,0.14);
+  --ff-display:'Cormorant Garamond',Georgia,serif;
+  --ff-body:'DM Sans',sans-serif;
+  --nav-h:72px;
+}
+body{font-family:var(--ff-body);background:var(--cream);color:var(--dark);overflow-x:hidden;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--cream-dk);}
+::-webkit-scrollbar-thumb{background:var(--saffron);border-radius:4px;}
+
+/* ══ NAVBAR ══ */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 5%;background:rgba(253,246,238,0.95);backdrop-filter:blur(12px);box-shadow:var(--shadow-sm);}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--saffron),var(--gold));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.nav-logo-text span:first-child{font-family:var(--ff-display);font-size:1.3rem;font-weight:700;color:var(--spice);display:block;line-height:1.1;}
+.nav-logo-text span:last-child{font-size:0.62rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
+.nav-links{display:flex;align-items:center;gap:2rem;}
+.nav-links a{font-size:0.88rem;font-weight:500;color:var(--dark);text-decoration:none;position:relative;transition:color 0.2s;}
+.nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1.5px;background:var(--saffron);transition:width 0.3s;}
+.nav-links a:hover,.nav-links a.active{color:var(--saffron);}
+.nav-links a.active::after,.nav-links a:hover::after{width:100%;}
+.nav-cta{display:flex;align-items:center;gap:10px;}
+.btn-outline{padding:8px 18px;border:1.5px solid var(--saffron);border-radius:8px;font-family:var(--ff-body);font-size:0.85rem;font-weight:500;color:var(--saffron-dk);background:transparent;cursor:pointer;text-decoration:none;transition:all 0.2s;}
+.btn-outline:hover{background:var(--saffron);color:#fff;}
+.btn-solid{padding:9px 20px;border:none;border-radius:8px;font-family:var(--ff-body);font-size:0.85rem;font-weight:500;color:#fff;background:linear-gradient(135deg,var(--saffron),var(--gold));cursor:pointer;text-decoration:none;transition:transform 0.15s,box-shadow 0.2s;}
+.btn-solid:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(200,134,10,0.4);}
+
+/* ── Profile Avatar ── */
+.nav-avatar-wrap{position:relative;display:flex;align-items:center;gap:10px;}
+.nav-greeting{font-size:0.85rem;font-weight:500;color:var(--muted);}
+.nav-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--saffron),var(--gold));display:flex;align-items:center;justify-content:center;font-family:var(--ff-display);font-size:1rem;font-weight:700;color:#fff;cursor:pointer;border:2px solid rgba(232,130,26,0.3);overflow:hidden;transition:box-shadow 0.2s;text-decoration:none;flex-shrink:0;}
+.nav-avatar:hover{box-shadow:0 0 0 3px rgba(232,130,26,0.25);}
+.avatar-dropdown{position:absolute;top:calc(100% + 10px);right:0;background:#fff;border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow-md);padding:0.5rem;min-width:180px;display:none;z-index:100;}
+.avatar-dropdown.open{display:block;animation:dropIn 0.2s ease;}
+@keyframes dropIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+.dd-header{padding:10px 12px 8px;border-bottom:1px solid var(--border);margin-bottom:4px;}
+.dd-name{font-size:0.88rem;font-weight:500;color:var(--dark);}
+.dd-email{font-size:0.72rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px;}
+.dd-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;font-size:0.83rem;color:var(--dark);text-decoration:none;transition:background 0.15s;cursor:pointer;border:none;background:none;font-family:var(--ff-body);width:100%;text-align:left;}
+.dd-item:hover{background:var(--cream-dk);}
+.dd-item.red{color:#D0342C;}
+.dd-item.red:hover{background:#FFF3F2;}
+.dd-divider{border:none;border-top:1px solid var(--border);margin:4px 0;}
+
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;}
+.hamburger span{display:block;width:24px;height:2px;background:var(--dark);border-radius:2px;transition:all 0.3s;}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px);}
+.mobile-menu{display:none;position:fixed;inset:0;top:var(--nav-h);z-index:999;background:rgba(253,246,238,0.97);backdrop-filter:blur(16px);flex-direction:column;align-items:center;justify-content:center;gap:2rem;padding:2rem;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{font-family:var(--ff-display);font-size:2rem;font-weight:600;color:var(--spice);text-decoration:none;}
+.mobile-menu a:hover{color:var(--saffron);}
+
+/* ══ PAGE HERO ══ */
+.page-hero{padding-top:calc(var(--nav-h) + 3rem);padding-bottom:3rem;padding-left:5%;padding-right:5%;background:linear-gradient(160deg,var(--cream) 0%,#F7E8C8 60%,var(--cream) 100%);text-align:center;position:relative;overflow:hidden;}
+.page-hero::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,var(--spice) 0,var(--spice) 1px,transparent 0,transparent 50%),repeating-linear-gradient(-45deg,var(--spice) 0,var(--spice) 1px,transparent 0,transparent 50%);background-size:30px 30px;opacity:0.03;}
+.page-hero-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(232,130,26,0.1);border:1px solid rgba(232,130,26,0.3);border-radius:20px;padding:5px 14px;font-size:0.78rem;font-weight:500;color:var(--saffron-dk);margin-bottom:1rem;}
+.page-hero h1{font-family:var(--ff-display);font-size:clamp(2.2rem,5vw,3.5rem);font-weight:700;color:var(--spice);margin-bottom:0.75rem;line-height:1.1;}
+.page-hero h1 em{font-style:italic;background:linear-gradient(135deg,var(--saffron),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.page-hero p{font-size:0.95rem;color:var(--muted);max-width:500px;margin:0 auto;font-weight:300;line-height:1.7;}
+
+/* ══ FILTER BAR ══ */
+.filter-bar{background:#fff;border-bottom:1px solid var(--border);padding:0.8rem 5%;position:sticky;top:var(--nav-h);z-index:100;display:flex;flex-direction:column;gap:8px;}
+.filter-row1{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.filter-row2{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.search-wrap{position:relative;flex:1;min-width:180px;max-width:300px;}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:0.4;width:16px;height:16px;pointer-events:none;}
+.search-clear{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;display:none;padding:0;line-height:1;}
+.search-clear.show{display:block;}
+.search-input{width:100%;height:40px;border:1.5px solid var(--border);border-radius:10px;padding:0 32px 0 36px;font-family:var(--ff-body);font-size:0.88rem;color:var(--dark);background:var(--cream);outline:none;transition:border-color 0.2s;}
+.search-input:focus{border-color:var(--saffron);box-shadow:0 0 0 3px rgba(232,130,26,0.1);}
+.sort-wrap{position:relative;}
+.sort-select{height:40px;border:1.5px solid var(--border);border-radius:10px;padding:0 28px 0 12px;font-family:var(--ff-body);font-size:0.82rem;color:var(--muted);background:var(--cream);outline:none;cursor:pointer;transition:border-color 0.2s;appearance:none;}
+.sort-select:focus{border-color:var(--saffron);}
+.sort-arrow{position:absolute;right:9px;top:50%;transform:translateY(-50%);pointer-events:none;opacity:0.5;}
+.price-wrap{display:flex;align-items:center;gap:8px;white-space:nowrap;}
+.price-label{font-size:0.78rem;color:var(--muted);font-weight:500;}
+.price-range{-webkit-appearance:none;appearance:none;width:100px;height:4px;border-radius:4px;background:var(--border);outline:none;cursor:pointer;}
+.price-range::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:linear-gradient(135deg,var(--saffron),var(--gold));cursor:pointer;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.2);}
+.price-range::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:linear-gradient(135deg,var(--saffron),var(--gold));cursor:pointer;border:2px solid #fff;}
+.price-val{font-size:0.8rem;font-weight:500;color:var(--saffron-dk);min-width:64px;}
+.rating-wrap{display:flex;align-items:center;gap:6px;}
+.rating-label{font-size:0.78rem;color:var(--muted);font-weight:500;white-space:nowrap;}
+.star-filter{display:flex;gap:2px;}
+.star-btn{background:none;border:none;cursor:pointer;font-size:17px;opacity:0.3;transition:opacity 0.15s,transform 0.15s;padding:0;line-height:1;}
+.star-btn:hover{opacity:0.8;}
+.star-btn.on{opacity:1;}
+.star-btn.active-sel{opacity:1;filter:drop-shadow(0 0 3px rgba(200,134,10,0.5));}
+.rating-clear{font-size:0.7rem;color:var(--muted);cursor:pointer;border:none;background:none;font-family:var(--ff-body);padding:0;display:none;}
+.rating-clear.show{display:inline;}
+.veg-toggle{display:flex;align-items:center;gap:7px;font-size:0.8rem;color:var(--muted);font-weight:500;cursor:pointer;white-space:nowrap;margin-left:auto;}
+.toggle-switch{width:34px;height:19px;background:var(--border);border-radius:20px;position:relative;transition:background 0.3s;flex-shrink:0;}
+.toggle-switch::after{content:'';position:absolute;width:13px;height:13px;border-radius:50%;background:#fff;top:3px;left:3px;transition:transform 0.3s;box-shadow:0 1px 3px rgba(0,0,0,0.2);}
+.toggle-switch.on{background:#2E7D32;}
+.toggle-switch.on::after{transform:translateX(15px);}
+.filter-chips{display:flex;gap:7px;flex-wrap:wrap;flex:1;}
+.fchip{padding:6px 15px;border-radius:20px;border:1.5px solid var(--border);font-family:var(--ff-body);font-size:0.79rem;font-weight:500;color:var(--muted);background:#fff;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.fchip:hover{border-color:var(--saffron);color:var(--saffron-dk);}
+.fchip.active{background:linear-gradient(135deg,var(--saffron),var(--gold));border-color:transparent;color:#fff;}
+.active-filters-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;padding-top:2px;}
+.active-filters-row:empty{display:none;}
+.af-tag{display:inline-flex;align-items:center;gap:5px;background:rgba(232,130,26,0.1);border:1px solid rgba(232,130,26,0.25);border-radius:20px;padding:3px 10px;font-size:0.72rem;color:var(--saffron-dk);font-weight:500;}
+.af-x{background:none;border:none;cursor:pointer;color:var(--saffron-dk);font-size:13px;padding:0;line-height:1;display:flex;align-items:center;}
+.af-x:hover{color:var(--spice);}
+.af-clear-all{background:none;border:none;font-size:0.72rem;color:var(--muted);cursor:pointer;font-family:var(--ff-body);text-decoration:underline;white-space:nowrap;padding:0;}
+.af-clear-all:hover{color:#D0342C;}
+.results-count{margin-left:auto;font-size:0.78rem;color:var(--muted);white-space:nowrap;}
+
+/* ══ MAIN LAYOUT ══ */
+.menu-layout{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:220px 1fr;gap:2rem;padding:2rem 5%;}
+
+/* ══ SIDEBAR ══ */
+.sidebar{position:sticky;top:calc(var(--nav-h) + 60px);height:fit-content;}
+.sidebar-title{font-size:0.7rem;font-weight:500;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:0.75rem;}
+.cat-list{display:flex;flex-direction:column;gap:4px;}
+.cat-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;cursor:pointer;font-size:0.88rem;color:var(--muted);font-weight:500;transition:all 0.2s;border:1.5px solid transparent;}
+.cat-item:hover{background:var(--cream-dk);color:var(--dark);}
+.cat-item.active{background:rgba(232,130,26,0.1);border-color:rgba(232,130,26,0.25);color:var(--saffron-dk);}
+.cat-item .cat-emoji{font-size:1.1rem;width:24px;text-align:center;}
+.cat-item .cat-count{margin-left:auto;font-size:0.72rem;background:var(--border);color:var(--muted);border-radius:10px;padding:1px 7px;}
+.cat-item.active .cat-count{background:rgba(232,130,26,0.2);color:var(--saffron-dk);}
+.cart-box{margin-top:1.5rem;background:#fff;border:1px solid var(--border);border-radius:14px;padding:1.1rem;display:none;}
+.cart-box.show{display:block;}
+.cart-title{font-size:0.75rem;font-weight:500;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:0.8rem;}
+.cart-items{display:flex;flex-direction:column;gap:6px;margin-bottom:0.8rem;max-height:160px;overflow-y:auto;}
+.cart-item{display:flex;align-items:center;justify-content:space-between;font-size:0.8rem;color:var(--dark);}
+.cart-item-name{flex:1;color:var(--muted);}
+.cart-item-qty{background:var(--cream-dk);border-radius:6px;padding:1px 7px;font-weight:500;font-size:0.75rem;}
+.cart-total{border-top:1px solid var(--border);padding-top:0.7rem;display:flex;justify-content:space-between;font-weight:500;font-size:0.88rem;color:var(--dark);}
+.cart-btn{width:100%;height:38px;background:linear-gradient(135deg,var(--saffron),var(--gold));border:none;border-radius:8px;color:#fff;font-family:var(--ff-body);font-size:0.85rem;font-weight:500;cursor:pointer;margin-top:0.7rem;transition:opacity 0.2s;}
+.cart-btn:hover{opacity:0.9;}
+
+/* ══ MENU CONTENT ══ */
+.no-results{text-align:center;padding:4rem 2rem;color:var(--muted);}
+.no-results .nr-icon{font-size:3rem;margin-bottom:1rem;}
+.no-results p{font-size:0.9rem;}
+.menu-section{margin-bottom:2.5rem;}
+.menu-section-header{display:flex;align-items:center;gap:12px;margin-bottom:1.2rem;padding-bottom:0.75rem;border-bottom:1.5px solid var(--border);}
+.menu-section-icon{font-size:1.5rem;}
+.menu-section-name{font-family:var(--ff-display);font-size:1.6rem;font-weight:700;color:var(--spice);}
+.menu-section-count{font-size:0.75rem;color:var(--muted);background:var(--cream-dk);border-radius:10px;padding:2px 10px;}
+.items-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;}
+.item-card{background:#fff;border-radius:16px;border:1px solid var(--border);padding:1rem;display:flex;gap:1rem;align-items:flex-start;transition:box-shadow 0.3s,transform 0.2s;position:relative;animation:fadeIn 0.4s ease both;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.item-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);}
+.item-img{width:80px;height:80px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:2.2rem;position:relative;overflow:hidden;}
+.veg-dot{width:14px;height:14px;border-radius:50%;border:2px solid;position:absolute;top:4px;left:4px;display:flex;align-items:center;justify-content:center;}
+.veg-dot.veg{border-color:#2E7D32;background:#fff;}
+.veg-dot.veg::after{content:'';width:6px;height:6px;border-radius:50%;background:#2E7D32;}
+.veg-dot.nonveg{border-color:#B71C1C;background:#fff;}
+.veg-dot.nonveg::after{content:'';width:6px;height:6px;border-radius:50%;background:#B71C1C;}
+.item-info{flex:1;min-width:0;}
+.item-badges{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:4px;}
+.badge{font-size:0.62rem;padding:2px 7px;border-radius:10px;font-weight:500;}
+.badge-best{background:#FFF3E0;color:#E65100;}
+.badge-new{background:#E8F5E9;color:#2E7D32;}
+.badge-spicy{background:#FFEBEE;color:#C62828;}
+.badge-jain{background:#F3E5F5;color:#6A1B9A;}
+.item-name{font-family:var(--ff-display);font-size:1.05rem;font-weight:600;color:var(--spice);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.item-desc{font-size:0.75rem;color:var(--muted);line-height:1.5;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.item-rating{display:flex;align-items:center;gap:4px;margin-bottom:5px;}
+.item-stars{font-size:11px;color:#C8860A;letter-spacing:1px;}
+.item-rating-num{font-size:0.72rem;font-weight:500;color:var(--muted);}
+.item-rating-count{font-size:0.68rem;color:var(--muted);opacity:0.7;}
+.item-footer{display:flex;align-items:center;justify-content:space-between;}
+.item-price{font-family:var(--ff-display);font-size:1rem;font-weight:600;color:var(--saffron-dk);}
+.item-price .old-price{font-size:0.75rem;color:var(--muted);text-decoration:line-through;margin-left:5px;font-family:var(--ff-body);font-weight:400;}
+.qty-ctrl{display:flex;align-items:center;gap:6px;}
+.qty-btn{width:26px;height:26px;border-radius:6px;border:1.5px solid var(--border);background:#fff;color:var(--dark);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;font-weight:500;line-height:1;}
+.qty-btn:hover{border-color:var(--saffron);color:var(--saffron);}
+.qty-num{font-size:0.85rem;font-weight:500;color:var(--dark);min-width:18px;text-align:center;}
+.add-btn{height:28px;padding:0 12px;border-radius:8px;border:1.5px solid var(--saffron);background:transparent;color:var(--saffron-dk);font-family:var(--ff-body);font-size:0.78rem;font-weight:500;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.add-btn:hover{background:var(--saffron);color:#fff;}
+.item-card.popular::before{content:'🔥 Popular';position:absolute;top:-1px;right:-1px;background:linear-gradient(135deg,var(--saffron),var(--gold));color:#fff;font-size:0.65rem;font-weight:500;padding:3px 10px;border-radius:0 14px 0 10px;}
+
+/* ══ FLOATING CART ══ */
+.float-cart{position:fixed;bottom:2rem;right:2rem;z-index:500;background:linear-gradient(135deg,var(--saffron),var(--gold));color:#fff;border:none;border-radius:50px;padding:12px 20px;font-family:var(--ff-body);font-size:0.88rem;font-weight:500;cursor:pointer;display:none;align-items:center;gap:10px;box-shadow:0 6px 24px rgba(200,134,10,0.4);transition:transform 0.2s,box-shadow 0.2s;}
+@keyframes popIn{from{transform:scale(0.8);opacity:0;}to{transform:scale(1);opacity:1;}}
+.float-cart.show{display:flex;animation:popIn 0.3s cubic-bezier(0.22,1,0.36,1);}
+.float-cart:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(200,134,10,0.5);}
+.cart-badge{background:rgba(255,255,255,0.25);border-radius:20px;padding:2px 10px;font-weight:700;font-size:0.82rem;}
+
+/* ══ TOAST ══ */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--spice);color:#fff;padding:10px 20px;border-radius:10px;font-size:0.85rem;font-weight:500;z-index:2000;transition:transform 0.3s cubic-bezier(0.22,1,0.36,1);pointer-events:none;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:1024px){.menu-layout{grid-template-columns:180px 1fr;gap:1.5rem;}.items-grid{grid-template-columns:1fr;}}
+@media(max-width:768px){
+  :root{--nav-h:64px;}
+  .nav-links,.nav-cta{display:none;}
+  .hamburger{display:flex;}
+  .menu-layout{grid-template-columns:1fr;padding:1.5rem 4%;}
+  .sidebar{position:static;}
+  .cat-list{flex-direction:row;flex-wrap:wrap;gap:6px;}
+  .cat-item{padding:7px 12px;font-size:0.8rem;}
+  .cart-box{display:none!important;}
+  .filter-bar{padding:0.75rem 4%;}
+  .items-grid{grid-template-columns:1fr;}
+  .float-cart{bottom:1.2rem;right:1.2rem;padding:10px 16px;font-size:0.83rem;}
+}
+@media(max-width:480px){
+  .page-hero{padding-left:4%;padding-right:4%;}
+  .item-card{flex-direction:column;gap:0.75rem;}
+  .item-img{width:100%;height:120px;border-radius:10px;}
+  .search-wrap{max-width:100%;width:100%;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">🪔</div>
+    <div class="nav-logo-text"><span>Lata Family</span><span>Restaurant</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#about">About</a>
+    <a href="menu.html" class="active">Menu</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="index.html#reservation">Reserve</a>
+  </div>
+  <!-- nav-cta: JS se replace hoga login ke baad -->
+  <div class="nav-cta" id="navCta">
+    <a href="login.html" class="btn-outline">Sign In</a>
+    <a href="signup.html" class="btn-solid">Sign Up</a>
+  </div>
+  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="closeMobile()">Home</a>
+  <a href="menu.html" onclick="closeMobile()">Menu</a>
+  <a href="gallery.html" onclick="closeMobile()">Gallery</a>
+  <a href="index.html#reservation" onclick="closeMobile()">Reserve</a>
+  <a href="signup.html" class="btn-solid">Sign Up Free</a>
+</div>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-tag">🍽️ 28 Dishes Available</div>
+  <h1>Our <em>Menu</em></h1>
+  <p>Fresh ingredients, family recipes, cooked with love every single day.</p>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="filter-row1">
+    <div class="search-wrap">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="#7A5C44" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="search-input" type="text" id="searchInput" placeholder="Search dishes, ingredients…" oninput="onSearch(this)"/>
+      <button class="search-clear" id="searchClear" onclick="clearSearch()" title="Clear">✕</button>
+    </div>
+    <div class="sort-wrap">
+      <select class="sort-select" id="sortSelect">
+        <option value="default">Sort: Default</option>
+        <option value="price-asc">Price: Low → High</option>
+        <option value="price-desc">Price: High → Low</option>
+        <option value="rating-desc">Rating: High → Low</option>
+        <option value="name-asc">Name: A → Z</option>
+        <option value="popular">Most Popular</option>
+      </select>
+      <svg class="sort-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7A5C44" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="price-wrap">
+      <span class="price-label">Max Price:</span>
+      <input class="price-range" type="range" id="priceRange" min="50" max="400" value="400" step="10" oninput="onPriceChange(this)"/>
+      <span class="price-val" id="priceVal">Any price</span>
+    </div>
+    <div class="rating-wrap">
+      <span class="rating-label">Min Rating:</span>
+      <div class="star-filter">
+        <button class="star-btn" data-r="1" onclick="setRating(1)">★</button>
+        <button class="star-btn" data-r="2" onclick="setRating(2)">★</button>
+        <button class="star-btn" data-r="3" onclick="setRating(3)">★</button>
+        <button class="star-btn" data-r="4" onclick="setRating(4)">★</button>
+        <button class="star-btn" data-r="5" onclick="setRating(5)">★</button>
+      </div>
+      <button class="rating-clear" id="ratingClear" onclick="clearRating()">✕ clear</button>
+    </div>
+    <label class="veg-toggle">
+      <span>Veg Only</span>
+      <div class="toggle-switch" id="vegToggle" onclick="toggleVeg()"></div>
+    </label>
+  </div>
+  <div class="filter-row2">
+    <div class="filter-chips">
+      <button class="fchip active" data-cat="all"      onclick="filterCat(this)">🍽️ All</button>
+      <button class="fchip" data-cat="starters"        onclick="filterCat(this)">🍢 Starters</button>
+      <button class="fchip" data-cat="mains"           onclick="filterCat(this)">🍛 Mains</button>
+      <button class="fchip" data-cat="breads"          onclick="filterCat(this)">🫓 Breads</button>
+      <button class="fchip" data-cat="rice"            onclick="filterCat(this)">🍚 Rice</button>
+      <button class="fchip" data-cat="desserts"        onclick="filterCat(this)">🍮 Desserts</button>
+      <button class="fchip" data-cat="drinks"          onclick="filterCat(this)">🥛 Drinks</button>
+    </div>
+    <span class="results-count" id="resultsCount">28 dishes</span>
+  </div>
+  <div class="active-filters-row" id="activeFiltersRow"></div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="menu-layout">
+  <aside class="sidebar">
+    <div class="sidebar-title">Categories</div>
+    <div class="cat-list" id="catList">
+      <div class="cat-item active" data-cat="all"      onclick="filterCatSide(this)"><span class="cat-emoji">🍽️</span>All Items<span class="cat-count" id="cnt-all">28</span></div>
+      <div class="cat-item" data-cat="starters"        onclick="filterCatSide(this)"><span class="cat-emoji">🍢</span>Starters<span class="cat-count" id="cnt-starters">6</span></div>
+      <div class="cat-item" data-cat="mains"           onclick="filterCatSide(this)"><span class="cat-emoji">🍛</span>Main Course<span class="cat-count" id="cnt-mains">8</span></div>
+      <div class="cat-item" data-cat="breads"          onclick="filterCatSide(this)"><span class="cat-emoji">🫓</span>Breads<span class="cat-count" id="cnt-breads">4</span></div>
+      <div class="cat-item" data-cat="rice"            onclick="filterCatSide(this)"><span class="cat-emoji">🍚</span>Rice & Biryani<span class="cat-count" id="cnt-rice">3</span></div>
+      <div class="cat-item" data-cat="desserts"        onclick="filterCatSide(this)"><span class="cat-emoji">🍮</span>Desserts<span class="cat-count" id="cnt-desserts">3</span></div>
+      <div class="cat-item" data-cat="drinks"          onclick="filterCatSide(this)"><span class="cat-emoji">🥛</span>Drinks<span class="cat-count" id="cnt-drinks">4</span></div>
+    </div>
+    <div class="cart-box" id="cartBox">
+      <div class="cart-title">Your Order</div>
+      <div class="cart-items" id="cartItems"></div>
+      <div class="cart-total"><span>Total</span><span id="cartTotal">₹0</span></div>
+      <!-- ✅ FIX 1: checkout.html -->
+      <button class="cart-btn" onclick="goCheckout()">Proceed to Checkout →</button>
+    </div>
+  </aside>
+
+  <main class="menu-content" id="menuContent"></main>
+</div>
+
+<!-- ✅ FIX 2: Float cart → checkout.html directly -->
+<button class="float-cart" id="floatCart" onclick="goCheckout()">
+  🛒 View Cart &nbsp;<span class="cart-badge" id="floatCartCount">0</span>&nbsp;·&nbsp;<span id="floatCartTotal">₹0</span>
+</button>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* ══ MENU DATA ══ */
+const MENU = [
+  {id:1, cat:'starters', name:'Paneer Tikka',        emoji:'🧀', color:'#FFF3E0,#FFE0B2', price:220, rating:4.8, rcount:312, desc:'Marinated cottage cheese cubes grilled in tandoor with bell peppers and onions.', veg:true,  badges:['Bestseller'], popular:true},
+  {id:2, cat:'starters', name:'Seekh Kebab',          emoji:'🍢', color:'#FBE9E7,#FFCCBC', price:280, rating:4.5, rcount:198, desc:'Minced lamb with aromatic herbs and spices, grilled on skewers in tandoor.',      veg:false, badges:['Spicy']},
+  {id:3, cat:'starters', name:'Veg Samosa',           emoji:'🥟', color:'#FFFDE7,#FFF9C4', price:80,  old:100, rating:4.3, rcount:540, desc:'Crispy fried pastry filled with spiced potatoes and peas.', veg:true, badges:['New'], jain:true},
+  {id:4, cat:'starters', name:'Chicken Tikka',        emoji:'🍗', color:'#FCE4EC,#F8BBD0', price:300, rating:4.7, rcount:275, desc:'Tender chicken pieces marinated overnight in yoghurt and spices, chargrilled.',    veg:false, badges:['Bestseller'], popular:true},
+  {id:5, cat:'starters', name:'Hara Bhara Kebab',     emoji:'🟢', color:'#E8F5E9,#C8E6C9', price:160, rating:4.2, rcount:88,  desc:'Crispy spinach and pea patties with green chutney.',          veg:true,  badges:[]},
+  {id:6, cat:'starters', name:'Fish Amritsari',       emoji:'🐟', color:'#E3F2FD,#BBDEFB', price:320, rating:4.6, rcount:142, desc:'Crispy batter-fried fish with carom seeds and chaat masala.',    veg:false, badges:['Spicy']},
+  {id:7, cat:'mains',    name:'Dal Makhani',          emoji:'🍲', color:'#FDE8C8,#F5C97A', price:220, rating:4.9, rcount:621, desc:'Slow-cooked black lentils with butter and cream, simmered overnight.', veg:true, badges:['Bestseller'], popular:true},
+  {id:8, cat:'mains',    name:'Paneer Butter Masala', emoji:'🧀', color:'#FFF3E0,#FFCC80', price:260, rating:4.7, rcount:408, desc:'Velvety tomato-cashew gravy with soft paneer cubes.', veg:true, badges:['Bestseller']},
+  {id:9, cat:'mains',    name:'Butter Chicken',       emoji:'🍗', color:'#FBE9E7,#FFAB91', price:320, rating:4.8, rcount:510, desc:"Tender chicken in a rich tomato-butter sauce. India's most iconic dish.", veg:false, badges:['Popular'], popular:true},
+  {id:10,cat:'mains',    name:'Palak Paneer',         emoji:'🥬', color:'#E8F5E9,#A5D6A7', price:240, rating:4.4, rcount:210, desc:'Fresh spinach puree with soft paneer cubes, tempered with garlic.',    veg:true,  badges:[]},
+  {id:11,cat:'mains',    name:'Mutton Rogan Josh',    emoji:'🥘', color:'#FFEBEE,#FFCDD2', price:380, rating:4.7, rcount:187, desc:'Kashmiri-style slow-braised mutton in aromatic whole spices.', veg:false, badges:['Spicy']},
+  {id:12,cat:'mains',    name:'Chole Masala',         emoji:'🫘', color:'#FFF8E1,#FFECB3', price:180, rating:4.3, rcount:163, desc:'Spiced chickpea curry with tangy tomatoes and pomegranate seeds.',             veg:true,  badges:['Jain Ok'], jain:true},
+  {id:13,cat:'mains',    name:'Shahi Paneer',         emoji:'🍛', color:'#F3E5F5,#CE93D8', price:280, rating:4.5, rcount:231, desc:'Royal Mughal-style paneer in a rich cream and cashew-based sauce.',                  veg:true,  badges:[]},
+  {id:14,cat:'mains',    name:'Chicken Korma',        emoji:'🍗', color:'#FFFDE7,#FFF176', price:340, rating:4.6, rcount:144, desc:'Tender chicken in a luxurious almond and coconut milk korma sauce.',            veg:false, badges:[]},
+  {id:15,cat:'breads',   name:'Butter Naan',          emoji:'🫓', color:'#FFF8E1,#FFECB3', price:50,  rating:4.8, rcount:890, desc:'Soft leavened bread baked in tandoor, generously brushed with butter.',              veg:true,  badges:['Must Try'], popular:true},
+  {id:16,cat:'breads',   name:'Garlic Naan',          emoji:'🫓', color:'#FFF3E0,#FFE0B2', price:60,  rating:4.7, rcount:642, desc:'Fluffy naan topped with fresh garlic and coriander.',             veg:true,  badges:[]},
+  {id:17,cat:'breads',   name:'Laccha Paratha',       emoji:'🥙', color:'#FFFDE7,#FFF9C4', price:55,  rating:4.5, rcount:320, desc:'Multi-layered whole wheat flatbread — crispy outside, flaky inside.',          veg:true,  badges:['Jain Ok'], jain:true},
+  {id:18,cat:'breads',   name:'Peshwari Naan',        emoji:'🫓', color:'#FCE4EC,#F8BBD0', price:90,  rating:4.4, rcount:108, desc:'Sweet naan stuffed with coconut, almonds and raisins.',              veg:true,  badges:['New']},
+  {id:19,cat:'rice',     name:'Veg Dum Biryani',      emoji:'🍚', color:'#E8F5E9,#A5D6A7', price:280, rating:4.7, rcount:445, desc:'Fragrant basmati rice layered with spiced vegetables, slow-cooked dum style.',        veg:true,  badges:['Bestseller'], popular:true},
+  {id:20,cat:'rice',     name:'Chicken Biryani',      emoji:'🍗', color:'#FFF3E0,#FFCC80', price:350, rating:4.9, rcount:712, desc:'Premium basmati rice layered with marinated chicken and saffron.',    veg:false, badges:['Bestseller'], popular:true},
+  {id:21,cat:'rice',     name:'Jeera Rice',           emoji:'🍚', color:'#FFFDE7,#FFF9C4', price:120, rating:4.2, rcount:187, desc:'Light steamed basmati rice tempered with cumin seeds and ghee.',                      veg:true,  badges:['Jain Ok'], jain:true},
+  {id:22,cat:'desserts', name:'Gulab Jamun',          emoji:'🍮', color:'#FCE4EC,#F48FB1', price:120, rating:4.9, rcount:560, desc:'Soft milk-solid dumplings soaked in rose-saffron syrup. Served warm.',                veg:true,  badges:['Bestseller'], popular:true},
+  {id:23,cat:'desserts', name:'Kulfi Falooda',        emoji:'🍦', color:'#E3F2FD,#90CAF9', price:150, rating:4.6, rcount:198, desc:'Indian ice cream with rose syrup, basil seeds and vermicelli noodles.',   veg:true,  badges:['Seasonal']},
+  {id:24,cat:'desserts', name:'Gajar Ka Halwa',       emoji:'🥕', color:'#FFF3E0,#FFCC80', price:130, rating:4.5, rcount:215, desc:'Slow-cooked carrot pudding with ghee, milk and nuts.',              veg:true,  badges:[]},
+  {id:25,cat:'drinks',   name:'Mango Lassi',          emoji:'🥭', color:'#FFF9C4,#FFF176', price:90,  rating:4.8, rcount:480, desc:'Thick creamy yoghurt blended with Alphonso mango pulp and cardamom.',                veg:true,  badges:['Bestseller'], popular:true},
+  {id:26,cat:'drinks',   name:'Masala Chaas',         emoji:'🥛', color:'#E3F2FD,#BBDEFB', price:60,  rating:4.4, rcount:312, desc:'Spiced buttermilk with roasted cumin, mint and ginger.',         veg:true,  badges:['Jain Ok'], jain:true},
+  {id:27,cat:'drinks',   name:'Rose Sharbat',         emoji:'🌹', color:'#FCE4EC,#F48FB1', price:70,  rating:4.3, rcount:95,  desc:'Chilled rose-flavoured drink with basil seeds and a hint of lemon.',                 veg:true,  badges:['New']},
+  {id:28,cat:'drinks',   name:'Masala Chai',          emoji:'☕', color:'#FFF3E0,#FFCC80', price:50,  rating:4.6, rcount:410, desc:'Freshly brewed spiced tea with ginger, cardamom, cloves and cinnamon.',              veg:true,  badges:[]},
+];
+
+/* ══ STATE ══ */
+let cart={}, activeCat='all', vegOnly=false, searchQ='', maxPrice=400, minRating=0, sortBy='default';
+
+/* ══ TOAST ══ */
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+/* ══ CART HELPERS ══ */
+function cartTotal(){return Object.entries(cart).reduce((s,[id,q])=>{const m=MENU.find(x=>x.id===+id);return s+(m?m.price*q:0);},0);}
+function cartCount(){return Object.values(cart).reduce((a,b)=>a+b,0);}
+
+/* ✅ FIX 3: Save cart to sessionStorage so checkout.html can read it */
+function saveCart(){
+  try{ sessionStorage.setItem('lata_cart', JSON.stringify(
+    Object.entries(cart).map(([id,qty])=>{
+      const m=MENU.find(x=>x.id===+id);
+      return m ? {id:m.id,name:m.name,emoji:m.emoji,price:m.price,qty,veg:m.veg,bg:m.color} : null;
+    }).filter(Boolean)
+  ));}catch(e){}
+}
+
+function updateCartUI(){
+  const count=cartCount(), total=cartTotal();
+  const fc=document.getElementById('floatCart');
+  const cb=document.getElementById('cartBox');
+  document.getElementById('floatCartCount').textContent=count;
+  document.getElementById('floatCartTotal').textContent='₹'+total;
+  document.getElementById('cartTotal').textContent='₹'+total;
+  count>0 ? fc.classList.add('show') : fc.classList.remove('show');
+  count>0 ? cb.classList.add('show') : cb.classList.remove('show');
+  const ci=document.getElementById('cartItems');
+  ci.innerHTML='';
+  Object.entries(cart).forEach(([id,qty])=>{
+    if(!qty) return;
+    const item=MENU.find(m=>m.id===+id); if(!item) return;
+    const d=document.createElement('div'); d.className='cart-item';
+    d.innerHTML=`<span class="cart-item-name">${item.emoji} ${item.name}</span><span class="cart-item-qty">×${qty}</span><span style="font-size:0.78rem;font-weight:500;color:var(--saffron-dk);">₹${item.price*qty}</span>`;
+    ci.appendChild(d);
+  });
+  Object.entries(cart).forEach(([id,qty])=>{
+    const qn=document.getElementById('qnum-'+id);
+    const qc=document.getElementById('qctrl-'+id);
+    const ab=document.getElementById('addbtn-'+id);
+    if(qn) qn.textContent=qty;
+    if(qty>0){if(qc)qc.style.display='flex';if(ab)ab.style.display='none';}
+    else{if(qc)qc.style.display='none';if(ab)ab.style.display='inline-flex';}
+  });
+  saveCart(); // ✅ save every time cart changes
+}
+
+window.addToCart=function(id){
+  cart[id]=(cart[id]||0)+1;
+  showToast('✓ '+MENU.find(m=>m.id===id).name+' added!');
+  updateCartUI();
+};
+window.qtyChange=function(id,d){
+  cart[id]=Math.max(0,(cart[id]||0)+d);
+  if(!cart[id]) delete cart[id];
+  updateCartUI();
+};
+
+/* ✅ FIX 1+2: Both cart button and float cart go to checkout.html */
+window.goCheckout=function(){
+  if(cartCount()===0){ showToast('⚠️ Add items to cart first!'); return; }
+  saveCart();
+  showToast('🛒 Going to checkout…');
+  setTimeout(()=>window.location.href='checkout.html',800);
+};
+
+/* ══ STARS ══ */
+function starsHTML(r){
+  const f=Math.floor(r),h=r%1>=0.5;
+  let s='';
+  for(let i=0;i<5;i++) s+=i<f?'★':(i===f&&h?'½':'☆');
+  return s;
+}
+
+/* ══ ACTIVE FILTER TAGS ══ */
+function renderActiveTags(){
+  const row=document.getElementById('activeFiltersRow');
+  const tags=[];
+  if(searchQ)      tags.push({label:`🔍 "${searchQ}"`,       clear:clearSearch});
+  if(maxPrice<400) tags.push({label:`💰 Max ₹${maxPrice}`,   clear:()=>{document.getElementById('priceRange').value=400;onPriceChange(document.getElementById('priceRange'));}});
+  if(minRating>0)  tags.push({label:`⭐ ${minRating}+ stars`, clear:clearRating});
+  if(vegOnly)      tags.push({label:'🥦 Veg Only',            clear:()=>{vegOnly=false;document.getElementById('vegToggle').classList.remove('on');applyFilters();}});
+  if(activeCat!=='all') tags.push({label:`📂 ${activeCat[0].toUpperCase()+activeCat.slice(1)}`,clear:()=>{activeCat='all';document.querySelectorAll('.fchip').forEach(c=>c.classList.toggle('active',c.dataset.cat==='all'));document.querySelectorAll('.cat-item').forEach(c=>c.classList.toggle('active',c.dataset.cat==='all'));applyFilters();}});
+  if(!tags.length){row.innerHTML='';return;}
+  row.innerHTML=tags.map((t,i)=>`<span class="af-tag">${t.label}<button class="af-x" data-i="${i}">✕</button></span>`).join('')+`<button class="af-clear-all" onclick="clearAllFilters()">Clear all</button>`;
+  row.querySelectorAll('.af-x').forEach(btn=>btn.addEventListener('click',()=>tags[+btn.dataset.i].clear()));
+}
+
+/* ══ FILTER + SORT ══ */
+function getFiltered(){
+  let items=MENU.filter(item=>{
+    if(activeCat!=='all'&&item.cat!==activeCat) return false;
+    if(vegOnly&&!item.veg) return false;
+    if(item.price>maxPrice) return false;
+    if(minRating>0&&item.rating<minRating) return false;
+    if(searchQ){const q=searchQ.toLowerCase();if(!item.name.toLowerCase().includes(q)&&!item.desc.toLowerCase().includes(q))return false;}
+    return true;
+  });
+  switch(sortBy){
+    case 'price-asc':   items.sort((a,b)=>a.price-b.price); break;
+    case 'price-desc':  items.sort((a,b)=>b.price-a.price); break;
+    case 'rating-desc': items.sort((a,b)=>b.rating-a.rating); break;
+    case 'name-asc':    items.sort((a,b)=>a.name.localeCompare(b.name)); break;
+    case 'popular':     items.sort((a,b)=>(b.popular?1:0)-(a.popular?1:0)); break;
+  }
+  return items;
+}
+
+function applyFilters(){
+  const filtered=getFiltered();
+  const el=document.getElementById('menuContent');
+  document.getElementById('resultsCount').textContent=`${filtered.length} dish${filtered.length!==1?'es':''}`;
+  renderActiveTags();
+  if(!filtered.length){
+    el.innerHTML=`<div class="no-results"><div class="nr-icon">🍽️</div><p>No dishes match your filters.</p><button onclick="clearAllFilters()" style="margin-top:1rem;padding:8px 20px;border-radius:10px;border:1.5px solid var(--saffron);background:transparent;color:var(--saffron-dk);font-family:var(--ff-body);cursor:pointer;">Clear filters</button></div>`;
+    return;
+  }
+  const isFlat=sortBy!=='default'&&sortBy!=='popular';
+  if(isFlat||searchQ){
+    el.innerHTML=`<div class="menu-section"><div class="menu-section-header"><span class="menu-section-icon">🍽️</span><span class="menu-section-name">Results</span><span class="menu-section-count">${filtered.length} items</span></div><div class="items-grid">${filtered.map(renderCard).join('')}</div></div>`;
+  } else {
+    const cats=['starters','mains','breads','rice','desserts','drinks'];
+    const meta={starters:{name:'Starters & Appetisers',emoji:'🍢'},mains:{name:'Main Course',emoji:'🍛'},breads:{name:'Breads & Rotis',emoji:'🫓'},rice:{name:'Rice & Biryani',emoji:'🍚'},desserts:{name:'Desserts',emoji:'🍮'},drinks:{name:'Drinks & Beverages',emoji:'🥛'}};
+    let html='';
+    cats.forEach(cat=>{
+      const items=filtered.filter(i=>i.cat===cat); if(!items.length) return;
+      html+=`<div class="menu-section" id="sec-${cat}"><div class="menu-section-header"><span class="menu-section-icon">${meta[cat].emoji}</span><span class="menu-section-name">${meta[cat].name}</span><span class="menu-section-count">${items.length} items</span></div><div class="items-grid">${items.map(renderCard).join('')}</div></div>`;
+    });
+    el.innerHTML=html;
+  }
+  Object.entries(cart).forEach(([id,qty])=>{
+    const qc=document.getElementById('qctrl-'+id),ab=document.getElementById('addbtn-'+id),qn=document.getElementById('qnum-'+id);
+    if(qn) qn.textContent=qty;
+    if(qty>0){if(qc)qc.style.display='flex';if(ab)ab.style.display='none';}
+  });
+}
+
+/* ══ RENDER CARD ══ */
+function renderCard(item){
+  const inCart=(cart[item.id]||0)>0, qty=cart[item.id]||0;
+  const badgeHTML=item.badges.map(b=>{
+    if(b==='Bestseller') return `<span class="badge badge-best">⭐ Bestseller</span>`;
+    if(b==='New')        return `<span class="badge badge-new">🆕 New</span>`;
+    if(b==='Spicy')      return `<span class="badge badge-spicy">🌶️ Spicy</span>`;
+    if(b==='Jain Ok')    return `<span class="badge badge-jain">🕉️ Jain</span>`;
+    return `<span class="badge badge-best">${b}</span>`;
+  }).join('');
+  const c=item.color.split(',');
+  return `
+  <div class="item-card ${item.popular?'popular':''}">
+    <div class="item-img" style="background:linear-gradient(135deg,${c[0].trim()},${c[1].trim()})">
+      ${item.emoji}
+      <div class="veg-dot ${item.veg?'veg':'nonveg'}"></div>
+    </div>
+    <div class="item-info">
+      ${badgeHTML?`<div class="item-badges">${badgeHTML}</div>`:''}
+      <div class="item-name" title="${item.name}">${item.name}</div>
+      <div class="item-rating">
+        <span class="item-stars">${starsHTML(item.rating)}</span>
+        <span class="item-rating-num">${item.rating}</span>
+        <span class="item-rating-count">(${item.rcount})</span>
+      </div>
+      <div class="item-desc">${item.desc}</div>
+      <div class="item-footer">
+        <div class="item-price">₹${item.price}${item.old?`<span class="old-price">₹${item.old}</span>`:''}</div>
+        <button class="add-btn" id="addbtn-${item.id}" onclick="addToCart(${item.id})" style="${inCart?'display:none':''}">+ Add</button>
+        <div class="qty-ctrl" id="qctrl-${item.id}" style="display:${inCart?'flex':'none'}">
+          <button class="qty-btn" onclick="qtyChange(${item.id},-1)">−</button>
+          <span class="qty-num" id="qnum-${item.id}">${qty}</span>
+          <button class="qty-btn" onclick="qtyChange(${item.id},1)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ══ FILTER HANDLERS ══ */
+window.onSearch=function(inp){searchQ=inp.value.trim();document.getElementById('searchClear').classList.toggle('show',searchQ.length>0);applyFilters();};
+window.clearSearch=function(){document.getElementById('searchInput').value='';searchQ='';document.getElementById('searchClear').classList.remove('show');applyFilters();};
+window.onPriceChange=function(inp){maxPrice=+inp.value;document.getElementById('priceVal').textContent=maxPrice>=400?'Any price':'Up to \u20b9'+maxPrice;applyFilters();};
+window.setRating=function(r){minRating=minRating===r?0:r;updateStarUI();document.getElementById('ratingClear').classList.toggle('show',minRating>0);applyFilters();};
+function updateStarUI(){document.querySelectorAll('.star-btn').forEach(b=>{const v=+b.dataset.r;b.classList.toggle('on',v<=minRating);b.classList.toggle('active-sel',v===minRating);});}
+window.clearRating=function(){minRating=0;updateStarUI();document.getElementById('ratingClear').classList.remove('show');applyFilters();};
+window.toggleVeg=function(){vegOnly=!vegOnly;document.getElementById('vegToggle').classList.toggle('on',vegOnly);applyFilters();};
+window.filterCat=function(el){activeCat=el.dataset.cat;document.querySelectorAll('.fchip').forEach(c=>c.classList.remove('active'));el.classList.add('active');document.querySelectorAll('.cat-item').forEach(c=>c.classList.toggle('active',c.dataset.cat===activeCat));applyFilters();};
+window.filterCatSide=function(el){activeCat=el.dataset.cat;document.querySelectorAll('.cat-item').forEach(c=>c.classList.remove('active'));el.classList.add('active');document.querySelectorAll('.fchip').forEach(c=>c.classList.toggle('active',c.dataset.cat===activeCat));applyFilters();if(activeCat!=='all'){const s=document.getElementById('sec-'+activeCat);if(s)s.scrollIntoView({behavior:'smooth',block:'start'});}};
+window.clearAllFilters=function(){searchQ='';maxPrice=400;minRating=0;vegOnly=false;activeCat='all';sortBy='default';document.getElementById('searchInput').value='';document.getElementById('searchClear').classList.remove('show');document.getElementById('priceRange').value=400;document.getElementById('priceVal').textContent='Any price';document.getElementById('vegToggle').classList.remove('on');document.getElementById('sortSelect').value='default';updateStarUI();document.getElementById('ratingClear').classList.remove('show');document.querySelectorAll('.fchip').forEach(c=>c.classList.toggle('active',c.dataset.cat==='all'));document.querySelectorAll('.cat-item').forEach(c=>c.classList.toggle('active',c.dataset.cat==='all'));applyFilters();};
+document.getElementById('sortSelect').addEventListener('change',function(){sortBy=this.value;applyFilters();});
+
+/* ══ HAMBURGER ══ */
+document.getElementById('hamburger').addEventListener('click',()=>{document.getElementById('hamburger').classList.toggle('open');document.getElementById('mobileMenu').classList.toggle('open');});
+window.closeMobile=function(){document.getElementById('hamburger').classList.remove('open');document.getElementById('mobileMenu').classList.remove('open');};
+
+/* ══ INIT ══ */
+applyFilters();
+
+})();
+</script>
+
+<!-- ✅ FIX 4: Profile avatar navbar + global logout -->
+<script>
+(function(){
+  const token  = localStorage.getItem('lata_token');
+  const name   = localStorage.getItem('lata_name')  || '';
+  const email  = localStorage.getItem('lata_email') || '';
+  const avatar = localStorage.getItem('lata_avatar')|| '';
+  const navCta = document.getElementById('navCta');
+  if(!navCta) return;
+
+  if(token && name){
+    const parts    = name.trim().split(' ');
+    const initials = ((parts[0]?.[0]||'')+(parts[1]?.[0]||'')).toUpperCase() || '?';
+    const avatarInner = avatar ? `<img src="${avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;"/>` : initials;
+
+    navCta.innerHTML = `
+      <div class="nav-avatar-wrap">
+        <span class="nav-greeting">👋 ${name.split(' ')[0]}</span>
+        <a href="dashboard.html" class="nav-avatar" id="navAvatarBtn">${avatarInner}</a>
+        <div class="avatar-dropdown" id="avatarDropdown">
+          <div class="dd-header">
+            <div class="dd-name">${name}</div>
+            <div class="dd-email">${email}</div>
+          </div>
+          <a href="dashboard.html" class="dd-item">📊 Dashboard</a>
+          <a href="profile.html"   class="dd-item">👤 Edit Profile</a>
+          <a href="checkout.html"  class="dd-item">🛒 Checkout</a>
+          <hr class="dd-divider"/>
+          <button class="dd-item red" onclick="doLogout()">🚪 Sign Out</button>
+        </div>
+      </div>
+    `;
+
+    const btn = document.getElementById('navAvatarBtn');
+    const dd  = document.getElementById('avatarDropdown');
+    btn.addEventListener('click', e=>{ e.preventDefault(); dd.classList.toggle('open'); });
+    document.addEventListener('click', e=>{ if(!navCta.contains(e.target)) dd.classList.remove('open'); });
+  }
+})();
+
+/* ✅ Global logout */
+window.doLogout = function(){
+  ['lata_token','lata_name','lata_email','lata_avatar','user'].forEach(k=>localStorage.removeItem(k));
+  window.location.href='index.html';
+};
+</script>
+
+</body>
+</html>

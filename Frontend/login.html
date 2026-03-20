@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Login – Lata Family Restaurant</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{--saffron:#E8821A;--saffron-dk:#B35F0A;--spice:#7B2D00;--cream:#FDF6EE;--gold:#C8860A;--dark:#1A0A00;--muted:#7A5C44;--border:#E2C9A8;--error:#D0342C;--success:#2E7D32;--shadow:rgba(123,45,0,0.12);}
+  body{font-family:'DM Sans',sans-serif;background:var(--cream);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem;position:relative;overflow:hidden;}
+  body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle at 10% 20%,rgba(232,130,26,0.08) 0%,transparent 50%),radial-gradient(circle at 90% 80%,rgba(200,134,10,0.07) 0%,transparent 50%);pointer-events:none;}
+  .deco-circle{position:fixed;border-radius:50%;border:1.5px solid rgba(232,130,26,0.18);pointer-events:none;}
+  .deco-circle:nth-child(1){width:340px;height:340px;top:-120px;right:-80px;}
+  .deco-circle:nth-child(2){width:240px;height:240px;top:-80px;right:-40px;border-color:rgba(200,134,10,0.12);}
+  .deco-circle:nth-child(3){width:300px;height:300px;bottom:-120px;left:-80px;}
+  .deco-circle:nth-child(4){width:200px;height:200px;bottom:-80px;left:-40px;border-color:rgba(200,134,10,0.12);}
+  .card{background:#fff;border-radius:20px;border:1px solid var(--border);box-shadow:0 8px 40px var(--shadow);width:100%;max-width:420px;padding:2.5rem 2.25rem;position:relative;z-index:1;animation:slideUp 0.45s cubic-bezier(0.22,1,0.36,1) both;}
+  @keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+  .brand{text-align:center;margin-bottom:1.75rem;}
+  .brand-icon{width:60px;height:60px;background:linear-gradient(135deg,var(--saffron),var(--gold));border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 0.75rem;font-size:26px;}
+  .brand h1{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--spice);}
+  .brand p{font-size:0.82rem;color:var(--muted);margin-top:2px;font-weight:300;letter-spacing:0.5px;}
+  hr.divider{border:none;border-top:1px solid var(--border);margin:0 0 1.5rem;}
+  .field{margin-bottom:1.15rem;}
+  label{display:block;font-size:0.8rem;font-weight:500;color:var(--muted);margin-bottom:6px;}
+  .input-wrap{position:relative;display:flex;align-items:center;}
+  .input-icon{position:absolute;left:12px;width:17px;height:17px;opacity:0.5;pointer-events:none;}
+  input[type="email"],input[type="password"]{width:100%;height:44px;border:1.5px solid var(--border);border-radius:10px;padding:0 42px 0 38px;font-family:'DM Sans',sans-serif;font-size:0.9rem;color:var(--dark);background:var(--cream);outline:none;transition:border-color 0.2s,box-shadow 0.2s;}
+  input:focus{border-color:var(--saffron);box-shadow:0 0 0 3px rgba(232,130,26,0.12);background:#fff;}
+  input.error-input{border-color:var(--error);box-shadow:0 0 0 3px rgba(208,52,44,0.1);}
+  .toggle-pw{position:absolute;right:12px;background:none;border:none;cursor:pointer;padding:0;opacity:0.45;transition:opacity 0.2s;display:flex;align-items:center;}
+  .toggle-pw:hover{opacity:0.8;}
+  .field-error{font-size:0.75rem;color:var(--error);margin-top:5px;display:none;}
+  .field-error.visible{display:block;}
+  .options-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.4rem;}
+  .remember{display:flex;align-items:center;gap:7px;font-size:0.82rem;color:var(--muted);cursor:pointer;}
+  .remember input[type="checkbox"]{width:15px;height:15px;accent-color:var(--saffron);padding:0;cursor:pointer;}
+  .forgot-link{font-size:0.82rem;color:var(--saffron-dk);text-decoration:none;font-weight:500;}
+  .btn-primary{width:100%;height:46px;background:linear-gradient(135deg,var(--saffron),var(--gold));border:none;border-radius:10px;color:#fff;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:500;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s,opacity 0.15s;}
+  .btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(200,134,10,0.35);}
+  .btn-primary:active{transform:scale(0.98);}
+  .btn-primary:disabled{opacity:0.6;cursor:not-allowed;}
+  .spinner{display:none;width:18px;height:18px;border:2px solid rgba(255,255,255,0.35);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto;}
+  .btn-primary.loading .btn-label{display:none;}
+  .btn-primary.loading .spinner{display:block;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .alert{background:#FFF3F2;border:1px solid #FFCDD2;border-radius:8px;padding:10px 14px;font-size:0.83rem;color:var(--error);margin-bottom:1.1rem;display:none;align-items:center;gap:8px;}
+  .alert.visible{display:flex;}
+  .success-alert{background:#F1F8E9;border:1px solid #C5E1A5;border-radius:8px;padding:10px 14px;font-size:0.83rem;color:var(--success);margin-bottom:1.1rem;display:none;align-items:center;gap:8px;}
+  .success-alert.visible{display:flex;}
+  .or-divider{display:flex;align-items:center;gap:10px;margin:1.4rem 0;font-size:0.78rem;color:var(--muted);}
+  .or-divider::before,.or-divider::after{content:'';flex:1;border-top:1px solid var(--border);}
+  .btn-google{width:100%;height:44px;border:1.5px solid var(--border);border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;gap:10px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:500;color:var(--dark);cursor:pointer;transition:border-color 0.2s,box-shadow 0.2s;}
+  .btn-google:hover{border-color:#aaa;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+  .signup-row{text-align:center;margin-top:1.4rem;padding:14px 16px;background:linear-gradient(135deg,rgba(232,130,26,0.06),rgba(200,134,10,0.06));border:1px solid var(--border);border-radius:12px;font-size:0.9rem;color:var(--muted);}
+  .signup-row a{display:inline-block;margin-left:6px;color:#fff;background:linear-gradient(135deg,var(--saffron),var(--gold));font-weight:500;font-size:0.88rem;padding:6px 16px;border-radius:8px;text-decoration:none;transition:opacity 0.2s,transform 0.15s;}
+  .signup-row a:hover{opacity:0.88;transform:translateY(-1px);}
+  .security-note{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:1.4rem;font-size:0.73rem;color:var(--muted);opacity:0.7;}
+</style>
+</head>
+<body>
+<div class="deco-circle"></div><div class="deco-circle"></div>
+<div class="deco-circle"></div><div class="deco-circle"></div>
+
+<div class="card" role="main">
+  <div class="brand">
+    <div class="brand-icon">🪔</div>
+    <h1>Lata Family Restaurant</h1>
+    <p>Welcome back! Please sign in to continue</p>
+  </div>
+  <hr class="divider"/>
+
+  <div class="alert" id="globalAlert"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16.01"/></svg><span id="alertMsg"></span></div>
+  <div class="success-alert" id="successAlert"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span id="successMsg"></span></div>
+
+  <form id="loginForm" novalidate autocomplete="on">
+    <div class="field">
+      <label for="email">Email address</label>
+      <div class="input-wrap">
+        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="#7A5C44" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="3"/><polyline points="2,4 12,13 22,4"/></svg>
+        <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" inputmode="email" aria-required="true"/>
+      </div>
+      <div class="field-error" id="emailError"></div>
+    </div>
+    <div class="field">
+      <label for="password">Password</label>
+      <div class="input-wrap">
+        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="#7A5C44" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <input type="password" id="password" name="password" placeholder="Enter your password" autocomplete="current-password" aria-required="true"/>
+        <button type="button" class="toggle-pw" id="togglePw">
+          <svg id="eyeIcon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#7A5C44" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+      <div class="field-error" id="passwordError"></div>
+    </div>
+    <div class="options-row">
+      <label class="remember"><input type="checkbox" id="remember"/> Remember me</label>
+      <a href="forgot-password.html" class="forgot-link">Forgot password?</a>
+    </div>
+    <button type="submit" class="btn-primary" id="submitBtn">
+      <span class="btn-label">Sign In</span>
+      <div class="spinner"></div>
+    </button>
+  </form>
+
+  <div class="or-divider">or continue with</div>
+
+  <button class="btn-google" type="button" onclick="handleGoogle()">
+    <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+    Sign in with Google
+  </button>
+
+  <div class="signup-row">Don't have an account? <a href="signup.html">Sign Up</a></div>
+
+  <div class="security-note">
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    Secured with 256-bit SSL encryption
+  </div>
+</div>
+
+<!-- ✅ Regular login (non-module) -->
+<script>
+(function(){
+'use strict';
+const API_BASE = 'http://localhost:5001/api';
+const $ = id => document.getElementById(id);
+function showError(id,msg){$(id+'Error').textContent=msg;$(id+'Error').classList.add('visible');$(id).classList.add('error-input');}
+function clearError(id){$(id+'Error').classList.remove('visible');$(id).classList.remove('error-input');}
+function showAlert(msg){$('alertMsg').textContent=msg;$('globalAlert').classList.add('visible');}
+function hideAlert(){$('globalAlert').classList.remove('visible');}
+function showSuccess(msg){$('successMsg').textContent=msg;$('successAlert').classList.add('visible');}
+function setLoading(on){$('submitBtn').classList.toggle('loading',on);$('submitBtn').disabled=on;}
+const EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+function validate(){
+  let ok=true;
+  const email=$('email').value.trim(),pass=$('password').value;
+  clearError('email');clearError('password');hideAlert();
+  if(!email){showError('email','Email is required.');ok=false;}
+  else if(!EMAIL_RE.test(email)){showError('email','Enter a valid email.');ok=false;}
+  if(!pass){showError('password','Password is required.');ok=false;}
+  else if(pass.length<6){showError('password','Min 6 characters.');ok=false;}
+  return ok;
+}
+['email','password'].forEach(id=>$(id).addEventListener('input',()=>{clearError(id);hideAlert();}));
+$('togglePw').addEventListener('click',function(){
+  const inp=$('password'),show=inp.type==='password';
+  inp.type=show?'text':'password';
+  $('eyeIcon').innerHTML=show
+    ?`<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>`
+    :`<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+});
+$('loginForm').addEventListener('submit',async function(e){
+  e.preventDefault();
+  if(!validate())return;
+  setLoading(true);
+  try{
+    const res=await fetch(`${API_BASE}/auth/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:$('email').value.trim(),password:$('password').value})});
+    const data=await res.json();
+    if(!res.ok)throw new Error(data.message||'Login failed.');
+    if(data.token)localStorage.setItem('lata_token',data.token);
+    showSuccess('Login successful! Redirecting…');
+    setTimeout(()=>window.location.href='index.html',1000);
+  }catch(err){showAlert(err.message);}
+  finally{setLoading(false);}
+});
+})();
+</script>
+
+<!-- ✅ Firebase Google Auth — ONLY this defines handleGoogle -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+const app  = initializeApp({
+  apiKey:            "AIzaSyCYzxD0F9jg89u_loGzCfVoCTD8VNVPuVE",
+  authDomain:        "my-project-0ecd7.firebaseapp.com",
+  projectId:         "my-project-0ecd7",
+  storageBucket:     "my-project-0ecd7.firebasestorage.app",
+  messagingSenderId: "201711814600",
+  appId:             "1:201711814600:web:e808ad2fd3d7223809a2fd"
+});
+const auth     = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+window.handleGoogle = async function() {
+  try {
+    const result        = await signInWithPopup(auth, provider);
+    const firebaseToken = await result.user.getIdToken();
+
+    const res  = await fetch('http://localhost:5001/api/auth/google-firebase', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ firebaseToken }),
+    });
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.message || 'Login failed.');
+
+    localStorage.setItem('lata_token', data.token);
+    localStorage.setItem('lata_name',  data.user.name);
+    localStorage.setItem('lata_email', data.user.email);
+
+    window.location.href = 'index.html';
+
+  } catch (err) {
+    if (err.code === 'auth/popup-closed-by-user')    return;
+    if (err.code === 'auth/cancelled-popup-request') return;
+    alert('Google sign-in failed: ' + (err.message || 'Please try again.'));
+    console.error(err);
+  }
+};
+</script>
+
+</body>
+</html>

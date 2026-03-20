@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Your Profile – Lata Family Restaurant</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --saffron:#E8821A;--saffron-dk:#B35F0A;--spice:#7B2D00;
+  --cream:#FDF6EE;--gold:#C8860A;--dark:#1A0A00;
+  --muted:#7A5C44;--border:#E2C9A8;--error:#D0342C;
+  --success:#2E7D32;--shadow:rgba(123,45,0,0.12);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem;position:relative;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle at 15% 15%,rgba(232,130,26,0.07) 0%,transparent 50%),radial-gradient(circle at 85% 85%,rgba(200,134,10,0.06) 0%,transparent 50%);pointer-events:none;}
+.deco{position:fixed;border-radius:50%;border:1.5px solid rgba(232,130,26,0.15);pointer-events:none;}
+
+.card{background:#fff;border-radius:20px;border:1px solid var(--border);box-shadow:0 8px 40px var(--shadow);width:100%;max-width:480px;padding:2.25rem 2.25rem;position:relative;z-index:1;animation:slideUp 0.45s cubic-bezier(0.22,1,0.36,1) both;}
+@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+/* avatar upload */
+.avatar-section{text-align:center;margin-bottom:1.5rem;}
+.avatar-wrap{position:relative;display:inline-block;margin-bottom:0.75rem;}
+.avatar-circle{
+  width:88px;height:88px;border-radius:50%;
+  background:linear-gradient(135deg,var(--saffron),var(--gold));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#fff;
+  border:3px solid #fff;box-shadow:0 4px 16px rgba(232,130,26,0.3);
+  cursor:pointer;overflow:hidden;transition:opacity 0.2s;
+}
+.avatar-circle:hover{opacity:0.9;}
+.avatar-circle img{width:100%;height:100%;object-fit:cover;display:none;}
+.avatar-edit{
+  position:absolute;bottom:0;right:0;
+  width:26px;height:26px;border-radius:50%;
+  background:var(--saffron);border:2px solid #fff;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+}
+#avatarInput{display:none;}
+.brand h1{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--spice);}
+.brand p{font-size:0.82rem;color:var(--muted);margin-top:2px;}
+.verified-badge{display:inline-flex;align-items:center;gap:4px;background:#F1F8E9;border:1px solid #C5E1A5;color:var(--success);border-radius:20px;font-size:0.72rem;font-weight:500;padding:3px 10px;margin-top:6px;}
+
+hr.div{border:none;border-top:1px solid var(--border);margin:1.2rem 0;}
+
+/* progress bar */
+.progress-bar{height:5px;background:#eee;border-radius:4px;margin-bottom:1.3rem;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--saffron),var(--gold));border-radius:4px;transition:width 0.4s cubic-bezier(0.22,1,0.36,1);}
+.progress-label{font-size:0.75rem;color:var(--muted);margin-bottom:8px;display:flex;justify-content:space-between;}
+
+/* sections */
+.section-title{font-size:0.7rem;font-weight:500;color:var(--saffron-dk);letter-spacing:1px;text-transform:uppercase;margin:1.2rem 0 0.8rem;display:flex;align-items:center;gap:8px;}
+.section-title::after{content:'';flex:1;border-top:1px solid var(--border);}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px;}
+.field{margin-bottom:1rem;}
+.full{grid-column:1/-1;}
+label{display:block;font-size:0.8rem;font-weight:500;color:var(--muted);margin-bottom:5px;}
+.input-wrap{position:relative;display:flex;align-items:center;}
+.iico{position:absolute;left:12px;width:16px;height:16px;opacity:0.45;pointer-events:none;}
+input[type=text],input[type=email],input[type=tel],input[type=date],select,textarea{
+  width:100%;height:44px;border:1.5px solid var(--border);border-radius:10px;
+  padding:0 12px 0 37px;font-family:'DM Sans',sans-serif;font-size:0.9rem;
+  color:var(--dark);background:var(--cream);outline:none;
+  transition:border-color 0.2s,box-shadow 0.2s;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--saffron);box-shadow:0 0 0 3px rgba(232,130,26,0.12);background:#fff;}
+input.err{border-color:var(--error);box-shadow:0 0 0 3px rgba(208,52,44,0.1);}
+input[readonly]{background:#f8f4ef;color:var(--muted);cursor:not-allowed;}
+select{appearance:none;padding:0 32px 0 37px;cursor:pointer;}
+.select-arrow{position:absolute;right:12px;pointer-events:none;opacity:0.5;}
+textarea{height:80px;padding:10px 12px 10px 37px;resize:vertical;min-height:70px;}
+.ferr{font-size:0.74rem;color:var(--error);margin-top:4px;display:none;}
+.ferr.show{display:block;}
+
+/* food preference chips */
+.pref-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;}
+.pref-chip{
+  padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);
+  font-size:0.8rem;color:var(--muted);cursor:pointer;
+  background:#fff;transition:all 0.2s;font-family:'DM Sans',sans-serif;
+}
+.pref-chip:hover{border-color:var(--saffron);color:var(--saffron-dk);}
+.pref-chip.selected{background:linear-gradient(135deg,var(--saffron),var(--gold));border-color:transparent;color:#fff;font-weight:500;}
+
+/* birthday month/day */
+.dob-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+
+.alert,.s-alert{border-radius:8px;padding:10px 14px;font-size:0.82rem;margin-bottom:1rem;display:none;align-items:center;gap:8px;}
+.alert{background:#FFF3F2;border:1px solid #FFCDD2;color:var(--error);}
+.s-alert{background:#F1F8E9;border:1px solid #C5E1A5;color:var(--success);}
+.alert.show,.s-alert.show{display:flex;}
+
+.btn-pri{width:100%;height:46px;background:linear-gradient(135deg,var(--saffron),var(--gold));border:none;border-radius:10px;color:#fff;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:500;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;}
+.btn-pri:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(200,134,10,0.35);}
+.btn-pri:active{transform:scale(0.98);}
+.btn-pri:disabled{opacity:0.6;cursor:not-allowed;}
+.spin{display:none;width:18px;height:18px;border:2px solid rgba(255,255,255,0.35);border-top-color:#fff;border-radius:50%;animation:sp 0.7s linear infinite;margin:0 auto;}
+.btn-pri.loading .lbl{display:none;}
+.btn-pri.loading .spin{display:block;}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+.skip-link{text-align:center;margin-top:10px;font-size:0.82rem;color:var(--muted);}
+.skip-link a{color:var(--saffron-dk);text-decoration:none;font-weight:500;}
+.skip-link a:hover{color:var(--spice);}
+.sec-note{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:0.8rem;font-size:0.72rem;color:var(--muted);opacity:0.7;}
+</style>
+</head>
+<body>
+<div class="deco" style="width:300px;height:300px;top:-100px;left:-80px;"></div>
+<div class="deco" style="width:200px;height:200px;top:-60px;left:-40px;border-color:rgba(200,134,10,0.1);"></div>
+<div class="deco" style="width:250px;height:250px;bottom:-90px;right:-70px;"></div>
+
+<div class="card">
+
+  <!-- avatar -->
+  <div class="avatar-section brand">
+    <div class="avatar-wrap">
+      <div class="avatar-circle" id="avatarCircle" onclick="$('avatarInput').click()">
+        <span id="avatarInitials">?</span>
+        <img id="avatarPreview" alt="Profile photo"/>
+      </div>
+      <div class="avatar-edit" onclick="$('avatarInput').click()" title="Upload photo">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      </div>
+      <input type="file" id="avatarInput" accept="image/*" onchange="handleAvatar(this)"/>
+    </div>
+    <h1>Complete Your Profile</h1>
+    <p>Help us personalise your experience</p>
+    <div class="verified-badge">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+      Email Verified
+    </div>
+  </div>
+
+  <!-- progress -->
+  <div class="progress-label">
+    <span>Profile completion</span>
+    <span id="progressPct">0%</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+  <hr class="div"/>
+
+  <div class="alert" id="alertBox"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16.01"/></svg><span id="alertMsg"></span></div>
+  <div class="s-alert" id="salertBox"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span id="salertMsg"></span></div>
+
+  <form id="profileForm" novalidate>
+
+    <div class="section-title">Personal Info</div>
+    <div class="grid2">
+      <div class="field">
+        <label>First name *</label>
+        <div class="input-wrap">
+          <svg class="iico" viewBox="0 0 24 24" fill="none" stroke="#7A5C44" stroke-width="2"><circle cx="12" cy="7" r="4"/><path d="M20 21v-2a7 7 0 0 0-14 0v2"/></svg>
+          <input type="text" id="fname" placeholder="Priya" autocomplete="given-name" oninput="updateProgress();updateInitials()"/>
+        </div>
+        <div class="ferr" id="fnameErr"></div>
+      </div>
+      <div class="field">
+        <label>Last name</label>
+        <div class="input-wrap">
+          <svg class="iico" viewBox="0 0 24 24" fill="none" stroke="#7A5C44" stroke-width="2"><circle cx="12" cy="7" r="4"/><path d="M20 21v-2a7 7 0 0 0-14 0v2"/></svg>
+          <input type="text" id="lname" placeholder="Sharma" autocomplete="family-name" oninput="updateProgress();updateInitials()"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="field full">
+      <label>Email address</label>
+      <div class="input-wrap">
+        <svg class="iico" viewBox="0 0 24 24" fill="none" stroke="#7A5C44" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="3"/><polyline points="2,4 12,13 22,4"/></svg>
+        <input type="email" id="profileEmail" readonly autocomplete="email"/>
+      </div>
+    </div>
+
+    <div class="field full">
+      <label>Phone number</label>
+      <div class="input-wrap">
+        <svg class="iico" viewBox="0 0 24 24" fill="none" stroke="#7A5C44" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 11.69 19a19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 3.1 4.18 2 2 0 0 1 5.08 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L9.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <input type="tel" id="profilePhone" placeholder="9876543210" autocomplete="tel" inputmode="tel" oninput="updateProgress()"/>
+      </div>
+    </div>
+
+    <div class="section-title">Birthday</div>
+    <div class="dob-grid">
+      <div class="field">
+        <label>Day</label>
+        <div class="input-wrap">
+          <input type="text" id="dobDay" placeholder="DD" maxlength="2" inputmode="numeric" style="padding-left:12px;" oninput="updateProgress()"/>
+        </div>
+      </div>
+      <div class="field">
+        <label>Month</label>
+        <div class="input-wrap">
+          <select id="dobMonth" style="padding-left:10px;" onchange="updateProgress()">
+            <option value="">Month</option>
+            <option>January</option><option>February</option><option>March</option>
+            <option>April</option><option>May</option><option>June</option>
+            <option>July</option><option>August</option><option>September</option>
+            <option>October</option><option>November</option><option>December</option>
+          </select>
+          <svg class="select-arrow" style="right:10px;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7A5C44" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+      <div class="field">
+        <label>Year</label>
+        <div class="input-wrap">
+          <input type="text" id="dobYear" placeholder="YYYY" maxlength="4" inputmode="numeric" style="padding-left:12px;" oninput="updateProgress()"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Food Preference</div>
+    <div class="pref-chips" id="prefChips">
+      <button type="button" class="pref-chip" data-val="Vegetarian" onclick="selectPref(this)">🥦 Vegetarian</button>
+      <button type="button" class="pref-chip" data-val="Non-Vegetarian" onclick="selectPref(this)">🍗 Non-Veg</button>
+      <button type="button" class="pref-chip" data-val="Vegan" onclick="selectPref(this)">🌱 Vegan</button>
+      <button type="button" class="pref-chip" data-val="Jain" onclick="selectPref(this)">🕉️ Jain</button>
+      <button type="button" class="pref-chip" data-val="No preference" onclick="selectPref(this)">✨ No preference</button>
+    </div>
+    <input type="hidden" id="foodPref"/>
+
+    <div class="section-title">Address <span style="font-size:0.65rem;opacity:0.7;text-transform:none;letter-spacing:0;">(optional)</span></div>
+    <div class="field full">
+      <div class="input-wrap">
+        <svg class="iico" viewBox="0 0 24 24" fill="none" stroke="#7A5C44" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <textarea id="address" placeholder="Street, Area, City, State – Pincode" style="padding-left:37px;" oninput="updateProgress()"></textarea>
+      </div>
+    </div>
+
+    <button type="submit" class="btn-pri" id="saveBtn">
+      <span class="lbl">Save Profile &amp; Continue</span>
+      <div class="spin"></div>
+    </button>
+  </form>
+
+  <div class="skip-link">
+    <a href="index.html">Skip for now →</a>
+  </div>
+  <div class="sec-note">
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    You can update this anytime in your account settings
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+const API_BASE = 'http://localhost:5001/api';
+const $ = id => document.getElementById(id);
+
+// Pre-fill email from session
+const email = sessionStorage.getItem('lata_email') || '';
+if(email) $('profileEmail').value = email;
+
+/* ── avatar upload ── */
+window.handleAvatar = function(input){
+  if(!input.files || !input.files[0]) return;
+  const file = input.files[0];
+  if(file.size > 2*1024*1024){ alert('Image must be under 2MB.'); return; }
+  const reader = new FileReader();
+  reader.onload = function(e){
+    const img = $('avatarPreview');
+    img.src = e.target.result;
+    img.style.display = 'block';
+    $('avatarInitials').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+};
+
+/* ── initials ── */
+window.updateInitials = function(){
+  const f=$('fname').value.trim()[0]||'', l=$('lname').value.trim()[0]||'';
+  const init=(f+l).toUpperCase()||'?';
+  if($('avatarPreview').style.display!=='block') $('avatarInitials').textContent=init;
+};
+
+/* ── food preference ── */
+window.selectPref = function(el){
+  document.querySelectorAll('.pref-chip').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  $('foodPref').value=el.dataset.val;
+  updateProgress();
+};
+
+/* ── progress ── */
+window.updateProgress = function(){
+  const fields=[
+    $('fname').value.trim(),
+    $('lname').value.trim(),
+    $('profilePhone').value.trim(),
+    $('dobDay').value.trim(),
+    $('dobMonth').value,
+    $('dobYear').value.trim(),
+    $('foodPref').value,
+    $('address').value.trim(),
+  ];
+  const filled = fields.filter(Boolean).length;
+  const pct = Math.round((filled/fields.length)*100);
+  $('progressFill').style.width=pct+'%';
+  $('progressPct').textContent=pct+'%';
+};
+
+/* ── validation ── */
+function showErr(id,msg){$(id).textContent=msg;$(id).classList.add('show');}
+function clrErr(id){$(id).classList.remove('show');}
+function showAlert(msg){$('alertMsg').textContent=msg;$('alertBox').classList.add('show');}
+function hideAlert(){$('alertBox').classList.remove('show');}
+function showSuccess(msg){$('salertMsg').textContent=msg;$('salertBox').classList.add('show');}
+function setLoading(on){$('saveBtn').classList.toggle('loading',on);$('saveBtn').disabled=on;}
+
+const PHONE_RE=/^[6-9]\d{9}$/;
+
+function validate(){
+  let ok=true;
+  ['fnameErr'].forEach(clrErr); hideAlert();
+  if(!$('fname').value.trim()){showErr('fnameErr','First name is required.');ok=false;}
+  const phone=$('profilePhone').value.trim();
+  if(phone && !PHONE_RE.test(phone)){showAlert('Please enter a valid 10-digit Indian mobile number.');ok=false;}
+  const year=$('dobYear').value;
+  if(year && (year<1900 || year>new Date().getFullYear())){showAlert('Please enter a valid birth year.');ok=false;}
+  return ok;
+}
+
+/* ── submit ── */
+$('profileForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+  if(!validate()) return;
+  setLoading(true);
+  try{
+    const token = localStorage.getItem('lata_token');
+    const body={
+      name:($('fname').value.trim()+' '+$('lname').value.trim()).trim(),
+      phone:$('profilePhone').value.trim(),
+      dob:{day:$('dobDay').value,month:$('dobMonth').value,year:$('dobYear').value},
+      foodPreference:$('foodPref').value,
+      address:$('address').value.trim(),
+    };
+    const res=await fetch(`${API_BASE}/auth/profile`,{
+      method:'PUT',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+      body:JSON.stringify(body)
+    });
+    const data=await res.json();
+    if(!res.ok) throw new Error(data.message||'Could not save profile.');
+    showSuccess('Profile saved! Welcome to Lata Family Restaurant 🎉');
+    setTimeout(()=>window.location.href='dashboard.html',1500);
+  }catch(err){
+    showAlert(err.message);
+  }finally{
+    setLoading(false);
+  }
+});
+
+updateInitials();
+})();
+</script>
+<script>
+  (function(){
+    const token = localStorage.getItem('lata_token');
+    const name  = localStorage.getItem('lata_name');
+  
+    if (token && name) {
+      // ✅ Logged in — Sign In/Up hata ke user name + dashboard button dikhao
+      document.querySelector('.nav-cta').innerHTML = `
+        <span style="font-size:0.85rem;font-weight:500;color:var(--muted);">
+          👋 ${name.split(' ')[0]}
+        </span>
+        <a href="dashboard.html" class="btn-solid">My Account</a>
+        <button onclick="logout()" class="btn-outline" style="cursor:pointer;">
+          Sign Out
+        </button>
+      `;
+    }
+  
+    // Logout function
+    window.logout = function(){
+      localStorage.removeItem('lata_token');
+      localStorage.removeItem('lata_name');
+      localStorage.removeItem('lata_email');
+      window.location.href = 'index.html';
+    };
+  })();
+  </script>
+</body>
+</html>

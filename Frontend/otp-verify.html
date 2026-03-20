@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Verify OTP – Lata Family Restaurant</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --saffron:#E8821A;--saffron-dk:#B35F0A;--spice:#7B2D00;
+  --cream:#FDF6EE;--gold:#C8860A;--dark:#1A0A00;
+  --muted:#7A5C44;--border:#E2C9A8;--error:#D0342C;
+  --success:#2E7D32;--shadow:rgba(123,45,0,0.12);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem;position:relative;overflow:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle at 80% 20%,rgba(232,130,26,0.08) 0%,transparent 50%),radial-gradient(circle at 20% 80%,rgba(200,134,10,0.07) 0%,transparent 50%);pointer-events:none;}
+.deco{position:fixed;border-radius:50%;border:1.5px solid rgba(232,130,26,0.15);pointer-events:none;}
+
+.card{background:#fff;border-radius:20px;border:1px solid var(--border);box-shadow:0 8px 40px var(--shadow);width:100%;max-width:400px;padding:2.5rem 2.25rem;position:relative;z-index:1;animation:slideUp 0.45s cubic-bezier(0.22,1,0.36,1) both;}
+@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+.brand{text-align:center;margin-bottom:1.5rem;}
+.brand-icon{width:64px;height:64px;background:linear-gradient(135deg,var(--saffron),var(--gold));border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 0.75rem;font-size:28px;position:relative;}
+.brand-icon::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:2px dashed rgba(232,130,26,0.3);animation:rotate 12s linear infinite;}
+@keyframes rotate{to{transform:rotate(360deg)}}
+.brand h1{font-family:'Playfair Display',serif;font-size:1.45rem;font-weight:700;color:var(--spice);}
+.brand p{font-size:0.82rem;color:var(--muted);margin-top:3px;}
+.email-chip{display:inline-block;background:rgba(232,130,26,0.1);border:1px solid rgba(232,130,26,0.25);border-radius:20px;padding:3px 12px;font-size:0.8rem;color:var(--saffron-dk);font-weight:500;margin-top:6px;}
+hr.div{border:none;border-top:1px solid var(--border);margin:1.2rem 0;}
+
+.alert,.s-alert{border-radius:8px;padding:10px 14px;font-size:0.82rem;margin-bottom:1rem;display:none;align-items:center;gap:8px;}
+.alert{background:#FFF3F2;border:1px solid #FFCDD2;color:var(--error);}
+.s-alert{background:#F1F8E9;border:1px solid #C5E1A5;color:var(--success);}
+.alert.show,.s-alert.show{display:flex;}
+
+/* OTP boxes */
+.otp-label{font-size:0.8rem;font-weight:500;color:var(--muted);text-align:center;margin-bottom:12px;}
+.otp-grid{display:flex;gap:8px;justify-content:center;margin-bottom:1.2rem;}
+.otp-box{
+  width:52px;height:58px;border:2px solid var(--border);border-radius:12px;
+  text-align:center;font-size:1.6rem;font-weight:700;color:var(--spice);
+  background:var(--cream);outline:none;transition:border-color 0.2s,box-shadow 0.2s,background 0.2s;
+  font-family:'Playfair Display',serif;
+}
+.otp-box:focus{border-color:var(--saffron);box-shadow:0 0 0 3px rgba(232,130,26,0.15);background:#fff;}
+.otp-box.filled{border-color:var(--saffron-dk);background:#fff;}
+.otp-box.error{border-color:var(--error)!important;box-shadow:0 0 0 3px rgba(208,52,44,0.1)!important;}
+.ferr{font-size:0.74rem;color:var(--error);margin-bottom:1rem;text-align:center;display:none;}
+.ferr.show{display:block;}
+
+/* timer */
+.timer-row{text-align:center;margin-bottom:1.2rem;}
+.timer-circle{
+  width:60px;height:60px;border-radius:50%;margin:0 auto 8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;font-weight:700;color:var(--saffron-dk);
+  background:rgba(232,130,26,0.08);border:2px solid rgba(232,130,26,0.25);
+  transition:all 0.5s;
+}
+.timer-circle.urgent{color:var(--error);background:rgba(208,52,44,0.08);border-color:rgba(208,52,44,0.25);}
+.timer-sub{font-size:0.75rem;color:var(--muted);}
+
+/* resend */
+.resend-row{text-align:center;margin-bottom:1.2rem;font-size:0.82rem;color:var(--muted);}
+.resend-btn{background:none;border:none;color:var(--saffron-dk);font-weight:500;cursor:pointer;font-size:0.82rem;font-family:'DM Sans',sans-serif;padding:0;text-decoration:underline;}
+.resend-btn:disabled{opacity:0.4;cursor:not-allowed;text-decoration:none;}
+
+.btn-pri{width:100%;height:46px;background:linear-gradient(135deg,var(--saffron),var(--gold));border:none;border-radius:10px;color:#fff;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:500;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s,opacity 0.15s;}
+.btn-pri:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(200,134,10,0.35);}
+.btn-pri:active{transform:scale(0.98);}
+.btn-pri:disabled{opacity:0.6;cursor:not-allowed;}
+.spin{display:none;width:18px;height:18px;border:2px solid rgba(255,255,255,0.35);border-top-color:#fff;border-radius:50%;animation:sp 0.7s linear infinite;margin:0 auto;}
+.btn-pri.loading .lbl{display:none;}
+.btn-pri.loading .spin{display:block;}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+.back-link{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:1.1rem;font-size:0.82rem;color:var(--muted);text-decoration:none;}
+.back-link:hover{color:var(--saffron-dk);}
+.sec-note{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:0.8rem;font-size:0.72rem;color:var(--muted);opacity:0.7;}
+
+/* success animation */
+.success-state{text-align:center;display:none;}
+.success-state.show{display:block;}
+.checkmark{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#43A047,#66BB6A);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;animation:pop 0.4s cubic-bezier(0.22,1,0.36,1);}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+</style>
+</head>
+<body>
+<div class="deco" style="width:300px;height:300px;top:-100px;right:-80px;"></div>
+<div class="deco" style="width:200px;height:200px;top:-60px;right:-40px;border-color:rgba(200,134,10,0.1);"></div>
+<div class="deco" style="width:250px;height:250px;bottom:-90px;left:-70px;"></div>
+
+<div class="card">
+  <!-- normal state -->
+  <div id="verifyState">
+    <div class="brand">
+      <div class="brand-icon">📧</div>
+      <h1>Check Your Email</h1>
+      <p>We sent a 6-digit OTP to</p>
+      <div class="email-chip" id="emailChip">your email</div>
+    </div>
+    <hr class="div"/>
+
+    <div class="alert" id="alertBox"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16.01"/></svg><span id="alertMsg"></span></div>
+    <div class="s-alert" id="salertBox"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span id="salertMsg"></span></div>
+
+    <div class="timer-row">
+      <div class="timer-circle" id="timerCircle"><span id="timerNum">10:00</span></div>
+      <div class="timer-sub">OTP expires in</div>
+    </div>
+
+    <div class="otp-label">Enter your 6-digit OTP</div>
+    <div class="otp-grid">
+      <input class="otp-box" id="o1" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]" autocomplete="one-time-code"/>
+      <input class="otp-box" id="o2" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]"/>
+      <input class="otp-box" id="o3" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]"/>
+      <input class="otp-box" id="o4" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]"/>
+      <input class="otp-box" id="o5" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]"/>
+      <input class="otp-box" id="o6" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]"/>
+    </div>
+    <div class="ferr" id="otpErr">Please enter the complete 6-digit OTP.</div>
+
+    <div class="resend-row">
+      Didn't receive it?
+      <button class="resend-btn" id="resendBtn" onclick="resendOTP()">Resend OTP</button>
+      <span id="resendCooldown"></span>
+    </div>
+
+    <button class="btn-pri" id="verifyBtn" onclick="verifyOTP()">
+      <span class="lbl">Verify &amp; Continue</span>
+      <div class="spin"></div>
+    </button>
+
+    <a href="signup.html" class="back-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to Sign Up
+    </a>
+    <div class="sec-note">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Never share your OTP with anyone
+    </div>
+  </div>
+
+  <!-- success state -->
+  <div class="success-state" id="successState">
+    <div class="checkmark">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <h1 style="font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--spice);margin-bottom:8px;">Email Verified!</h1>
+    <p style="font-size:0.85rem;color:var(--muted);">Setting up your profile now…</p>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+const API_BASE = 'http://localhost:5001/api';
+const $ = id => document.getElementById(id);
+
+// Retrieve data from previous page
+const userId = sessionStorage.getItem('lata_userId') || '';
+const email  = sessionStorage.getItem('lata_email')  || 'your email';
+$('emailChip').textContent = email;
+
+/* ── OTP box interactions ── */
+const otpBoxes = [1,2,3,4,5,6].map(i => $('o'+i));
+
+otpBoxes.forEach((box, i) => {
+  box.addEventListener('input', function(){
+    this.value = this.value.replace(/[^0-9]/g,'').slice(-1);
+    this.classList.toggle('filled', !!this.value);
+    $('otpErr').classList.remove('show');
+    clearOtpErrors();
+    if(this.value && i < 5) otpBoxes[i+1].focus();
+  });
+  box.addEventListener('keydown', function(e){
+    if(e.key==='Backspace'){
+      if(!this.value && i>0){ otpBoxes[i-1].focus(); otpBoxes[i-1].value=''; otpBoxes[i-1].classList.remove('filled'); }
+      else{ this.value=''; this.classList.remove('filled'); }
+    }
+    if(e.key==='ArrowLeft' && i>0) otpBoxes[i-1].focus();
+    if(e.key==='ArrowRight' && i<5) otpBoxes[i+1].focus();
+  });
+  box.addEventListener('paste', function(e){
+    const data=(e.clipboardData||window.clipboardData).getData('text').replace(/\D/g,'');
+    if(data.length===6){
+      e.preventDefault();
+      otpBoxes.forEach((b,j)=>{ b.value=data[j]||''; b.classList.toggle('filled',!!b.value); });
+      otpBoxes[5].focus();
+    }
+  });
+});
+
+function getOTP(){ return otpBoxes.map(b=>b.value).join(''); }
+function clearOtpErrors(){ otpBoxes.forEach(b=>b.classList.remove('error')); }
+function markOtpError(){ otpBoxes.forEach(b=>b.classList.add('error')); }
+
+function showAlert(msg){ $('alertMsg').textContent=msg; $('alertBox').classList.add('show'); }
+function hideAlert()   { $('alertBox').classList.remove('show'); }
+function showSuccess(msg){ $('salertMsg').textContent=msg; $('salertBox').classList.add('show'); }
+function setLoading(on){ $('verifyBtn').classList.toggle('loading',on); $('verifyBtn').disabled=on; }
+
+/* ── countdown timer (10 minutes) ── */
+let totalSeconds = 10 * 60;
+let timerInterval = setInterval(tick, 1000);
+
+function tick(){
+  totalSeconds--;
+  if(totalSeconds <= 0){
+    clearInterval(timerInterval);
+    $('timerNum').textContent = '0:00';
+    $('timerCircle').classList.add('urgent');
+    showAlert('Your OTP has expired. Please request a new one.');
+    $('verifyBtn').disabled = true;
+    return;
+  }
+  const m = Math.floor(totalSeconds/60);
+  const s = totalSeconds % 60;
+  $('timerNum').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+  if(totalSeconds <= 60) $('timerCircle').classList.add('urgent');
+}
+
+/* ── verify OTP ── */
+window.verifyOTP = async function(){
+  hideAlert();
+  clearOtpErrors();
+  const otp = getOTP();
+  if(otp.length < 6){
+    $('otpErr').classList.add('show');
+    otpBoxes[otp.length]?.focus();
+    return;
+  }
+  setLoading(true);
+  try{
+    const res = await fetch(`${API_BASE}/auth/verify-otp`,{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ userId, otp })
+    });
+    const data = await res.json();
+    if(!res.ok){ markOtpError(); throw new Error(data.message||'Invalid OTP.'); }
+    // Store token
+    if(data.token) localStorage.setItem('lata_token', data.token);
+    clearInterval(timerInterval);
+    // Show success animation then redirect
+    $('verifyState').style.display = 'none';
+    $('successState').classList.add('show');
+    setTimeout(()=> window.location.href='profile.html', 1800);
+  }catch(err){
+    showAlert(err.message);
+    markOtpError();
+  }finally{
+    setLoading(false);
+  }
+};
+
+/* ── resend OTP ── */
+let resendCooldown = 0;
+let cooldownInterval;
+
+window.resendOTP = async function(){
+  if(resendCooldown > 0) return;
+  hideAlert();
+  try{
+    const res = await fetch(`${API_BASE}/auth/resend-otp`,{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ userId })
+    });
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.message||'Could not resend OTP.');
+    showSuccess('New OTP sent! Please check your email.');
+    // Reset timer
+    totalSeconds = 10 * 60;
+    clearInterval(timerInterval);
+    timerInterval = setInterval(tick, 1000);
+    $('timerCircle').classList.remove('urgent');
+    $('verifyBtn').disabled = false;
+    // Start resend cooldown (60s)
+    resendCooldown = 60;
+    $('resendBtn').disabled = true;
+    cooldownInterval = setInterval(()=>{
+      resendCooldown--;
+      $('resendCooldown').textContent = `(${resendCooldown}s)`;
+      if(resendCooldown <= 0){
+        clearInterval(cooldownInterval);
+        $('resendBtn').disabled = false;
+        $('resendCooldown').textContent = '';
+      }
+    }, 1000);
+  }catch(err){
+    showAlert(err.message);
+  }
+};
+
+// Focus first box on load
+otpBoxes[0].focus();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dashboard – Lata Family Restaurant</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+:root{
+  --saffron:#E8821A;--saffron-lt:#F5A84E;--gold:#C8860A;--spice:#7B2D00;
+  --cream:#FDF6EE;--cream-dk:#F5EAD8;--dark:#1A0A00;--muted:#7A5C44;
+  --border:#E2C9A8;--white:#fff;--success:#2E7D32;--error:#D0342C;
+  --shadow-sm:0 2px 12px rgba(123,45,0,0.08);
+  --shadow-md:0 6px 28px rgba(123,45,0,0.12);
+  --shadow-lg:0 16px 48px rgba(123,45,0,0.16);
+  --ff-display:'Cormorant Garamond',Georgia,serif;
+  --ff-body:'DM Sans',sans-serif;
+  --sidebar-w:260px;
+}
+body{font-family:var(--ff-body);background:var(--cream);color:var(--dark);min-height:100vh;display:flex;overflow-x:hidden;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+
+/* ══ SIDEBAR ══ */
+.sidebar{
+  width:var(--sidebar-w);min-height:100vh;
+  background:linear-gradient(170deg,var(--spice) 0%,#3A1400 100%);
+  display:flex;flex-direction:column;
+  position:fixed;left:0;top:0;bottom:0;z-index:200;
+  transition:transform 0.3s cubic-bezier(0.22,1,0.36,1);
+}
+.sidebar-logo{
+  padding:1.5rem 1.25rem 1rem;
+  display:flex;align-items:center;gap:10px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.logo-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--saffron),var(--gold));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.logo-text span:first-child{font-family:var(--ff-display);font-size:1.15rem;font-weight:700;color:#fff;display:block;line-height:1.1;}
+.logo-text span:last-child{font-size:0.58rem;color:rgba(255,255,255,0.45);letter-spacing:2px;text-transform:uppercase;}
+
+/* user card in sidebar */
+.sidebar-user{
+  padding:1.1rem 1.25rem;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+  display:flex;align-items:center;gap:10px;
+}
+.user-av{
+  width:40px;height:40px;border-radius:50%;
+  background:linear-gradient(135deg,var(--saffron),var(--gold));
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--ff-display);font-size:1rem;font-weight:700;color:#fff;
+  flex-shrink:0;border:2px solid rgba(255,255,255,0.2);
+}
+.user-info span:first-child{display:block;font-size:0.88rem;font-weight:500;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px;}
+.user-info span:last-child{font-size:0.7rem;color:rgba(255,255,255,0.45);}
+.user-online{width:8px;height:8px;border-radius:50%;background:#4CAF50;border:1.5px solid var(--spice);margin-left:auto;flex-shrink:0;}
+
+/* nav */
+.sidebar-nav{flex:1;padding:1rem 0.75rem;display:flex;flex-direction:column;gap:2px;overflow-y:auto;}
+.nav-section-label{font-size:0.62rem;font-weight:500;color:rgba(255,255,255,0.3);letter-spacing:2px;text-transform:uppercase;padding:0.6rem 0.5rem 0.3rem;}
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 12px;border-radius:10px;cursor:pointer;
+  font-size:0.87rem;font-weight:500;color:rgba(255,255,255,0.65);
+  transition:all 0.2s;text-decoration:none;
+  position:relative;
+}
+.nav-item:hover{background:rgba(255,255,255,0.08);color:#fff;}
+.nav-item.active{background:rgba(232,130,26,0.2);color:var(--saffron-lt);}
+.nav-item.active::before{content:'';position:absolute;left:-12px;top:50%;transform:translateY(-50%);width:3px;height:60%;background:var(--saffron);border-radius:0 3px 3px 0;}
+.nav-icon{width:18px;height:18px;flex-shrink:0;opacity:0.7;}
+.nav-item.active .nav-icon,.nav-item:hover .nav-icon{opacity:1;}
+.nav-badge{margin-left:auto;background:var(--saffron);color:#fff;font-size:0.65rem;font-weight:700;padding:1px 7px;border-radius:10px;}
+
+/* sidebar bottom */
+.sidebar-bottom{padding:1rem 0.75rem;border-top:1px solid rgba(255,255,255,0.08);}
+.logout-btn{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;cursor:pointer;font-size:0.87rem;font-weight:500;color:rgba(255,255,255,0.5);transition:all 0.2s;background:none;border:none;width:100%;font-family:var(--ff-body);}
+.logout-btn:hover{background:rgba(208,52,44,0.15);color:#ff8a80;}
+
+/* ══ MAIN CONTENT ══ */
+.main{
+  margin-left:var(--sidebar-w);flex:1;
+  display:flex;flex-direction:column;min-height:100vh;
+}
+
+/* topbar */
+.topbar{
+  background:#fff;border-bottom:1px solid var(--border);
+  padding:0 2rem;height:64px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+}
+.topbar-left{display:flex;align-items:center;gap:12px;}
+.hamburger-dash{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px;}
+.hamburger-dash span{display:block;width:22px;height:2px;background:var(--dark);border-radius:2px;transition:all 0.3s;}
+.page-title{font-family:var(--ff-display);font-size:1.3rem;font-weight:600;color:var(--spice);}
+.topbar-right{display:flex;align-items:center;gap:12px;}
+.topbar-search{
+  display:flex;align-items:center;gap:8px;
+  background:var(--cream);border:1.5px solid var(--border);
+  border-radius:10px;padding:0 12px;height:38px;width:220px;
+  transition:border-color 0.2s;
+}
+.topbar-search:focus-within{border-color:var(--saffron);}
+.topbar-search input{border:none;background:transparent;outline:none;font-family:var(--ff-body);font-size:0.85rem;color:var(--dark);width:100%;}
+.topbar-search svg{opacity:0.4;flex-shrink:0;}
+.notif-btn{
+  width:38px;height:38px;border-radius:10px;border:1.5px solid var(--border);
+  background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:17px;position:relative;transition:border-color 0.2s;
+}
+.notif-btn:hover{border-color:var(--saffron);}
+.notif-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--saffron);border:1.5px solid #fff;}
+.topbar-av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--saffron),var(--gold));display:flex;align-items:center;justify-content:center;font-family:var(--ff-display);font-size:0.95rem;font-weight:700;color:#fff;cursor:pointer;flex-shrink:0;}
+
+/* ══ CONTENT AREA ══ */
+.content{padding:2rem;flex:1;}
+
+/* sections shown/hidden */
+.section{display:none;}
+.section.active{display:block;animation:fadeIn 0.35s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+/* ══ SHARED COMPONENTS ══ */
+.section-header{margin-bottom:1.5rem;}
+.section-header h2{font-family:var(--ff-display);font-size:1.7rem;font-weight:700;color:var(--spice);margin-bottom:4px;}
+.section-header h2 em{font-style:italic;color:var(--saffron);}
+.section-header p{font-size:0.85rem;color:var(--muted);}
+
+/* stat cards */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.75rem;}
+.stat-card{
+  background:#fff;border-radius:14px;border:1px solid var(--border);
+  padding:1.1rem 1.25rem;position:relative;overflow:hidden;
+  transition:box-shadow 0.2s,transform 0.2s;
+}
+.stat-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--saffron),var(--gold));}
+.stat-icon{width:40px;height:40px;border-radius:10px;background:rgba(232,130,26,0.1);display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:0.75rem;}
+.stat-label{font-size:0.75rem;color:var(--muted);font-weight:500;letter-spacing:0.3px;margin-bottom:4px;}
+.stat-value{font-family:var(--ff-display);font-size:1.6rem;font-weight:700;color:var(--spice);line-height:1;}
+.stat-change{font-size:0.72rem;margin-top:4px;display:flex;align-items:center;gap:3px;}
+.stat-change.up{color:var(--success);}
+.stat-change.down{color:var(--error);}
+
+/* cards */
+.card{background:#fff;border-radius:16px;border:1px solid var(--border);padding:1.25rem;box-shadow:var(--shadow-sm);}
+.card-title{font-family:var(--ff-display);font-size:1.1rem;font-weight:600;color:var(--spice);margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;}
+.card-title a{font-family:var(--ff-body);font-size:0.78rem;color:var(--saffron-dk);font-weight:500;text-decoration:none;}
+.card-title a:hover{color:var(--spice);}
+
+/* ══ OVERVIEW SECTION ══ */
+.overview-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:1.25rem;margin-bottom:1.25rem;}
+.overview-grid2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem;}
+
+/* welcome banner */
+.welcome-banner{
+  background:linear-gradient(135deg,var(--spice) 0%,#6B2200 100%);
+  border-radius:16px;padding:1.5rem 1.75rem;
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:1.5rem;position:relative;overflow:hidden;
+}
+.welcome-banner::before{content:'';position:absolute;right:-60px;top:-60px;width:200px;height:200px;border-radius:50%;background:rgba(232,130,26,0.15);}
+.welcome-banner::after{content:'';position:absolute;right:20px;bottom:-40px;width:120px;height:120px;border-radius:50%;background:rgba(200,134,10,0.1);}
+.wb-text h2{font-family:var(--ff-display);font-size:1.5rem;font-weight:700;color:#fff;margin-bottom:4px;}
+.wb-text p{font-size:0.83rem;color:rgba(255,255,255,0.65);}
+.wb-btn{
+  background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);
+  border-radius:10px;padding:9px 18px;color:#fff;font-family:var(--ff-body);
+  font-size:0.83rem;font-weight:500;cursor:pointer;white-space:nowrap;
+  transition:background 0.2s;z-index:1;text-decoration:none;display:inline-block;
+}
+.wb-btn:hover{background:rgba(255,255,255,0.25);}
+
+/* order list */
+.order-list{display:flex;flex-direction:column;gap:10px;}
+.order-row{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 12px;border-radius:10px;
+  background:var(--cream);border:1px solid var(--border);
+  transition:border-color 0.2s;
+}
+.order-row:hover{border-color:var(--saffron);}
+.order-emoji{font-size:1.4rem;width:36px;text-align:center;flex-shrink:0;}
+.order-info{flex:1;min-width:0;}
+.order-name{font-size:0.88rem;font-weight:500;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.order-date{font-size:0.72rem;color:var(--muted);}
+.order-price{font-family:var(--ff-display);font-size:0.95rem;font-weight:600;color:var(--saffron-dk);white-space:nowrap;}
+.order-status{font-size:0.68rem;font-weight:500;padding:3px 9px;border-radius:10px;white-space:nowrap;}
+.status-delivered{background:#E8F5E9;color:#2E7D32;}
+.status-pending{background:#FFF3E0;color:#E65100;}
+.status-cancelled{background:#FFEBEE;color:#C62828;}
+.status-confirmed{background:#E3F2FD;color:#1565C0;}
+
+/* reservation list */
+.res-list{display:flex;flex-direction:column;gap:10px;}
+.res-row{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 14px;border-radius:10px;
+  background:var(--cream);border:1px solid var(--border);
+}
+.res-date-box{
+  background:linear-gradient(135deg,var(--saffron),var(--gold));
+  border-radius:10px;padding:8px 10px;text-align:center;
+  min-width:46px;flex-shrink:0;
+}
+.res-date-box .rday{font-family:var(--ff-display);font-size:1.2rem;font-weight:700;color:#fff;line-height:1;}
+.res-date-box .rmon{font-size:0.6rem;color:rgba(255,255,255,0.8);letter-spacing:1px;text-transform:uppercase;}
+.res-info{flex:1;}
+.res-title{font-size:0.88rem;font-weight:500;color:var(--dark);}
+.res-sub{font-size:0.72rem;color:var(--muted);}
+.res-badge{font-size:0.68rem;font-weight:500;padding:3px 9px;border-radius:10px;}
+.res-upcoming{background:#E3F2FD;color:#1565C0;}
+.res-completed{background:#E8F5E9;color:#2E7D32;}
+
+/* favourite items */
+.fav-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.fav-item{
+  background:var(--cream);border:1px solid var(--border);border-radius:12px;
+  padding:10px;text-align:center;cursor:pointer;transition:all 0.2s;
+}
+.fav-item:hover{border-color:var(--saffron);box-shadow:var(--shadow-sm);}
+.fav-emoji{font-size:1.8rem;margin-bottom:4px;}
+.fav-name{font-size:0.72rem;font-weight:500;color:var(--dark);line-height:1.3;}
+.fav-price{font-size:0.7rem;color:var(--saffron-dk);font-weight:500;margin-top:2px;}
+
+/* points card */
+.points-card{
+  background:linear-gradient(135deg,#C8860A,#E8821A);
+  border-radius:14px;padding:1.25rem;color:#fff;
+  position:relative;overflow:hidden;
+}
+.points-card::before{content:'';position:absolute;right:-30px;top:-30px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,0.1);}
+.pts-label{font-size:0.72rem;letter-spacing:1px;text-transform:uppercase;opacity:0.75;margin-bottom:4px;}
+.pts-value{font-family:var(--ff-display);font-size:2.2rem;font-weight:700;color:#fff;line-height:1;margin-bottom:4px;}
+.pts-sub{font-size:0.75rem;opacity:0.7;}
+.pts-bar-wrap{margin-top:1rem;height:6px;background:rgba(255,255,255,0.25);border-radius:4px;overflow:hidden;}
+.pts-bar{height:100%;background:#fff;border-radius:4px;width:65%;}
+.pts-next{font-size:0.72rem;opacity:0.7;margin-top:4px;}
+
+/* ══ ORDERS SECTION ══ */
+.orders-filter{display:flex;gap:8px;margin-bottom:1.2rem;flex-wrap:wrap;}
+.ofchip{padding:6px 16px;border-radius:20px;border:1.5px solid var(--border);font-size:0.8rem;font-weight:500;color:var(--muted);background:#fff;cursor:pointer;transition:all 0.2s;}
+.ofchip:hover{border-color:var(--saffron);color:var(--saffron-dk);}
+.ofchip.active{background:linear-gradient(135deg,var(--saffron),var(--gold));border-color:transparent;color:#fff;}
+.orders-table{width:100%;border-collapse:collapse;}
+.orders-table th{font-size:0.72rem;font-weight:500;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;padding:0.6rem 1rem;text-align:left;border-bottom:1.5px solid var(--border);}
+.orders-table td{padding:0.9rem 1rem;border-bottom:1px solid var(--border);font-size:0.85rem;color:var(--dark);}
+.orders-table tr:last-child td{border-bottom:none;}
+.orders-table tr:hover td{background:var(--cream);}
+.order-id{font-weight:500;color:var(--saffron-dk);}
+.reorder-btn{padding:5px 12px;border-radius:8px;border:1.5px solid var(--border);background:#fff;font-family:var(--ff-body);font-size:0.75rem;font-weight:500;color:var(--muted);cursor:pointer;transition:all 0.2s;}
+.reorder-btn:hover{border-color:var(--saffron);color:var(--saffron-dk);}
+
+/* ══ RESERVATIONS SECTION ══ */
+.res-section-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;}
+.new-res-form{display:flex;flex-direction:column;gap:10px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.finput{height:42px;border:1.5px solid var(--border);border-radius:10px;padding:0 12px;font-family:var(--ff-body);font-size:0.87rem;color:var(--dark);background:var(--cream);outline:none;width:100%;transition:border-color 0.2s;}
+.finput:focus{border-color:var(--saffron);box-shadow:0 0 0 3px rgba(232,130,26,0.1);}
+.fselect{height:42px;border:1.5px solid var(--border);border-radius:10px;padding:0 12px;font-family:var(--ff-body);font-size:0.87rem;color:var(--dark);background:var(--cream);outline:none;width:100%;appearance:none;cursor:pointer;}
+.fselect:focus{border-color:var(--saffron);}
+.res-submit{height:44px;background:linear-gradient(135deg,var(--saffron),var(--gold));border:none;border-radius:10px;color:#fff;font-family:var(--ff-body);font-size:0.9rem;font-weight:500;cursor:pointer;transition:transform 0.15s,box-shadow 0.2s;}
+.res-submit:hover{transform:translateY(-1px);box-shadow:0 5px 16px rgba(200,134,10,0.4);}
+
+/* ══ PROFILE SECTION ══ */
+.profile-layout{display:grid;grid-template-columns:1fr 2fr;gap:1.25rem;}
+.profile-card-left{display:flex;flex-direction:column;align-items:center;text-align:center;padding:1.5rem;}
+.profile-big-av{
+  width:90px;height:90px;border-radius:50%;
+  background:linear-gradient(135deg,var(--saffron),var(--gold));
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--ff-display);font-size:2.2rem;font-weight:700;color:#fff;
+  border:4px solid #fff;box-shadow:0 4px 16px rgba(232,130,26,0.3);
+  margin-bottom:1rem;cursor:pointer;overflow:hidden;position:relative;
+}
+.profile-big-av:hover::after{content:'📷';position:absolute;inset:0;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;font-size:1.5rem;}
+.profile-name{font-family:var(--ff-display);font-size:1.3rem;font-weight:700;color:var(--spice);margin-bottom:3px;}
+.profile-email{font-size:0.8rem;color:var(--muted);margin-bottom:0.75rem;}
+.verified-chip{display:inline-flex;align-items:center;gap:4px;background:#E8F5E9;border:1px solid #C5E1A5;color:var(--success);border-radius:20px;font-size:0.7rem;font-weight:500;padding:3px 10px;margin-bottom:1rem;}
+.member-since{font-size:0.75rem;color:var(--muted);opacity:0.7;}
+.profile-stats{display:flex;gap:1rem;margin-top:1rem;width:100%;}
+.pstat{flex:1;background:var(--cream);border-radius:10px;padding:8px;text-align:center;}
+.pstat-num{font-family:var(--ff-display);font-size:1.1rem;font-weight:700;color:var(--spice);}
+.pstat-lbl{font-size:0.65rem;color:var(--muted);}
+.profile-form{display:flex;flex-direction:column;gap:12px;}
+.profile-form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-group{display:flex;flex-direction:column;gap:5px;}
+.form-group label{font-size:0.78rem;font-weight:500;color:var(--muted);}
+.form-group.full{grid-column:1/-1;}
+.pref-chips{display:flex;flex-wrap:wrap;gap:7px;}
+.pchip{padding:5px 13px;border-radius:20px;border:1.5px solid var(--border);font-size:0.78rem;color:var(--muted);cursor:pointer;background:#fff;transition:all 0.2s;font-family:var(--ff-body);}
+.pchip:hover{border-color:var(--saffron);color:var(--saffron-dk);}
+.pchip.sel{background:linear-gradient(135deg,var(--saffron),var(--gold));border-color:transparent;color:#fff;font-weight:500;}
+.save-btn{height:44px;background:linear-gradient(135deg,var(--saffron),var(--gold));border:none;border-radius:10px;color:#fff;font-family:var(--ff-body);font-size:0.9rem;font-weight:500;cursor:pointer;transition:transform 0.15s,box-shadow 0.2s;}
+.save-btn:hover{transform:translateY(-1px);box-shadow:0 5px 16px rgba(200,134,10,0.4);}
+
+/* ══ NOTIFICATIONS SECTION ══ */
+.notif-list{display:flex;flex-direction:column;gap:0;}
+.notif-item{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:14px 16px;border-bottom:1px solid var(--border);
+  transition:background 0.2s;cursor:pointer;position:relative;
+}
+.notif-item:last-child{border-bottom:none;}
+.notif-item:hover{background:var(--cream);}
+.notif-item.unread{background:rgba(232,130,26,0.04);}
+.notif-item.unread::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--saffron);border-radius:0 3px 3px 0;}
+.notif-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.notif-icon.orange{background:rgba(232,130,26,0.1);}
+.notif-icon.green{background:rgba(46,125,50,0.1);}
+.notif-icon.blue{background:rgba(21,101,192,0.1);}
+.notif-icon.red{background:rgba(208,52,44,0.1);}
+.notif-body{flex:1;}
+.notif-title{font-size:0.87rem;font-weight:500;color:var(--dark);margin-bottom:2px;}
+.notif-desc{font-size:0.78rem;color:var(--muted);line-height:1.5;}
+.notif-time{font-size:0.7rem;color:var(--muted);white-space:nowrap;opacity:0.7;margin-top:4px;}
+.mark-all{font-size:0.8rem;color:var(--saffron-dk);font-weight:500;cursor:pointer;border:none;background:none;font-family:var(--ff-body);}
+.mark-all:hover{color:var(--spice);}
+
+/* ══ TOAST ══ */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--spice);color:#fff;padding:10px 20px;border-radius:10px;font-size:0.85rem;font-weight:500;z-index:3000;transition:transform 0.3s cubic-bezier(0.22,1,0.36,1);pointer-events:none;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:1100px){
+  .stat-grid{grid-template-columns:repeat(2,1fr);}
+  .overview-grid{grid-template-columns:1fr;}
+  .overview-grid2{grid-template-columns:1fr 1fr;}
+  .profile-layout{grid-template-columns:1fr;}
+  .res-section-grid{grid-template-columns:1fr;}
+}
+@media(max-width:768px){
+  :root{--sidebar-w:260px;}
+  .sidebar{transform:translateX(-100%);}
+  .sidebar.open{transform:translateX(0);}
+  .main{margin-left:0;}
+  .hamburger-dash{display:flex;}
+  .topbar-search{display:none;}
+  .stat-grid{grid-template-columns:1fr 1fr;}
+  .overview-grid2{grid-template-columns:1fr;}
+  .fav-grid{grid-template-columns:repeat(3,1fr);}
+  .form-row,.profile-form-row{grid-template-columns:1fr;}
+  .profile-form-row .form-group.full{grid-column:1;}
+  .content{padding:1.25rem;}
+  .orders-table{display:block;overflow-x:auto;}
+}
+@media(max-width:480px){
+  .stat-grid{grid-template-columns:1fr;}
+  .fav-grid{grid-template-columns:repeat(2,1fr);}
+  .welcome-banner{flex-direction:column;gap:1rem;align-items:flex-start;}
+}
+
+/* overlay for mobile sidebar */
+.sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:199;display:none;}
+.sidebar-overlay.show{display:block;}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">🪔</div>
+    <div class="logo-text">
+      <span>Lata Family</span>
+      <span>Restaurant</span>
+    </div>
+  </div>
+
+  <div class="sidebar-user">
+    <div class="user-av" id="sidebarAv">P</div>
+    <div class="user-info">
+      <span id="sidebarName">priya</span>
+      <span>Member since 2024</span>
+    </div>
+    <div class="user-online" title="Online"></div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Main</div>
+    <a class="nav-item active" onclick="showSection('overview',this)">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Overview
+    </a>
+    <a class="nav-item" onclick="showSection('orders',this)">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      My Orders
+      <span class="nav-badge">3</span>
+    </a>
+    <a class="nav-item" onclick="showSection('reservations',this)">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Reservations
+      <span class="nav-badge">1</span>
+    </a>
+    <a class="nav-item" onclick="showSection('notifications',this)">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      Notifications
+      <span class="nav-badge">4</span>
+    </a>
+
+    <div class="nav-section-label" style="margin-top:0.75rem;">Explore</div>
+    <a class="nav-item" href="menu.html">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+      Menu
+    </a>
+    <a class="nav-item" href="gallery.html">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      Gallery
+    </a>
+    <a class="nav-item" href="index.html#reservation">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Visit Us
+    </a>
+
+    <div class="nav-section-label" style="margin-top:0.75rem;">Account</div>
+    <a class="nav-item" onclick="showSection('profile',this)">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"/><path d="M20 21v-2a7 7 0 0 0-14 0v2"/></svg>
+      My Profile
+    </a>
+  </nav>
+
+  <div class="sidebar-bottom">
+    <button class="logout-btn" onclick="logout()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Sign Out
+    </button>
+  </div>
+</aside>
+
+<!-- overlay -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <button class="hamburger-dash" id="hamDash" onclick="toggleSidebar()">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="page-title" id="pageTitle">Overview</div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7A5C44" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search orders, dishes…"/>
+      </div>
+      <button class="notif-btn" onclick="showSection('notifications',null)">
+        🔔<div class="notif-dot"></div>
+      </button>
+      <div class="topbar-av" id="topbarAv" onclick="window.location.href='profile.html'" style="cursor:pointer;">P</div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ══ OVERVIEW ══ -->
+    <div class="section active" id="sec-overview">
+      <div class="welcome-banner">
+        <div class="wb-text">
+          <h2>Namaste, <span id="wbName">Priya</span> 🙏</h2>
+          <p>Good to see you again! Here's what's happening with your account.</p>
+        </div>
+        <a href="menu.html" class="wb-btn">Order Now →</a>
+      </div>
+
+      <!-- stats -->
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-icon">🛒</div>
+          <div class="stat-label">Total Orders</div>
+          <div class="stat-value">12</div>
+          <div class="stat-change up">↑ 3 this month</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📅</div>
+          <div class="stat-label">Reservations</div>
+          <div class="stat-value">4</div>
+          <div class="stat-change up">↑ 1 upcoming</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⭐</div>
+          <div class="stat-label">Loyalty Points</div>
+          <div class="stat-value">650</div>
+          <div class="stat-change up">↑ 120 this week</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💰</div>
+          <div class="stat-label">Total Spent</div>
+          <div class="stat-value">₹3,840</div>
+          <div class="stat-change up">↑ ₹720 this month</div>
+        </div>
+      </div>
+
+      <div class="overview-grid">
+        <!-- recent orders -->
+        <div class="card">
+          <div class="card-title">Recent Orders <a onclick="showSection('orders',null)">View All →</a></div>
+          <div class="order-list">
+            <div class="order-row">
+              <div class="order-emoji">🍛</div>
+              <div class="order-info"><div class="order-name">Dal Makhani + Butter Naan ×2</div><div class="order-date">Today, 1:30 PM · Dine-in</div></div>
+              <div class="order-price">₹320</div>
+              <div class="order-status status-delivered">Delivered</div>
+            </div>
+            <div class="order-row">
+              <div class="order-emoji">🍚</div>
+              <div class="order-info"><div class="order-name">Dum Biryani + Raita</div><div class="order-date">Yesterday, 8:00 PM · Takeaway</div></div>
+              <div class="order-price">₹380</div>
+              <div class="order-status status-delivered">Delivered</div>
+            </div>
+            <div class="order-row">
+              <div class="order-emoji">🥘</div>
+              <div class="order-info"><div class="order-name">Paneer Tikka Masala + Naan</div><div class="order-date">12 Jan · Dine-in</div></div>
+              <div class="order-price">₹310</div>
+              <div class="order-status status-delivered">Delivered</div>
+            </div>
+            <div class="order-row">
+              <div class="order-emoji">🍢</div>
+              <div class="order-info"><div class="order-name">Seekh Kebab + Mango Lassi</div><div class="order-date">8 Jan · Delivery</div></div>
+              <div class="order-price">₹370</div>
+              <div class="order-status status-pending">In Progress</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- loyalty points -->
+        <div class="card">
+          <div class="card-title">Loyalty Points</div>
+          <div class="points-card">
+            <div class="pts-label">Your Points Balance</div>
+            <div class="pts-value">650 pts</div>
+            <div class="pts-sub">= ₹65 discount on next order</div>
+            <div class="pts-bar-wrap"><div class="pts-bar"></div></div>
+            <div class="pts-next">350 more points for Gold membership 🏆</div>
+          </div>
+          <div style="margin-top:1rem;">
+            <div style="font-size:0.75rem;font-weight:500;color:var(--muted);letter-spacing:0.5px;margin-bottom:8px;">HOW TO EARN MORE</div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="display:flex;justify-content:space-between;font-size:0.8rem;color:var(--dark);padding:6px 10px;background:var(--cream);border-radius:8px;"><span>Every ₹100 spent</span><span style="color:var(--saffron-dk);font-weight:500;">+10 pts</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:0.8rem;color:var(--dark);padding:6px 10px;background:var(--cream);border-radius:8px;"><span>Leave a review</span><span style="color:var(--saffron-dk);font-weight:500;">+25 pts</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:0.8rem;color:var(--dark);padding:6px 10px;background:var(--cream);border-radius:8px;"><span>Refer a friend</span><span style="color:var(--saffron-dk);font-weight:500;">+100 pts</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="overview-grid2">
+        <!-- upcoming reservation -->
+        <div class="card">
+          <div class="card-title">Upcoming Reservation <a onclick="showSection('reservations',null)">View All →</a></div>
+          <div class="res-list">
+            <div class="res-row">
+              <div class="res-date-box"><div class="rday">25</div><div class="rmon">Jan</div></div>
+              <div class="res-info"><div class="res-title">Table for 4 · 7:30 PM</div><div class="res-sub">Anniversary dinner · Window seat</div></div>
+              <span class="res-badge res-upcoming">Confirmed</span>
+            </div>
+          </div>
+          <div style="margin-top:1rem;padding:10px 14px;background:rgba(232,130,26,0.06);border:1px solid rgba(232,130,26,0.2);border-radius:10px;font-size:0.78rem;color:var(--muted);">
+            💡 Reminder: We'll call to confirm 2 hours before your reservation.
+          </div>
+        </div>
+
+        <!-- favourite dishes -->
+        <div class="card">
+          <div class="card-title">Your Favourites</div>
+          <div class="fav-grid">
+            <div class="fav-item" onclick="window.location.href='menu.html'"><div class="fav-emoji">🍛</div><div class="fav-name">Dal Makhani</div><div class="fav-price">₹220</div></div>
+            <div class="fav-item" onclick="window.location.href='menu.html'"><div class="fav-emoji">🫓</div><div class="fav-name">Butter Naan</div><div class="fav-price">₹50</div></div>
+            <div class="fav-item" onclick="window.location.href='menu.html'"><div class="fav-emoji">🍚</div><div class="fav-name">Dum Biryani</div><div class="fav-price">₹350</div></div>
+            <div class="fav-item" onclick="window.location.href='menu.html'"><div class="fav-emoji">🥘</div><div class="fav-name">Paneer Tikka</div><div class="fav-price">₹280</div></div>
+            <div class="fav-item" onclick="window.location.href='menu.html'"><div class="fav-emoji">🍮</div><div class="fav-name">Gulab Jamun</div><div class="fav-price">₹120</div></div>
+            <div class="fav-item" onclick="window.location.href='menu.html'"><div class="fav-emoji">🥛</div><div class="fav-name">Mango Lassi</div><div class="fav-price">₹90</div></div>
+          </div>
+        </div>
+
+        <!-- quick actions -->
+        <div class="card">
+          <div class="card-title">Quick Actions</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <a href="menu.html" style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:linear-gradient(135deg,rgba(232,130,26,0.08),rgba(200,134,10,0.05));border:1px solid rgba(232,130,26,0.2);border-radius:10px;text-decoration:none;color:var(--dark);font-size:0.85rem;font-weight:500;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--saffron)'" onmouseout="this.style.borderColor='rgba(232,130,26,0.2)'">
+              🍛 &nbsp;Order Food
+            </a>
+            <a onclick="showSection('reservations',null)" style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--cream);border:1px solid var(--border);border-radius:10px;cursor:pointer;color:var(--dark);font-size:0.85rem;font-weight:500;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--saffron)'" onmouseout="this.style.borderColor='var(--border)'">
+              📅 &nbsp;Book a Table
+            </a>
+            <a href="gallery.html" style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--cream);border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--dark);font-size:0.85rem;font-weight:500;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--saffron)'" onmouseout="this.style.borderColor='var(--border)'">
+              📸 &nbsp;View Gallery
+            </a>
+            <a onclick="showSection('profile',null)" style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--cream);border:1px solid var(--border);border-radius:10px;cursor:pointer;color:var(--dark);font-size:0.85rem;font-weight:500;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--saffron)'" onmouseout="this.style.borderColor='var(--border)'">
+              👤 &nbsp;Edit Profile
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ ORDERS ══ -->
+    <div class="section" id="sec-orders">
+      <div class="section-header">
+        <h2>My <em>Orders</em></h2>
+        <p>Track and manage all your food orders</p>
+      </div>
+      <div class="orders-filter">
+        <a href="my-orders.html">View All Orders</a>
+        <button class="ofchip" onclick="filterOrders(this,'delivered')">Delivered</button>
+        <button class="ofchip" onclick="filterOrders(this,'pending')">In Progress</button>
+        <button class="ofchip" onclick="filterOrders(this,'cancelled')">Cancelled</button>
+      </div>
+      <div class="card">
+        <table class="orders-table" id="ordersTable">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Items</th>
+              <th>Date</th>
+              <th>Type</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="ordersBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══ RESERVATIONS ══ -->
+    <div class="section" id="sec-reservations">
+      <div class="section-header">
+        <h2>My <em>Reservations</em></h2>
+        <p>Book and manage your table reservations</p>
+      </div>
+      <div class="res-section-grid">
+        <!-- new booking form -->
+        <div class="card">
+          <div class="card-title">Book a New Table</div>
+          <form class="new-res-form" onsubmit="submitReservation(event)">
+            <div class="form-row">
+              <input class="finput" type="date" id="rDate" required/>
+              <input class="finput" type="time" id="rTime" value="19:00"/>
+            </div>
+            <div class="form-row">
+              <select class="fselect" id="rGuests">
+                <option>1 Guest</option><option>2 Guests</option>
+                <option selected>3 Guests</option><option>4 Guests</option>
+                <option>5 Guests</option><option>6+ Guests</option>
+              </select>
+              <select class="fselect" id="rOccasion">
+                <option>No special occasion</option>
+                <option>Birthday</option><option>Anniversary</option>
+                <option>Business Dinner</option><option>Family Get-together</option>
+              </select>
+            </div>
+            <input class="finput" type="text" placeholder="Special requests (dietary, seating, etc.)" id="rNotes"/>
+            <button type="submit" class="res-submit">🪔 Confirm Reservation</button>
+          </form>
+        </div>
+        <!-- existing reservations -->
+        <div class="card">
+          <div class="card-title">Your Reservations</div>
+          <div class="res-list" id="resList"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PROFILE ══ -->
+    <div class="section" id="sec-profile">
+      <div class="section-header">
+        <h2>My <em>Profile</em></h2>
+        <p>Manage your personal information and preferences</p>
+      </div>
+      <div class="profile-layout">
+        <div class="card profile-card-left">
+          <div class="profile-big-av" id="profileAvatar">P</div>
+          <div class="profile-name" id="profileNameDisp">Priya Sharma</div>
+          <div class="profile-email" id="profileEmailDisp">priya@example.com</div>
+          <div class="verified-chip">✓ Verified Account</div>
+          <div class="member-since">Member since January 2024</div>
+          <div class="profile-stats">
+            <div class="pstat"><div class="pstat-num">12</div><div class="pstat-lbl">Orders</div></div>
+            <div class="pstat"><div class="pstat-num">4</div><div class="pstat-lbl">Visits</div></div>
+            <div class="pstat"><div class="pstat-num">650</div><div class="pstat-lbl">Points</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Edit Information</div>
+          <form class="profile-form" onsubmit="saveProfile(event)">
+            <div class="profile-form-row">
+              <div class="form-group"><label>First Name</label><input class="finput" type="text" id="pFname" value="Priya"/></div>
+              <div class="form-group"><label>Last Name</label><input class="finput" type="text" id="pLname" value="Sharma"/></div>
+              <div class="form-group"><label>Email</label><input class="finput" type="email" id="pEmail" value="priya@example.com" readonly style="background:#f8f4ef;color:var(--muted);cursor:not-allowed;"/></div>
+              <div class="form-group"><label>Phone</label><input class="finput" type="tel" id="pPhone" value="9876543210" inputmode="tel"/></div>
+              <div class="form-group"><label>Date of Birth</label><input class="finput" type="date" id="pDob"/></div>
+              <div class="form-group"><label>City</label><input class="finput" type="text" id="pCity" placeholder="Nagpur"/></div>
+              <div class="form-group full">
+                <label>Food Preference</label>
+                <div class="pref-chips">
+                  <button type="button" class="pchip sel" data-v="Vegetarian" onclick="selPref(this)">🥦 Vegetarian</button>
+                  <button type="button" class="pchip" data-v="Non-Vegetarian" onclick="selPref(this)">🍗 Non-Veg</button>
+                  <button type="button" class="pchip" data-v="Vegan" onclick="selPref(this)">🌱 Vegan</button>
+                  <button type="button" class="pchip" data-v="Jain" onclick="selPref(this)">🕉️ Jain</button>
+                </div>
+                <input type="hidden" id="pPref" value="Vegetarian"/>
+              </div>
+              <div class="form-group full"><label>Address</label><input class="finput" type="text" id="pAddr" placeholder="Your address in Nagpur"/></div>
+            </div>
+            <button type="submit" class="save-btn">Save Changes</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ NOTIFICATIONS ══ -->
+    <div class="section" id="sec-notifications">
+      <div class="section-header" style="display:flex;align-items:flex-start;justify-content:space-between;">
+        <div>
+          <h2>My <em>Notifications</em></h2>
+          <p>Stay updated with your orders and offers</p>
+        </div>
+        <button class="mark-all" onclick="markAllRead()">Mark all as read</button>
+      </div>
+      <div class="card" style="padding:0;">
+        <div class="notif-list" id="notifList"></div>
+      </div>
+    </div>
+
+  </div><!-- .content -->
+</div><!-- .main -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* ══ USER DATA (replace with real API call) ══ */
+const user = {
+  name:'Priya Sharma', fname:'Priya', email:'priya@example.com',
+  initials:'PS', points:650,
+};
+
+/* ══ INIT USER ══ */
+function initUser(){
+  document.getElementById('sidebarAv').textContent    = user.initials;
+  document.getElementById('sidebarName').textContent  = user.name;
+  document.getElementById('topbarAv').textContent     = user.initials;
+  document.getElementById('profileAvatar').textContent= user.initials;
+  document.getElementById('profileNameDisp').textContent = user.name;
+  document.getElementById('profileEmailDisp').textContent= user.email;
+  document.getElementById('wbName').textContent       = user.fname;
+}
+
+/* ══ SECTION NAVIGATION ══ */
+const titles = {overview:'Overview',orders:'My Orders',reservations:'Reservations',profile:'My Profile',notifications:'Notifications'};
+
+window.showSection = function(name, navEl){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sec-'+name).classList.add('active');
+  document.getElementById('pageTitle').textContent = titles[name]||name;
+  if(navEl){
+    document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+    navEl.classList.add('active');
+  }
+  closeSidebar();
+};
+
+/* ══ SIDEBAR MOBILE ══ */
+window.toggleSidebar = function(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('show');
+};
+window.closeSidebar = function(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('show');
+};
+
+/* ══ TOAST ══ */
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+/* ══ ORDERS DATA ══ */
+const ORDERS = [
+  {id:'#LFR-1024',items:'Dal Makhani + Butter Naan ×2',date:'Today, 1:30 PM',type:'Dine-in',amount:320,status:'delivered'},
+  {id:'#LFR-1023',items:'Dum Biryani + Raita',date:'Yesterday, 8:00 PM',type:'Takeaway',amount:380,status:'delivered'},
+  {id:'#LFR-1022',items:'Seekh Kebab + Mango Lassi',date:'15 Jan 2025',type:'Delivery',amount:370,status:'pending'},
+  {id:'#LFR-1021',items:'Paneer Tikka Masala + Naan',date:'12 Jan 2025',type:'Dine-in',amount:310,status:'delivered'},
+  {id:'#LFR-1020',items:'Butter Chicken + Jeera Rice',date:'8 Jan 2025',type:'Delivery',amount:460,status:'delivered'},
+  {id:'#LFR-1019',items:'Gulab Jamun + Kulfi Falooda',date:'5 Jan 2025',type:'Dine-in',amount:270,status:'cancelled'},
+  {id:'#LFR-1018',items:'Chole Bhature + Lassi',date:'1 Jan 2025',type:'Takeaway',amount:240,status:'delivered'},
+];
+
+let orderFilter='all';
+function renderOrders(){
+  const filtered=orderFilter==='all'?ORDERS:ORDERS.filter(o=>o.status===orderFilter);
+  const statusMap={
+    delivered:'<span class="order-status status-delivered">Delivered</span>',
+    pending:'<span class="order-status status-pending">In Progress</span>',
+    cancelled:'<span class="order-status status-cancelled">Cancelled</span>',
+    confirmed:'<span class="order-status status-confirmed">Confirmed</span>',
+  };
+  document.getElementById('ordersBody').innerHTML=filtered.map(o=>`
+    <tr>
+      <td><span class="order-id">${o.id}</span></td>
+      <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${o.items}</td>
+      <td>${o.date}</td>
+      <td>${o.type}</td>
+      <td style="font-weight:500;">₹${o.amount}</td>
+      <td>${statusMap[o.status]||o.status}</td>
+      <td><button class="reorder-btn" onclick="reorder('${o.id}')">Reorder</button></td>
+    </tr>
+  `).join('');
+}
+
+window.filterOrders=function(el,filter){
+  orderFilter=filter;
+  document.querySelectorAll('.ofchip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  renderOrders();
+};
+window.reorder=function(id){showToast('🛒 Reordering '+id+'…');setTimeout(()=>window.location.href='menu.html',1200);};
+
+/* ══ RESERVATIONS DATA ══ */
+const RESERVATIONS = [
+  {day:25,mon:'Jan',title:'Table for 4 · 7:30 PM',sub:'Anniversary dinner · Window seat',status:'upcoming'},
+  {day:12,mon:'Jan',title:'Table for 2 · 1:00 PM',sub:'Lunch · Indoor seating',status:'completed'},
+  {day:1,mon:'Jan',title:'Table for 6 · 8:00 PM',sub:'New Year dinner · Family',status:'completed'},
+  {day:20,mon:'Dec',title:'Table for 3 · 7:00 PM',sub:'Birthday celebration · Outdoor',status:'completed'},
+];
+
+function renderReservations(){
+  document.getElementById('resList').innerHTML=RESERVATIONS.map(r=>`
+    <div class="res-row">
+      <div class="res-date-box"><div class="rday">${r.day}</div><div class="rmon">${r.mon}</div></div>
+      <div class="res-info"><div class="res-title">${r.title}</div><div class="res-sub">${r.sub}</div></div>
+      <span class="res-badge ${r.status==='upcoming'?'res-upcoming':'res-completed'}">${r.status==='upcoming'?'Upcoming':'Completed'}</span>
+    </div>
+  `).join('');
+}
+
+window.submitReservation=function(e){
+  e.preventDefault();
+  const date=document.getElementById('rDate').value;
+  const time=document.getElementById('rTime').value;
+  if(!date){showToast('⚠️ Please select a date.');return;}
+  const btn=e.target.querySelector('.res-submit');
+  btn.textContent='⏳ Confirming…'; btn.disabled=true;
+  setTimeout(()=>{
+    RESERVATIONS.unshift({day:new Date(date).getDate(),mon:new Date(date).toLocaleString('en',{month:'short'}),title:`Table · ${time}`,sub:document.getElementById('rGuests').value+' · '+document.getElementById('rOccasion').value,status:'upcoming'});
+    renderReservations();
+    btn.textContent='✅ Reserved!'; btn.style.background='linear-gradient(135deg,#2E7D32,#43A047)';
+    showToast('🪔 Table reserved successfully!');
+    setTimeout(()=>{btn.textContent='🪔 Confirm Reservation';btn.style.background='';btn.disabled=false;},3000);
+  },1400);
+};
+
+// set min date
+const di=document.getElementById('rDate');
+if(di) di.min=new Date().toISOString().split('T')[0];
+
+/* ══ PROFILE ══ */
+window.selPref=function(el){
+  document.querySelectorAll('.pchip').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('pPref').value=el.dataset.v;
+};
+window.saveProfile=function(e){
+  e.preventDefault();
+  const fname=document.getElementById('pFname').value.trim();
+  const lname=document.getElementById('pLname').value.trim();
+  const fullName=`${fname} ${lname}`.trim();
+  user.name=fullName; user.fname=fname;
+  const initials=(fname[0]||'')+(lname[0]||'');
+  document.getElementById('sidebarAv').textContent=initials.toUpperCase();
+  document.getElementById('topbarAv').textContent=initials.toUpperCase();
+  document.getElementById('profileAvatar').textContent=initials.toUpperCase();
+  document.getElementById('sidebarName').textContent=fullName;
+  document.getElementById('profileNameDisp').textContent=fullName;
+  document.getElementById('wbName').textContent=fname;
+  showToast('✅ Profile saved successfully!');
+};
+
+/* ══ NOTIFICATIONS ══ */
+const NOTIFS = [
+  {icon:'🎉',cls:'orange',title:'Special Diwali Offer!',desc:'Get 20% off on all orders above ₹500 this Diwali. Valid till 31st October.',time:'Just now',unread:true},
+  {icon:'✅',cls:'green',title:'Order #LFR-1024 Delivered',desc:'Your Dal Makhani + Butter Naan has been delivered. Enjoy your meal!',time:'2 hours ago',unread:true},
+  {icon:'📅',cls:'blue',title:'Reservation Confirmed',desc:'Your table for 4 on 25 Jan at 7:30 PM is confirmed. We look forward to seeing you!',time:'Yesterday',unread:true},
+  {icon:'⭐',cls:'orange',title:'You earned 32 points!',desc:'Points added for your last order #LFR-1023. Your balance is now 650 pts.',time:'2 days ago',unread:true},
+  {icon:'🍛',cls:'green',title:'New Menu Item Added',desc:'Try our new Peshwari Naan — stuffed with coconut, almonds and raisins!',time:'3 days ago',unread:false},
+  {icon:'💰',cls:'orange',title:'Weekend Special',desc:'Free Gulab Jamun with every main course order on weekends. This weekend only!',time:'5 days ago',unread:false},
+  {icon:'🏆',cls:'blue',title:'350 points to Gold!',desc:'You\'re getting close to Gold membership. Keep ordering to unlock exclusive perks.',time:'1 week ago',unread:false},
+];
+
+function renderNotifs(){
+  document.getElementById('notifList').innerHTML=NOTIFS.map((n,i)=>`
+    <div class="notif-item ${n.unread?'unread':''}" id="notif-${i}" onclick="readNotif(${i})">
+      <div class="notif-icon ${n.cls}">${n.icon}</div>
+      <div class="notif-body">
+        <div class="notif-title">${n.title}</div>
+        <div class="notif-desc">${n.desc}</div>
+        <div class="notif-time">${n.time}</div>
+      </div>
+    </div>
+  `).join('');
+}
+window.readNotif=function(i){
+  NOTIFS[i].unread=false;
+  const el=document.getElementById('notif-'+i);
+  if(el) el.classList.remove('unread');
+};
+window.markAllRead=function(){
+  NOTIFS.forEach((_,i)=>{NOTIFS[i].unread=false;});
+  renderNotifs();
+  showToast('✅ All notifications marked as read');
+};
+
+/* ══ LOGOUT ══ */
+window.logout=function(){
+  if(confirm('Are you sure you want to sign out?')){
+    localStorage.removeItem('lata_token');
+    sessionStorage.clear();
+    showToast('👋 Signed out. Redirecting…');
+    setTimeout(()=>window.location.href='login.html',1200);
+  }
+};
+
+/* ══ INIT ══ */
+initUser();
+renderOrders();
+renderReservations();
+renderNotifs();
+
+})();
+</script>
+</body>
+</html>
