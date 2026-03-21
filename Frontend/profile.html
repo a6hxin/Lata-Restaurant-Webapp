@@ -239,7 +239,7 @@ textarea{height:80px;padding:10px 12px 10px 37px;resize:vertical;min-height:70px
   </form>
 
   <div class="skip-link">
-    <a href="index.html">Skip for now →</a>
+    <a href="dashboard.html">Skip for now →</a>
   </div>
   <div class="sec-note">
     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
@@ -250,7 +250,7 @@ textarea{height:80px;padding:10px 12px 10px 37px;resize:vertical;min-height:70px
 <script>
 (function(){
 'use strict';
-const API_BASE = 'http://localhost:5001/api';
+const API_BASE = 'http://localhost:5000/api';
 const $ = id => document.getElementById(id);
 
 // Pre-fill email from session
@@ -359,32 +359,5 @@ $('profileForm').addEventListener('submit', async function(e){
 updateInitials();
 })();
 </script>
-<script>
-  (function(){
-    const token = localStorage.getItem('lata_token');
-    const name  = localStorage.getItem('lata_name');
-  
-    if (token && name) {
-      // ✅ Logged in — Sign In/Up hata ke user name + dashboard button dikhao
-      document.querySelector('.nav-cta').innerHTML = `
-        <span style="font-size:0.85rem;font-weight:500;color:var(--muted);">
-          👋 ${name.split(' ')[0]}
-        </span>
-        <a href="dashboard.html" class="btn-solid">My Account</a>
-        <button onclick="logout()" class="btn-outline" style="cursor:pointer;">
-          Sign Out
-        </button>
-      `;
-    }
-  
-    // Logout function
-    window.logout = function(){
-      localStorage.removeItem('lata_token');
-      localStorage.removeItem('lata_name');
-      localStorage.removeItem('lata_email');
-      window.location.href = 'index.html';
-    };
-  })();
-  </script>
 </body>
 </html>

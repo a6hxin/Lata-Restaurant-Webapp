@@ -1,0 +1,12 @@
+# LFR/ folder mein yeh file banao
+# Firebase keys
+firebase.js
+serviceAccountKey.json
+
+# Environment variables
+.env
+backend/.env
+
+# Node modules
+node_modules/
+backend/node_modules/
