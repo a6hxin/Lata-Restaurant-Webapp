@@ -114,7 +114,7 @@ const orderSchema = new mongoose.Schema({
 // Index for fast user order lookups
 orderSchema.index({ user: 1, createdAt: -1 });
 orderSchema.index({ status: 1 });
-orderSchema.index({ orderId: 1 });
+
 
 // Pre-save: push status change to history
 orderSchema.pre('save', function (next) {

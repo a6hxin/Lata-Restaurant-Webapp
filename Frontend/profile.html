@@ -250,12 +250,33 @@ textarea{height:80px;padding:10px 12px 10px 37px;resize:vertical;min-height:70px
 <script>
 (function(){
 'use strict';
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = 'http://localhost:5001/api';
 const $ = id => document.getElementById(id);
 
-// Pre-fill email from session
-const email = sessionStorage.getItem('lata_email') || '';
-if(email) $('profileEmail').value = email;
+// Pre-fill from localStorage
+const storedToken  = localStorage.getItem('lata_token');
+const storedName   = localStorage.getItem('lata_name')  || '';
+const storedEmail  = localStorage.getItem('lata_email') || sessionStorage.getItem('lata_email') || '';
+const storedAvatar = localStorage.getItem('lata_avatar')|| '';
+
+if(storedEmail) $('profileEmail').value = storedEmail;
+
+// If name already stored, pre-fill name fields
+if(storedName){
+  const parts = storedName.trim().split(' ');
+  $('fname').value = parts[0]||'';
+  $('lname').value = parts.slice(1).join(' ')||'';
+  updateInitials();
+  updateProgress();
+}
+
+// If avatar stored, show it
+if(storedAvatar){
+  const img = $('avatarPreview');
+  img.src = storedAvatar;
+  img.style.display='block';
+  $('avatarInitials').style.display='none';
+}
 
 /* ── avatar upload ── */
 window.handleAvatar = function(input){
@@ -347,8 +368,13 @@ $('profileForm').addEventListener('submit', async function(e){
     });
     const data=await res.json();
     if(!res.ok) throw new Error(data.message||'Could not save profile.');
+    // Save updated name to localStorage
+    const fullName = (body.name||storedName).trim();
+    localStorage.setItem('lata_name', fullName);
+    if(body.phone) localStorage.setItem('lata_phone', body.phone);
     showSuccess('Profile saved! Welcome to Lata Family Restaurant 🎉');
-    setTimeout(()=>window.location.href='dashboard.html',1500);
+    // Switch to view mode
+    setTimeout(()=>showViewMode(), 900);
   }catch(err){
     showAlert(err.message);
   }finally{
@@ -357,6 +383,57 @@ $('profileForm').addEventListener('submit', async function(e){
 });
 
 updateInitials();
+
+/* ── View Mode ── */
+window.showViewMode = function(){
+  const fname   = $('fname').value.trim();
+  const lname   = $('lname').value.trim();
+  const fullName= (fname+' '+lname).trim()||storedName||'Guest';
+  const email   = $('profileEmail').value||storedEmail;
+  const phone   = $('profilePhone').value||localStorage.getItem('lata_phone')||'—';
+  const dob     = [$('dobDay').value,$('dobMonth').value,$('dobYear').value].filter(Boolean).join(' ')||'—';
+  const pref    = $('foodPref').value||'—';
+  const addr    = $('address').value||'—';
+  const initials= ((fname[0]||'')+(lname[0]||'')).toUpperCase()||'?';
+  const avatarSrc = $('avatarPreview').style.display==='block' ? $('avatarPreview').src : '';
+
+  const avatarHTML = avatarSrc
+    ? `<img src="${avatarSrc}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;" alt="profile"/>`
+    : `<span style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#fff;">${initials}</span>`;
+
+  document.querySelector('.card').innerHTML = `
+    <div style="text-align:center;margin-bottom:1.5rem;">
+      <div style="width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,#E8821A,#C8860A);display:flex;align-items:center;justify-content:center;border:3px solid #fff;box-shadow:0 4px 16px rgba(232,130,26,0.3);margin:0 auto 0.75rem;overflow:hidden;">${avatarHTML}</div>
+      <h1 style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:#7B2D00;">${fullName}</h1>
+      <p style="font-size:0.82rem;color:#7A5C44;margin-top:3px;">${email}</p>
+      <span style="display:inline-flex;align-items:center;gap:4px;background:#F1F8E9;border:1px solid #C5E1A5;color:#2E7D32;border-radius:20px;font-size:0.72rem;font-weight:500;padding:3px 10px;margin-top:6px;">✓ Email Verified</span>
+    </div>
+    <hr style="border:none;border-top:1px solid #E2C9A8;margin:1rem 0;"/>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:1.5rem;">
+      ${phone!=='—'?`<div style="display:flex;gap:10px;align-items:center;"><span style="font-size:0.78rem;color:#7A5C44;min-width:90px;font-weight:500;">📱 Phone</span><span style="font-size:0.88rem;color:#1A0A00;">${phone}</span></div>`:''}
+      ${dob!=='—'?`<div style="display:flex;gap:10px;align-items:center;"><span style="font-size:0.78rem;color:#7A5C44;min-width:90px;font-weight:500;">🎂 Birthday</span><span style="font-size:0.88rem;color:#1A0A00;">${dob}</span></div>`:''}
+      ${pref!=='—'?`<div style="display:flex;gap:10px;align-items:center;"><span style="font-size:0.78rem;color:#7A5C44;min-width:90px;font-weight:500;">🍽️ Food Pref</span><span style="font-size:0.88rem;color:#1A0A00;">${pref}</span></div>`:''}
+      ${addr!=='—'?`<div style="display:flex;gap:10px;align-items:start;"><span style="font-size:0.78rem;color:#7A5C44;min-width:90px;font-weight:500;margin-top:2px;">📍 Address</span><span style="font-size:0.88rem;color:#1A0A00;line-height:1.5;">${addr}</span></div>`:''}
+    </div>
+    <button onclick="window.location.href='profile.html'" style="width:100%;height:46px;background:linear-gradient(135deg,#E8821A,#C8860A);border:none;border-radius:10px;color:#fff;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:500;cursor:pointer;margin-bottom:10px;">✏️ Edit Profile</button>
+    <button onclick="window.location.href='dashboard.html'" style="width:100%;height:44px;background:transparent;border:1.5px solid #E2C9A8;border-radius:10px;color:#7A5C44;font-family:'DM Sans',sans-serif;font-size:0.9rem;cursor:pointer;">Go to Dashboard →</button>
+    <div style="display:flex;align-items:center;justify-content:center;gap:5px;margin-top:0.8rem;font-size:0.72rem;color:#7A5C44;opacity:0.7;">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      You can update this anytime
+    </div>
+  `;
+};
+
+// If user already has profile data, show view mode directly
+if(storedToken && storedName && storedName !== ''){
+  // Still show edit form (they might want to update)
+  // Only auto-switch to view if coming from dashboard (not from signup)
+  const fromSignup = sessionStorage.getItem('lata_new_user');
+  if(!fromSignup && window.location.search.includes('view=1')){
+    showViewMode();
+  }
+}
+
 })();
 </script>
 </body>

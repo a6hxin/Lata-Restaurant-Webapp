@@ -4,8 +4,8 @@
 //  Uses firebase-admin SDK to verify tokens
 // ─────────────────────────────────────────────
 const express = require('express');
-const admin   = require('firebase-admin');
-const User    = require('../models/User');
+const admin = require('firebase-admin');
+const User = require('../models/User');
 const generateToken = require('../utils/generateToken');
 
 const router = express.Router();
@@ -13,7 +13,13 @@ const router = express.Router();
 // ── Initialize Firebase Admin (only once) ──
 if (!admin.apps.length) {
   try {
-    const serviceAccount = require(process.env.FIREBASE_SERVICE_ACCOUNT || './serviceAccountKey.json');
+    let serviceAccount;
+    if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+      serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+    } else {
+      serviceAccount = require('../my-project-0ecd7-firebase-adminsdk-fbsvc-a24d7b2bba.json');
+    }
+
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount),
     });
@@ -69,18 +75,18 @@ router.post('/google-firebase', async (req, res, next) => {
       await user.updateOne({
         googleId,
         isVerified: true,
-        lastLogin:  new Date(),
-        avatar:     picture || user.avatar,
+        lastLogin: new Date(),
+        avatar: picture || user.avatar,
       });
       user = await User.findById(user._id);
     } else {
       user = await User.create({
         googleId,
-        name:          name || email.split('@')[0],
-        email:         email.toLowerCase(),
-        avatar:        picture,
-        isVerified:    true,
-        role:          'user',
+        name: name || email.split('@')[0],
+        email: email.toLowerCase(),
+        avatar: picture,
+        isVerified: true,
+        role: 'user',
         loyaltyPoints: 0,
       });
       console.log('✅ New Google user created:', email);

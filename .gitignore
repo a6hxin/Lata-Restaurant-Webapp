@@ -7,7 +7,7 @@ serviceAccountKey.json
 .env
 backend/.env
 Node modules
-node_modules/
+node_modules
 backend/node_modules/
 my-project-0ecd7-firebase-adminsdk-fbsvc-a24d7b2bba.json
 echo "*.json" >> .gitignore

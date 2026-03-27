@@ -93,12 +93,14 @@ body{font-family:var(--ff-body);background:var(--cream);color:var(--dark);overfl
   position:relative;
   border:1px solid var(--border);
 }
+.g-tile-inner img{width:100%;height:100%;object-fit:cover;display:block;border-radius:14px;position:absolute;inset:0;z-index:0;}
 .g-tile-inner{
   width:100%;display:flex;align-items:center;justify-content:center;
   position:relative;overflow:hidden;
   transition:transform 0.4s cubic-bezier(0.22,1,0.36,1);
 }
-.masonry-item:hover .g-tile-inner{transform:scale(1.04);}
+.masonry-item:hover .g-tile-inner img{width:100%;height:100%;object-fit:cover;display:block;border-radius:14px;position:absolute;inset:0;z-index:0;}
+.g-tile-inner{transform:scale(1.04);}
 .g-emoji{font-size:clamp(3rem,8vw,6rem);line-height:1;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.15));z-index:1;position:relative;}
 
 /* overlay on hover */
@@ -392,7 +394,7 @@ footer{background:linear-gradient(160deg,var(--spice) 0%,#2A0E00 100%);color:rgb
       <ul>
         <li><a href="#">📍 Civil Lines, Nagpur – 440001</a></li>
         <li><a href="#">📞 +91 98765 43210</a></li>
-        <li><a href="#">✉️ hello@latafamilyrestaurant.in</a></li>
+        <li><a href="#">✉️ <span class="__cf_email__" data-cfemail="1179747d7d7e517d70657077707c787d6863746265706463707f653f787f">[email&#160;protected]</span></a></li>
       </ul>
     </div>
   </div>
@@ -405,50 +407,50 @@ footer{background:linear-gradient(160deg,var(--spice) 0%,#2A0E00 100%);color:rgb
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 (function(){
 'use strict';
 
 /* ══ GALLERY DATA ══ */
 const PHOTOS = [
   // FOOD
-  {id:1,cat:'food',emoji:'🍛',bg:'linear-gradient(135deg,#FDE8C8,#F5C97A)',h:260,title:'Dal Makhani',desc:'Our signature overnight-cooked dal. Rich, creamy and absolutely unforgettable.',likes:142,featured:true},
-  {id:2,cat:'food',emoji:'🥘',bg:'linear-gradient(135deg,#FFE4CC,#FFBC80)',h:200,title:'Paneer Tikka Masala',desc:'Golden chargrilled paneer in a velvety tomato gravy.',likes:98},
-  {id:3,cat:'food',emoji:'🍚',bg:'linear-gradient(135deg,#E8F5E9,#A5D6A7)',h:280,title:'Dum Biryani',desc:'Fragrant basmati rice slow-cooked in a sealed handi with whole spices.',likes:210,featured:true},
-  {id:4,cat:'food',emoji:'🍢',bg:'linear-gradient(135deg,#FFF3E0,#FFCC80)',h:220,title:'Seekh Kebab',desc:'Minced lamb skewers grilled to smoky perfection in our tandoor.',likes:76},
-  {id:5,cat:'food',emoji:'🍮',bg:'linear-gradient(135deg,#FCE4EC,#F48FB1)',h:200,title:'Gulab Jamun',desc:'Soft milk dumplings in warm rose-saffron syrup. Pure happiness.',likes:189},
-  {id:6,cat:'food',emoji:'🧀',bg:'linear-gradient(135deg,#FFF8E1,#FFE082)',h:240,title:'Paneer Tikka',desc:'Marinated cottage cheese, chargrilled with peppers and onions.',likes:114},
-  {id:7,cat:'food',emoji:'🥛',bg:'linear-gradient(135deg,#E3F2FD,#90CAF9)',h:180,title:'Mango Lassi',desc:'Thick Alphonso mango lassi — the perfect summer drink.',likes:87},
-  {id:8,cat:'food',emoji:'🫓',bg:'linear-gradient(135deg,#FFFDE7,#FFF176)',h:200,title:'Butter Naan',desc:'Pillowy soft naan brushed with generous butter, hot from the tandoor.',likes:133},
-  {id:9,cat:'food',emoji:'🐟',bg:'linear-gradient(135deg,#E1F5FE,#81D4FA)',h:220,title:'Fish Amritsari',desc:'Crispy batter-fried fish with carom seeds — a Punjabi favourite.',likes:62},
-  {id:10,cat:'food',emoji:'☕',bg:'linear-gradient(135deg,#FFF3E0,#FFCC80)',h:180,title:'Masala Chai',desc:'Freshly brewed spiced tea — the perfect way to end your meal.',likes:95},
+  {id:1,cat:'food',emoji:'🍛',bg:'linear-gradient(135deg,#FDE8C8,#F5C97A)',h:260,title:'Dal Makhani', img:'images/gallery/food/dal-makhani.jpg',desc:'Our signature overnight-cooked dal. Rich, creamy and absolutely unforgettable.',likes:142,featured:true},
+  {id:2,cat:'food',emoji:'🥘',bg:'linear-gradient(135deg,#FFE4CC,#FFBC80)',h:200,title:'Paneer Tikka Masala', img:'images/gallery/food/paneer-tikka-masala.jpg',desc:'Golden chargrilled paneer in a velvety tomato gravy.',likes:98},
+  {id:3,cat:'food',emoji:'🍚',bg:'linear-gradient(135deg,#E8F5E9,#A5D6A7)',h:280,title:'Dum Biryani', img:'images/gallery/food/dum-biryani.jpg',desc:'Fragrant basmati rice slow-cooked in a sealed handi with whole spices.',likes:210,featured:true},
+  {id:4,cat:'food',emoji:'🍢',bg:'linear-gradient(135deg,#FFF3E0,#FFCC80)',h:220,title:'Seekh Kebab', img:'images/gallery/food/seekh-kebab.jpg',desc:'Minced lamb skewers grilled to smoky perfection in our tandoor.',likes:76},
+  {id:5,cat:'food',emoji:'🍮',bg:'linear-gradient(135deg,#FCE4EC,#F48FB1)',h:200,title:'Gulab Jamun', img:'images/gallery/food/gulab-jamun.jpg',desc:'Soft milk dumplings in warm rose-saffron syrup. Pure happiness.',likes:189},
+  {id:6,cat:'food',emoji:'🧀',bg:'linear-gradient(135deg,#FFF8E1,#FFE082)',h:240,title:'Paneer Tikka', img:'images/gallery/food/paneer-tikka.jpg',desc:'Marinated cottage cheese, chargrilled with peppers and onions.',likes:114},
+  {id:7,cat:'food',emoji:'🥛',bg:'linear-gradient(135deg,#E3F2FD,#90CAF9)',h:180,title:'Mango Lassi', img:'images/gallery/food/mango-lassi.jpg',desc:'Thick Alphonso mango lassi — the perfect summer drink.',likes:87},
+  {id:8,cat:'food',emoji:'🫓',bg:'linear-gradient(135deg,#FFFDE7,#FFF176)',h:200,title:'Butter Naan', img:'images/gallery/food/butter-naan.jpg',desc:'Pillowy soft naan brushed with generous butter, hot from the tandoor.',likes:133},
+  {id:9,cat:'food',emoji:'🐟',bg:'linear-gradient(135deg,#E1F5FE,#81D4FA)',h:220,title:'Fish Amritsari', img:'images/gallery/food/fish-amritsari.jpg',desc:'Crispy batter-fried fish with carom seeds — a Punjabi favourite.',likes:62},
+  {id:10,cat:'food',emoji:'☕',bg:'linear-gradient(135deg,#FFF3E0,#FFCC80)',h:180,title:'Masala Chai', img:'images/gallery/food/masala-chai.jpg',desc:'Freshly brewed spiced tea — the perfect way to end your meal.',likes:95},
 
   // AMBIENCE
-  {id:11,cat:'ambience',emoji:'🏮',bg:'linear-gradient(135deg,#4A1800,#7B2D00)',h:280,title:'Evening Ambience',desc:'Warm lanterns, rich wooden interiors — the perfect dining atmosphere.',likes:201,featured:true},
-  {id:12,cat:'ambience',emoji:'🪔',bg:'linear-gradient(135deg,#E8821A,#C8860A)',h:220,title:'Table Settings',desc:'Every table set with care — fresh flowers and traditional diyas.',likes:154},
-  {id:13,cat:'ambience',emoji:'🌿',bg:'linear-gradient(135deg,#E8F5E9,#C8E6C9)',h:200,title:'Garden Seating',desc:'Our beautiful outdoor garden section for fresh-air dining.',likes:88},
-  {id:14,cat:'ambience',emoji:'🎨',bg:'linear-gradient(135deg,#F3E5F5,#CE93D8)',h:260,title:'Wall Art',desc:'Hand-painted murals by local Nagpur artists adorn our walls.',likes:73},
-  {id:15,cat:'ambience',emoji:'🕯️',bg:'linear-gradient(135deg,#FFF8E1,#FFE082)',h:200,title:'Candlelit Dinner',desc:'Romantic candlelit setup for special occasions and anniversaries.',likes:165},
-  {id:16,cat:'ambience',emoji:'🌙',bg:'linear-gradient(135deg,#1A237E,#283593)',h:240,title:'Night View',desc:'Our restaurant beautifully lit up after sundown in Civil Lines.',likes:119},
+  {id:11,cat:'ambience',emoji:'🏮',bg:'linear-gradient(135deg,#4A1800,#7B2D00)',h:280,title:'Evening Ambience', img:'images/gallery/ambience/evening-ambience.jpg',desc:'Warm lanterns, rich wooden interiors — the perfect dining atmosphere.',likes:201,featured:true},
+  {id:12,cat:'ambience',emoji:'🪔',bg:'linear-gradient(135deg,#E8821A,#C8860A)',h:220,title:'Table Settings', img:'images/gallery/ambience/table-settings.jpg',desc:'Every table set with care — fresh flowers and traditional diyas.',likes:154},
+  {id:13,cat:'ambience',emoji:'🌿',bg:'linear-gradient(135deg,#E8F5E9,#C8E6C9)',h:200,title:'Garden Seating', img:'images/gallery/ambience/garden-seating.jpg',desc:'Our beautiful outdoor garden section for fresh-air dining.',likes:88},
+  {id:14,cat:'ambience',emoji:'🎨',bg:'linear-gradient(135deg,#F3E5F5,#CE93D8)',h:260,title:'Wall Art', img:'images/gallery/ambience/wall-art.jpg',desc:'Hand-painted murals by local Nagpur artists adorn our walls.',likes:73},
+  {id:15,cat:'ambience',emoji:'🕯️',bg:'linear-gradient(135deg,#FFF8E1,#FFE082)',h:200,title:'Candlelit Dinner', img:'images/gallery/ambience/candlelit-dinner.jpg',desc:'Romantic candlelit setup for special occasions and anniversaries.',likes:165},
+  {id:16,cat:'ambience',emoji:'🌙',bg:'linear-gradient(135deg,#1A237E,#283593)',h:240,title:'Night View', img:'images/gallery/ambience/night-view.jpg',desc:'Our restaurant beautifully lit up after sundown in Civil Lines.',likes:119},
 
   // KITCHEN
-  {id:17,cat:'kitchen',emoji:'👨‍🍳',bg:'linear-gradient(135deg,#FFCCBC,#FF8A65)',h:260,title:'Chef at Work',desc:'Head Chef Ramesh ji preparing our famous Dal Makhani from scratch.',likes:234,featured:true},
-  {id:18,cat:'kitchen',emoji:'🔥',bg:'linear-gradient(135deg,#FF6F00,#E65100)',h:220,title:'Tandoor in Action',desc:'Our clay tandoor running at full heat — the heart of our kitchen.',likes:178},
-  {id:19,cat:'kitchen',emoji:'🌿',bg:'linear-gradient(135deg,#E8F5E9,#A5D6A7)',h:200,title:'Fresh Herbs Daily',desc:'Coriander, mint and curry leaves sourced fresh every morning.',likes:66},
-  {id:20,cat:'kitchen',emoji:'🫙',bg:'linear-gradient(135deg,#FFF3E0,#FFCC80)',h:240,title:'Spice Selection',desc:'Our collection of 30+ handpicked whole spices from across India.',likes:92},
-  {id:21,cat:'kitchen',emoji:'🥣',bg:'linear-gradient(135deg,#E3F2FD,#90CAF9)',h:200,title:'Dough Preparation',desc:'Fresh dough kneaded by hand every morning for our breads.',likes:55},
+  {id:17,cat:'kitchen',emoji:'👨‍🍳',bg:'linear-gradient(135deg,#FFCCBC,#FF8A65)',h:260,title:'Chef at Work', img:'images/gallery/kitchen/chef-at-work.jpg',desc:'Head Chef Ramesh ji preparing our famous Dal Makhani from scratch.',likes:234,featured:true},
+  {id:18,cat:'kitchen',emoji:'🔥',bg:'linear-gradient(135deg,#FF6F00,#E65100)',h:220,title:'Tandoor in Action', img:'images/gallery/kitchen/tandoor.jpg',desc:'Our clay tandoor running at full heat — the heart of our kitchen.',likes:178},
+  {id:19,cat:'kitchen',emoji:'🌿',bg:'linear-gradient(135deg,#E8F5E9,#A5D6A7)',h:200,title:'Fresh Herbs Daily', img:'images/gallery/kitchen/fresh-herbs.jpg',desc:'Coriander, mint and curry leaves sourced fresh every morning.',likes:66},
+  {id:20,cat:'kitchen',emoji:'🫙',bg:'linear-gradient(135deg,#FFF3E0,#FFCC80)',h:240,title:'Spice Selection', img:'images/gallery/kitchen/spices.jpg',desc:'Our collection of 30+ handpicked whole spices from across India.',likes:92},
+  {id:21,cat:'kitchen',emoji:'🥣',bg:'linear-gradient(135deg,#E3F2FD,#90CAF9)',h:200,title:'Dough Preparation', img:'images/gallery/kitchen/dough.jpg',desc:'Fresh dough kneaded by hand every morning for our breads.',likes:55},
 
   // MOMENTS
-  {id:22,cat:'moments',emoji:'👨‍👩‍👧‍👦',bg:'linear-gradient(135deg,#FCE4EC,#F48FB1)',h:260,title:'Family Celebration',desc:'A beautiful family gathering celebrating their 25th anniversary with us.',likes:287,featured:true},
-  {id:23,cat:'moments',emoji:'💍',bg:'linear-gradient(135deg,#E8EAF6,#9FA8DA)',h:220,title:'Engagement Dinner',desc:'Congratulations to Rahul & Sneha on their engagement at Lata!',likes:312},
-  {id:24,cat:'moments',emoji:'🎂',bg:'linear-gradient(135deg,#FFF9C4,#FFF176)',h:200,title:'Birthday Party',desc:'Little Arjun celebrating his 7th birthday with our special dessert platter.',likes:198},
-  {id:25,cat:'moments',emoji:'🤝',bg:'linear-gradient(135deg,#E8F5E9,#C8E6C9)',h:240,title:'Business Lunch',desc:'Corporate teams choose Lata for their important business meetings.',likes:44},
+  {id:22,cat:'moments',emoji:'👨‍👩‍👧‍👦',bg:'linear-gradient(135deg,#FCE4EC,#F48FB1)',h:260,title:'Family Celebration', img:'images/gallery/moments/family-celebration.jpg',desc:'A beautiful family gathering celebrating their 25th anniversary with us.',likes:287,featured:true},
+  {id:23,cat:'moments',emoji:'💍',bg:'linear-gradient(135deg,#E8EAF6,#9FA8DA)',h:220,title:'Engagement Dinner', img:'images/gallery/moments/engagement.jpg',desc:'Congratulations to Rahul & Sneha on their engagement at Lata!',likes:312},
+  {id:24,cat:'moments',emoji:'🎂',bg:'linear-gradient(135deg,#FFF9C4,#FFF176)',h:200,title:'Birthday Party', img:'images/gallery/moments/birthday.jpg',desc:'Little Arjun celebrating his 7th birthday with our special dessert platter.',likes:198},
+  {id:25,cat:'moments',emoji:'🤝',bg:'linear-gradient(135deg,#E8F5E9,#C8E6C9)',h:240,title:'Business Lunch', img:'images/gallery/moments/business-lunch.jpg',desc:'Corporate teams choose Lata for their important business meetings.',likes:44},
   {id:26,cat:'moments',emoji:'👴',bg:'linear-gradient(135deg,#FDE8C8,#F5C97A)',h:200,title:'Founder\'s Story',desc:'Lata Devi ji, our founder, still visits the kitchen every morning.',likes:445,featured:true},
 
   // EVENTS
-  {id:27,cat:'events',emoji:'🎊',bg:'linear-gradient(135deg,#FF6F00,#E65100)',h:260,title:'Diwali Night 2024',desc:'Our annual Diwali celebration with live music, fireworks and special menu.',likes:356,featured:true},
-  {id:28,cat:'events',emoji:'🎵',bg:'linear-gradient(135deg,#4A148C,#6A1B9A)',h:220,title:'Live Ghazal Evening',desc:'Monthly live ghazal nights every last Friday of the month.',likes:189},
-  {id:29,cat:'events',emoji:'🏆',bg:'linear-gradient(135deg,#E65100,#BF360C)',h:200,title:'Times Food Award',desc:'Proudly receiving the Times Food Award 2023 – Best Indian Restaurant.',likes:421},
+  {id:27,cat:'events',emoji:'🎊',bg:'linear-gradient(135deg,#FF6F00,#E65100)',h:260,title:'Diwali Night 2024', img:'images/gallery/events/diwali-2024.jpg',desc:'Our annual Diwali celebration with live music, fireworks and special menu.',likes:356,featured:true},
+  {id:28,cat:'events',emoji:'🎵',bg:'linear-gradient(135deg,#4A148C,#6A1B9A)',h:220,title:'Live Ghazal Evening', img:'images/gallery/events/ghazal-evening.jpg',desc:'Monthly live ghazal nights every last Friday of the month.',likes:189},
+  {id:29,cat:'events',emoji:'🏆',bg:'linear-gradient(135deg,#E65100,#BF360C)',h:200,title:'Times Food Award', img:'images/gallery/events/times-award.jpg',desc:'Proudly receiving the Times Food Award 2023 – Best Indian Restaurant.',likes:421},
   {id:30,cat:'events',emoji:'🌹',bg:'linear-gradient(135deg,#FCE4EC,#F48FB1)',h:240,title:'Valentine\'s Special',desc:'Our Valentine\'s Day special dining experience — roses and romance.',likes:267},
 ];
 
@@ -473,7 +475,8 @@ function render(){
         <button class="g-like ${likes[p.id]>p.likes?'liked':''}" id="like-${p.id}"
           onclick="event.stopPropagation();toggleLike(${p.id})">${likes[p.id]>p.likes?'🧡':'🤍'}</button>
         <div class="g-tile-inner" style="background:${p.bg};height:${p.h}px;">
-          <span class="g-emoji">${p.emoji}</span>
+          ${p.img ? `<img src="${p.img}" alt="${p.title}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;z-index:0;border-radius:14px;" onerror="this.style.display='none'"/>` : ''}
+          <span class="g-emoji" style="position:relative;z-index:1;">${p.emoji}</span>
           <div class="g-overlay">
             <div class="g-overlay-icon">🔍</div>
             <div class="g-overlay-title">${p.title}</div>
@@ -514,8 +517,13 @@ function openLightbox(id){
 window.openLightbox = openLightbox;
 
 function showLb(p){
-  document.getElementById('lbImg').style.background = p.bg;
-  document.getElementById('lbImg').innerHTML = `<span style="font-size:8rem;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.15))">${p.emoji}</span>`;
+  const lbEl = document.getElementById('lbImg');
+  lbEl.style.background = p.bg;
+  if(p.img){
+    lbEl.innerHTML = `<img src="${p.img}" alt="${p.title}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;position:absolute;inset:0;" onerror="this.style.display='none'"/><span style="font-size:8rem;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.15));position:relative;z-index:1;">${p.emoji}</span>`;
+  } else {
+    lbEl.innerHTML = `<span style="font-size:8rem;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.15))">${p.emoji}</span>`;
+  }
   document.getElementById('lbCat').textContent = p.cat.toUpperCase();
   document.getElementById('lbTitle').textContent = p.title;
   document.getElementById('lbDesc').textContent = p.desc;
@@ -591,12 +599,4 @@ render();
   
     // Logout function
     window.logout = function(){
-      localStorage.removeItem('lata_token');
-      localStorage.removeItem('lata_name');
-      localStorage.removeItem('lata_email');
-      window.location.href = 'index.html';
-    };
-  })();
-  </script>
-</body>
-</html>
+      loc

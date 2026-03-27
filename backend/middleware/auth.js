@@ -1,52 +1,50 @@
 // ─────────────────────────────────────────────
-//  middleware/auth.js  –  JWT Auth Middleware
+//  middleware/auth.js  –  Authentication Middleware
 // ─────────────────────────────────────────────
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 /**
- * Protect routes – verifies JWT and attaches user to req
+ * Middleware to protect routes – ensures user is authenticated
  */
-const protect = async (req, res, next) => {
+exports.protect = async (req, res, next) => {
+  let token;
+
+  // 1. Check for token in headers
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+    token = req.headers.authorization.split(' ')[1];
+  }
+
+  if (!token) {
+    return res.status(401).json({ success: false, message: 'Not authorized, token failed or missing.' });
+  }
+
   try {
-    const authHeader = req.headers.authorization;
-
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({
-        success: false,
-        message: 'Not authorised. No token provided.',
-      });
-    }
-
-    const token = authHeader.split(' ')[1];
-
-    // Verify token
+    // 2. Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // Attach user to request (exclude password)
+    // 3. Find user and attach to req.user (exclude sensitive fields)
     const user = await User.findById(decoded.id).select('-passwordHash -otp -otpExpiry');
+
     if (!user) {
-      return res.status(401).json({ success: false, message: 'User not found.' });
+      return res.status(401).json({ success: false, message: 'User belonging to this token no longer exists.' });
     }
 
     req.user = user;
     next();
-  } catch (err) {
-    if (err.name === 'TokenExpiredError') {
-      return res.status(401).json({ success: false, message: 'Session expired. Please log in again.' });
-    }
-    return res.status(401).json({ success: false, message: 'Invalid token.' });
+  } catch (error) {
+    console.error('Auth middleware error:', error);
+    return res.status(401).json({ success: false, message: 'Not authorized, invalid token.' });
   }
 };
 
 /**
- * Admin only – must be used after protect
+ * Middleware to restrict access to admin only
  */
-const adminOnly = (req, res, next) => {
-  if (req.user?.role !== 'admin') {
-    return res.status(403).json({ success: false, message: 'Admin access required.' });
+exports.adminOnly = (req, res, next) => {
+  if (req.user && req.user.role === 'admin') {
+    next();
+  } else {
+    res.status(403).json({ success: false, message: 'Not authorized as an admin.' });
   }
-  next();
 };
-
-module.exports = { protect, adminOnly };
