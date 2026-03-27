@@ -12,7 +12,13 @@ require('dotenv').config();
 
 const connectDB     = require('./config/db');
 const errorHandler  = require('./middleware/errorHandler');
+app.use(cors({
+  origin: "https://lata-restaurant.vercel.app",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
 
+app.use(express.json());
 // ── Route imports ──
 const authRoutes         = require('./routes/auth');
 const menuRoutes         = require('./routes/menu');
